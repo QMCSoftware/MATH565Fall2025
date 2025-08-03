@@ -1,0 +1,4 @@
+/* Override minima default wrapper width */
+.wrapper {
+  max-width: 1200px;
+}
