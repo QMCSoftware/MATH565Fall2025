@@ -1,3 +1,8 @@
 title: MATH 565 Fall 2025
 markdown: kramdown
 theme: minima
+exclude:
+  - qmcsoftware
+  - .gitmodules
+  - .gitignore
+  - README.md
