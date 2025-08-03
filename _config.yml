@@ -1,4 +1,4 @@
-title: MATH 565 Fall 2025
+title: MATH 565 Monte Carlo Methods, Fall 2025
 markdown: kramdown
 theme: minima
 exclude:
@@ -6,3 +6,15 @@ exclude:
   - .gitmodules
   - .gitignore
   - README.md
+
+sass:
+  style: compressed
+
+# Use custom stylesheet
+defaults:
+  -
+    scope:
+      path: ""
+    values:
+      layout: default
+      css: "/assets/css/style.css"

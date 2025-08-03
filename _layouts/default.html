@@ -5,18 +5,33 @@
     <title>{{ page.title }} | {{ site.title }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="{{ '/assets/main.css' | relative_url }}">
+    <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
   </head>
 
   <body>
     <header class="site-header" role="banner">
       <div class="wrapper">
-        <a class="site-title" href="{{ '/' | relative_url }}">{{ site.title }}</a>
+        <a class="site-title" href="{{ '/' | relative_url }}">
+          <img src="{{ '/assets/images/qmcpy_logo.png' | relative_url }}" alt="Logo" style="height: 40px; vertical-align: middle; margin-right: 10px;">
+          {{ site.title }}
+        </a>
 
         <nav class="site-nav">
-          <a class="page-link" href="{{ '/' | relative_url }}">Home</a>
-          <a class="page-link" href="{{ '/schedule.html' | relative_url }}">Schedule</a>
-          <a class="page-link" href="{{ '/assignments/' | relative_url }}">Assignments</a>
-          <a class="page-link" href="{{ '/lectures/' | relative_url }}">Lectures</a>
+          <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+          <label for="nav-trigger">
+            <span class="menu-icon">
+              <svg viewBox="0 0 18 15" width="18px" height="15px">
+                <path fill="#424242" d="M18,1.5v2H0v-2H18z M18,6.5v2H0v-2H18z M18,11.5v2H0v-2H18z"/>
+              </svg>
+            </span>
+          </label>
+
+          <div class="trigger">
+            <a class="page-link" href="{{ '/' | relative_url }}">Home</a>
+            <a class="page-link" href="{{ '/schedule.html' | relative_url }}">Schedule</a>
+            <a class="page-link" href="{{ '/assignments/' | relative_url }}">Assignments</a>
+            <a class="page-link" href="{{ '/lectures/' | relative_url }}">Lectures</a>
+          </div>
         </nav>
       </div>
     </header>
