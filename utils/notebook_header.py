@@ -73,8 +73,11 @@ def get_repo_root() -> Optional[pathlib.Path]:
         return None
 
 def get_org_repo() -> tuple[str, str]:
-    org = globals().get("ORG") or os.environ.get("ORG")
-    repo = globals().get("REPO") or os.environ.get("REPO")
+    # Prefer explicit overrides first
+    org = (globals().get("ORG") or os.environ.get("ORG")
+           or os.environ.get("BOOT_ORG"))
+    repo = (globals().get("REPO") or os.environ.get("REPO")
+            or os.environ.get("BOOT_REPO"))
     if org and repo:
         return str(org), str(repo)
     try:
