@@ -1,17 +1,19 @@
 """
 notebook_header.py — portable header for VS Code, JupyterLab, and Colab.
 
-- Quiet by default; idempotent main(); re-running re-renders the badge.
-- Always shows an inline "Open in Colab" badge with guidance text.
+- Minimal output by default (quiet=True). Re-running re-renders the badge.
+- Always shows an inline "Open in Colab" badge (one line, no break).
 - Honors NB_PATH (from notebook user_ns or environment).
 - Org/repo detection prefers BOOT_ORG/BOOT_REPO, then git remote.
 - Branch resolution prefers BOOT_BRANCH; defaults to 'main' for MATH565Fall2025,
-  else to DEFAULT_BOOT_BRANCH (e.g., 'bootstrap_colab').
+  otherwise to DEFAULT_BOOT_BRANCH (e.g., 'bootstrap_colab').
+- Local runs: header ensures both <repo_root> and <repo_root>/utils are on sys.path.
 - Colab bootstrap:
-    • Clone (with submodules) and install requirements.
+    • Clone/update repo and submodules.
     • Find QMCSoftware submodule under either 'QMCSoftware' or 'qmcsoftware'.
-    • pip -e the submodule if installable; else add to sys.path.
+    • pip -e the submodule if installable; else add correct path (flat or src) to sys.path.
     • Never editable-install the top-level repo; just add to sys.path.
+- Optional auto-import hook (utils/auto_imports.py) if present.
 """
 
 from __future__ import annotations
@@ -20,7 +22,6 @@ import sys
 import re
 import subprocess
 import pathlib
-import datetime
 from typing import Optional, List
 
 _STATE = {"ran": False}
@@ -85,13 +86,18 @@ def get_org_repo() -> tuple[str, str]:
         return str(org), str(repo)
     try:
         url = subprocess.check_output(
-            ["git", "config", "--get", "remote.origin.url"], text=True
+            ["git", "config", " --get", "remote.origin.url"], text=True
         ).strip()
-        m = re.search(r"[:/](?P<org>[^/]+)/(?P<repo>[^/\\.]+)(?:\\.git)?$", url)
-        if m:
-            return m.group("org"), m.group("repo")
     except Exception:
-        pass
+        try:
+            url = subprocess.check_output(
+                ["git", "config", "--get", "remote.origin.url"], text=True
+            ).strip()
+        except Exception:
+            url = ""
+    m = re.search(r"[:/](?P<org>[^/]+)/(?P<repo>[^/\\.]+)(?:\\.git)?$", url)
+    if m:
+        return m.group("org"), m.group("repo")
     return "QMCSoftware", "QMCSoftware"
 
 def _resolve_branch(org: str, repo: str) -> str:
@@ -129,9 +135,21 @@ def guess_nb_path(repo_root: pathlib.Path) -> str:
         return "unknown.ipynb"
 
 # ---------------------------
+# Local path setup
+# ---------------------------
+def _ensure_local_paths(repo_root: pathlib.Path):
+    """Ensure both repo_root and repo_root/utils are importable locally."""
+    root = str(repo_root)
+    util = str(repo_root / "utils")
+    if root not in sys.path:
+        sys.path.insert(0, root)
+    if util not in sys.path:
+        sys.path.insert(0, util)
+
+# ---------------------------
 # Colab bootstrap
 # ---------------------------
-def ensure_pip_packages(pkgs: List[str]) -> None:
+def ensure_pip_packages(pkgs: List[str], *, quiet: bool = True) -> None:
     import importlib
     to_install = []
     for p in pkgs:
@@ -141,7 +159,8 @@ def ensure_pip_packages(pkgs: List[str]) -> None:
         except Exception:
             to_install.append(p)
     if to_install:
-        print("[notebook_header] pip install:", " ".join(to_install))
+        if not quiet:
+            print("[notebook_header] pip install:", " ".join(to_install))
         subprocess.check_call([sys.executable, "-m", "pip", "install", *to_install])
 
 def _is_editable_installable(path: pathlib.Path) -> bool:
@@ -149,11 +168,8 @@ def _is_editable_installable(path: pathlib.Path) -> bool:
 
 def _find_qmc_submodule(repo_dir: pathlib.Path) -> Optional[pathlib.Path]:
     # Common names used across repos
-    candidates = [
-        repo_dir / "QMCSoftware",
-        repo_dir / "qmcsoftware",
-    ]
-    for p in candidates:
+    for name in ("QMCSoftware", "qmcsoftware"):
+        p = repo_dir / name
         if p.exists():
             return p
     # Fallback: shallow scan for a dir containing 'qmcpy'
@@ -165,17 +181,22 @@ def _find_qmc_submodule(repo_dir: pathlib.Path) -> Optional[pathlib.Path]:
         pass
     return None
 
-def colab_bootstrap(org: str, repo: str, branch: str) -> pathlib.Path:
-    """Clone repo (w/ submodules), ensure deps & imports work in Colab."""
+def _add_qmc_to_syspath(qmc_path: pathlib.Path) -> None:
+    """Add correct folder (flat or src layout) to sys.path."""
+    add = qmc_path / "src" if (qmc_path / "src" / "qmcpy").exists() else qmc_path
+    if str(add) not in sys.path:
+        sys.path.insert(0, str(add))
+
+def colab_bootstrap(org: str, repo: str, branch: str, *, quiet: bool = True) -> pathlib.Path:
+    """Clone/update repo & submodules, ensure deps & imports work in Colab."""
     repo_dir = pathlib.Path("/content") / repo
     if not repo_dir.exists():
-        print(f"[notebook_header] Cloning {org}/{repo}@{branch} (with submodules) ...")
+        if not quiet:
+            print(f"[notebook_header] Cloning {org}/{repo}@{branch} (with submodules) ...")
         subprocess.check_call([
             "git", "clone", "--depth", "1", "--recurse-submodules",
             "-b", branch, f"https://github.com/{org}/{repo}.git", str(repo_dir)
         ])
-    else:
-        print(f"[notebook_header] Using existing clone at {repo_dir}")
 
     # Ensure submodules are present/up-to-date (even for reused shallow clones)
     subprocess.check_call(["git", "-C", str(repo_dir), "submodule", "sync", "--recursive"])
@@ -184,10 +205,11 @@ def colab_bootstrap(org: str, repo: str, branch: str) -> pathlib.Path:
     # requirements
     req = repo_dir / "requirements-colab.txt"
     if req.exists():
-        print("[notebook_header] Installing requirements-colab.txt")
+        if not quiet:
+            print("[notebook_header] Installing requirements-colab.txt")
         subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", str(req)])
     else:
-        ensure_pip_packages(["numpy", "scipy", "matplotlib", "pandas", "ipynbname"])
+        ensure_pip_packages(["numpy", "scipy", "matplotlib", "pandas", "ipynbname"], quiet=quiet)
 
     # QMCSoftware submodule: editable if possible; else add to sys.path
     qmc_path = _find_qmc_submodule(repo_dir)
@@ -196,20 +218,16 @@ def colab_bootstrap(org: str, repo: str, branch: str) -> pathlib.Path:
             try:
                 subprocess.check_call([sys.executable, "-m", "pip", "install", "-e", str(qmc_path)])
             except Exception as e:
-                print("[notebook_header] Editable install of QMCSoftware failed; falling back to sys.path:", e)
-                # Fallback: support both flat and src layouts
-                candidates = [qmc_path / "src", qmc_path]
-                for c in candidates:
-                    add = c if (c / "qmcpy").exists() else None
-                    if add and str(add) not in sys.path:
-                        sys.path.insert(0, str(add))
+                print("[notebook_header] WARNING: Editable install of QMCSoftware failed; falling back to sys.path:", e)
+                _add_qmc_to_syspath(qmc_path)
         else:
-            # No packaging metadata: directly add the correct path to sys.path
-            add = qmc_path / "src" if (qmc_path / "src" / "qmcpy").exists() else qmc_path
-            if str(add) not in sys.path:
-                sys.path.insert(0, str(add))
+            _add_qmc_to_syspath(qmc_path)
     else:
-        print("[notebook_header] WARNING: QMCSoftware submodule not found (looked for 'QMCSoftware' and 'qmcsoftware').")
+        print("[notebook_header] WARNING: QMCSoftware submodule not found (tried 'QMCSoftware' and 'qmcsoftware').")
+
+    # Top-level repo: never editable-install; just add to sys.path
+    if str(repo_dir) not in sys.path:
+        sys.path.insert(0, str(repo_dir))
 
     # Ensure utils on path + chdir for relative paths
     utils_dir = repo_dir / "utils"
@@ -232,29 +250,41 @@ def show_colab_button(org: str, repo: str, branch: str, nb_path: str) -> None:
     url = f"https://colab.research.google.com/github/{org}/{repo}/blob/{branch}/{nb_quoted}"
     html = (
         'If you are not running this notebook in the '
-        '<code>conda qmcpy</code> environment, '
+        '<code>conda qmcpy</code> environment, make sure that you '
         f'<a target="_blank" href="{url}">'
         '<img src="https://colab.research.google.com/assets/colab-badge.svg" '
         'alt="Open In Colab"/></a>'
+        ' and rerun the cell above.  Otherwise, proceed to the next cell.'
     )
+
     display(HTML(html))
 
 # ---------------------------
 # Auto imports (optional)
 # ---------------------------
 def try_auto_imports() -> None:
+    """Inject aliases if utils/auto_imports.py exists (robust to path style)."""
     try:
+        # Package-style
         from utils.auto_imports import inject_common  # type: ignore
-        inject_common(get_ipython().user_ns)  # type: ignore[attr-defined]
+    except Exception:
+        try:
+            # Module-style (when only <repo>/utils is on sys.path)
+            import auto_imports  # type: ignore
+            inject_common = auto_imports.inject_common  # type: ignore[attr-defined]
+        except Exception:
+            return
+    try:
+        verbose = os.environ.get("AUTO_IMPORTS_VERBOSE","0").lower() in ("1","true","yes")
+        inject_common(get_ipython().user_ns, verbose=verbose)  # type: ignore[attr-defined]
     except Exception:
         pass
 
 # ---------------------------
-# Post-run hook (rarely needed now)
+# Post-run hook (rarely needed)
 # ---------------------------
 def _post_run_attempt_path(repo_root: pathlib.Path, org: str, repo: str, branch: str, quiet: bool):
     ip = get_ipython()  # type: ignore[attr-defined]
-
     def _callback(*args, **kwargs):
         global _NB_PATH
         try:
@@ -275,7 +305,6 @@ def _post_run_attempt_path(repo_root: pathlib.Path, org: str, repo: str, branch:
                 ip.events.unregister('post_run_cell', _callback)  # type: ignore[attr-defined]
             except Exception:
                 pass
-
     try:
         ip.events.register('post_run_cell', _callback)  # type: ignore[attr-defined]
     except Exception:
@@ -292,8 +321,11 @@ def main(force: bool = False, quiet: bool = True):
     org, repo = get_org_repo()
     branch = _resolve_branch(org, repo)
 
+    # NEW: on local runs, ensure repo_root and utils are importable
+    if repo_root and not in_colab():
+        _ensure_local_paths(repo_root)
+
     if _STATE["ran"] and not force:
-        # Re-show the badge so re-running the first cell doesn't blank it out
         try:
             show_colab_button(org, repo, branch, _NB_PATH)
         except Exception as e:
@@ -307,8 +339,6 @@ def main(force: bool = False, quiet: bool = True):
     nb_override = get_nb_override()
     if nb_override:
         _NB_PATH = nb_override
-        if not quiet:
-            print(f"[notebook_header] Using NB_PATH override: {_NB_PATH}")
     elif repo_root:
         _NB_PATH = guess_nb_path(repo_root)
     else:
@@ -324,10 +354,9 @@ def main(force: bool = False, quiet: bool = True):
     # If in Colab, ensure the repo & deps are ready
     if in_colab():
         try:
-            colab_bootstrap(org, repo, branch)
+            colab_bootstrap(org, repo, branch, quiet=quiet)
         except Exception as e:
-            if not quiet:
-                print("[notebook_header] Colab bootstrap error:", e)
+            print("[notebook_header] ERROR: Colab bootstrap failed:", e)
 
     # If we couldn't resolve NB path on first import, try right after first cell
     if _NB_PATH == "unknown.ipynb" and in_ipython() and repo_root:
@@ -347,4 +376,4 @@ if os.environ.get("NOTEBOOK_HEADER_AUTORUN", "1").lower() in ("1", "true", "yes"
         try:
             main(False)
         except Exception as e:
-            print("[notebook_header] autorun failed:", e)
+            print("[notebook_header] ERROR: autorun failed:", e)
