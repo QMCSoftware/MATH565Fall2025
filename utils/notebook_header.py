@@ -2,13 +2,14 @@
 notebook_header.py — portable header for VS Code, JupyterLab, and Colab.
 
 Features:
-- Location-independent: detects repo root, org/repo, and notebook path.
-- Honors NB_PATH override set in the notebook or environment.
-- Colab bootstrap: clones current repo (+ submodules) and installs deps.
-- Colab badge: shows "Open in Colab" when not in 'qmcpy' env (or always in Colab).
-- Post-cell hook: if NB path is unknown on first import, resolve it right after the first cell.
-- Auto-run on import; idempotent; re-run via reload_header().
-- quiet=True by default to suppress print output.
+- Quiet by default, idempotent main(); re-run re-renders the badge.
+- Always shows an inline "Open in Colab" badge with guidance text.
+- Honors NB_PATH (from notebook user_ns or environment).
+- Org/repo detection prefers BOOT_ORG/BOOT_REPO, then git remote.
+- Branch resolution prefers BOOT_BRANCH; defaults to 'main' for MATH565Fall2025,
+  otherwise to DEFAULT_BOOT_BRANCH (e.g., 'bootstrap_colab').
+- Colab bootstrap: clone (w/ submodules), install requirements, pip -e QMCSoftware
+  if it’s a package, never editable-install the top-level repo (adds to sys.path).
 """
 
 from __future__ import annotations
@@ -73,7 +74,7 @@ def get_repo_root() -> Optional[pathlib.Path]:
         return None
 
 def get_org_repo() -> tuple[str, str]:
-    # Prefer explicit overrides first
+    """Prefer explicit overrides (ORG/REPO, BOOT_ORG/BOOT_REPO), else derive from git remote."""
     org = (globals().get("ORG") or os.environ.get("ORG")
            or os.environ.get("BOOT_ORG"))
     repo = (globals().get("REPO") or os.environ.get("REPO")
@@ -91,10 +92,20 @@ def get_org_repo() -> tuple[str, str]:
         pass
     return "QMCSoftware", "QMCSoftware"
 
+def _resolve_branch(org: str, repo: str) -> str:
+    """Pick a reasonable default branch; prefer explicit override."""
+    env_branch = os.environ.get("BOOT_BRANCH")
+    if env_branch:
+        return env_branch
+    if repo == "MATH565Fall2025":
+        return "main"
+    return DEFAULT_BOOT_BRANCH
+
 # ---------------------------
 # NB_PATH override + detection
 # ---------------------------
 def get_nb_override() -> Optional[str]:
+    """Read NB_PATH override from the notebook's user_ns or environment."""
     try:
         if in_ipython():
             ns = get_ipython().user_ns  # type: ignore[attr-defined]
@@ -107,6 +118,7 @@ def get_nb_override() -> Optional[str]:
     return val if val else None
 
 def guess_nb_path(repo_root: pathlib.Path) -> str:
+    """Guess path to the current notebook, relative to repo root."""
     try:
         import ipynbname  # type: ignore
         full = pathlib.Path(ipynbname.path())
@@ -134,6 +146,7 @@ def _is_editable_installable(path: pathlib.Path) -> bool:
     return any((path / fname).exists() for fname in ("pyproject.toml", "setup.cfg", "setup.py"))
 
 def colab_bootstrap(org: str, repo: str, branch: str) -> pathlib.Path:
+    """Clone repo (with submodules) and ensure imports work in Colab."""
     repo_dir = pathlib.Path("/content") / repo
     if not repo_dir.exists():
         print(f"[notebook_header] Cloning {org}/{repo}@{branch} (with submodules) ...")
@@ -166,21 +179,11 @@ def colab_bootstrap(org: str, repo: str, branch: str) -> pathlib.Path:
             if str(qmc_path) not in sys.path:
                 sys.path.insert(0, str(qmc_path))
 
-    # Top-level repo: editable only if it’s a package (or unless explicitly skipped)
-    if os.environ.get("SKIP_EDITABLE_TOP", "").lower() in ("1", "true", "yes"):
-        pass  # skip
-    elif _is_editable_installable(repo_dir):
-        try:
-            subprocess.check_call([sys.executable, "-m", "pip", "install", "-e", str(repo_dir)])
-        except Exception as e:
-            print("[notebook_header] Editable install of repo failed; adding to sys.path:", e)
-            if str(repo_dir) not in sys.path:
-                sys.path.insert(0, str(repo_dir))
-    else:
-        if str(repo_dir) not in sys.path:
-            sys.path.insert(0, str(repo_dir))
+    # Top-level repo: never editable-install; just add to sys.path
+    if str(repo_dir) not in sys.path:
+        sys.path.insert(0, str(repo_dir))
 
-    # utils on path + chdir for data paths
+    # Ensure utils on path + chdir for relative paths
     utils_dir = repo_dir / "utils"
     if str(utils_dir) not in sys.path:
         sys.path.insert(0, str(utils_dir))
@@ -195,6 +198,7 @@ def colab_bootstrap(org: str, repo: str, branch: str) -> pathlib.Path:
 # Colab badge helper
 # ---------------------------
 def show_colab_button(org: str, repo: str, branch: str, nb_path: str) -> None:
+    """Display an inline message + Open in Colab badge (one line, no break)."""
     from IPython.display import HTML, display
     nb_quoted = nb_path.replace(" ", "%20")
     url = f"https://colab.research.google.com/github/{org}/{repo}/blob/{branch}/{nb_quoted}"
@@ -204,7 +208,6 @@ def show_colab_button(org: str, repo: str, branch: str, nb_path: str) -> None:
         f'<a target="_blank" href="{url}">'
         '<img src="https://colab.research.google.com/assets/colab-badge.svg" '
         'alt="Open In Colab"/></a>'
-        ', otherwise continue to the next cell for setup.'
     )
     display(HTML(html))
 
@@ -219,7 +222,7 @@ def try_auto_imports() -> None:
         pass
 
 # ---------------------------
-# Post-run hook
+# Post-run hook (kept minimal; not usually needed now)
 # ---------------------------
 def _post_run_attempt_path(repo_root: pathlib.Path, org: str, repo: str, branch: str, quiet: bool):
     ip = get_ipython()  # type: ignore[attr-defined]
@@ -231,8 +234,6 @@ def _post_run_attempt_path(repo_root: pathlib.Path, org: str, repo: str, branch:
             new_path = override if override else guess_nb_path(repo_root)
             if new_path != "unknown.ipynb":
                 _NB_PATH = new_path
-                if not quiet:
-                    print(f"[notebook_header] Detected notebook after first cell: {_NB_PATH}")
                 try:
                     show_colab_button(org, repo, branch, _NB_PATH)
                 except Exception:
@@ -256,14 +257,15 @@ def _post_run_attempt_path(repo_root: pathlib.Path, org: str, repo: str, branch:
 # Main entry
 # ---------------------------
 def main(force: bool = False, quiet: bool = True):
+    """Run header once; on subsequent calls, just re-render the badge."""
     global _NB_PATH
 
     repo_root = get_repo_root()
     org, repo = get_org_repo()
-    branch = os.environ.get("BOOT_BRANCH", DEFAULT_BOOT_BRANCH)
+    branch = _resolve_branch(org, repo)
 
     if _STATE["ran"] and not force:
-        # Re-show the badge so re-running the cell doesn't blank it out
+        # Re-show the badge so re-running the first cell doesn't blank it out
         try:
             show_colab_button(org, repo, branch, _NB_PATH)
         except Exception as e:
@@ -272,12 +274,8 @@ def main(force: bool = False, quiet: bool = True):
         return
 
     _STATE["ran"] = True
-    # ... keep the rest of your function body the same, but remove the old early-return block ...
 
-    repo_root = get_repo_root()
-    org, repo = get_org_repo()
-    branch = os.environ.get("BOOT_BRANCH", DEFAULT_BOOT_BRANCH)
-
+    # Determine notebook path
     nb_override = get_nb_override()
     if nb_override:
         _NB_PATH = nb_override
@@ -288,17 +286,14 @@ def main(force: bool = False, quiet: bool = True):
     else:
         _NB_PATH = "unknown.ipynb"
 
-    if not quiet:
-        print(f"[notebook_header] {org}/{repo}@{branch}")
-        print(f"[notebook_header] Notebook: {_NB_PATH}")
-        print(f"[notebook_header] Time: {datetime.datetime.now().isoformat(timespec='seconds')}")
-
+    # Always show the badge (inline)
     try:
         show_colab_button(org, repo, branch, _NB_PATH)
     except Exception as e:
         if not quiet:
             print("[notebook_header] Colab badge error:", e)
 
+    # If in Colab, ensure the repo & deps are ready
     if in_colab():
         try:
             colab_bootstrap(org, repo, branch)
@@ -306,16 +301,18 @@ def main(force: bool = False, quiet: bool = True):
             if not quiet:
                 print("[notebook_header] Colab bootstrap error:", e)
 
+    # If we couldn't resolve NB path on first import, try right after first cell
     if _NB_PATH == "unknown.ipynb" and in_ipython() and repo_root:
         _post_run_attempt_path(repo_root, org, repo, branch, quiet)
 
+    # Optional auto-imports
     try_auto_imports()
 
 def reload_header(quiet: bool = True):
     return main(force=True, quiet=quiet)
 
 # ---------------------------
-# Autorun
+# Autorun (default on; you can disable via NOTEBOOK_HEADER_AUTORUN=0)
 # ---------------------------
 if os.environ.get("NOTEBOOK_HEADER_AUTORUN", "1").lower() in ("1", "true", "yes"):
     if in_ipython():
