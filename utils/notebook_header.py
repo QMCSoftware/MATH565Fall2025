@@ -130,6 +130,9 @@ def ensure_pip_packages(pkgs: List[str]) -> None:
         print("[notebook_header] pip install:", " ".join(to_install))
         subprocess.check_call([sys.executable, "-m", "pip", "install", *to_install])
 
+def _is_editable_installable(path: pathlib.Path) -> bool:
+    return any((path / fname).exists() for fname in ("pyproject.toml", "setup.cfg", "setup.py"))
+
 def colab_bootstrap(org: str, repo: str, branch: str) -> pathlib.Path:
     repo_dir = pathlib.Path("/content") / repo
     if not repo_dir.exists():
@@ -141,31 +144,46 @@ def colab_bootstrap(org: str, repo: str, branch: str) -> pathlib.Path:
     else:
         print(f"[notebook_header] Using existing clone at {repo_dir}")
 
+    # requirements
     req = repo_dir / "requirements-colab.txt"
     if req.exists():
         print("[notebook_header] Installing requirements-colab.txt")
         subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", str(req)])
     else:
-        ensure_pip_packages([
-            "numpy", "scipy", "matplotlib", "pandas", "ipynbname"
-        ])
+        ensure_pip_packages(["numpy", "scipy", "matplotlib", "pandas", "ipynbname"])
 
+    # QMCSoftware submodule: editable if possible; else add to sys.path
     qmc_path = repo_dir / "QMCSoftware"
     if qmc_path.exists():
+        if _is_editable_installable(qmc_path):
+            try:
+                subprocess.check_call([sys.executable, "-m", "pip", "install", "-e", str(qmc_path)])
+            except Exception as e:
+                print("[notebook_header] Editable install of QMCSoftware failed; adding to sys.path:", e)
+                if str(qmc_path) not in sys.path:
+                    sys.path.insert(0, str(qmc_path))
+        else:
+            if str(qmc_path) not in sys.path:
+                sys.path.insert(0, str(qmc_path))
+
+    # Top-level repo: editable only if it’s a package (or unless explicitly skipped)
+    if os.environ.get("SKIP_EDITABLE_TOP", "").lower() in ("1", "true", "yes"):
+        pass  # skip
+    elif _is_editable_installable(repo_dir):
         try:
-            subprocess.check_call([sys.executable, "-m", "pip", "install", "-e", str(qmc_path)])
+            subprocess.check_call([sys.executable, "-m", "pip", "install", "-e", str(repo_dir)])
         except Exception as e:
-            print("[notebook_header] Editable install of QMCSoftware failed:", e)
+            print("[notebook_header] Editable install of repo failed; adding to sys.path:", e)
+            if str(repo_dir) not in sys.path:
+                sys.path.insert(0, str(repo_dir))
+    else:
+        if str(repo_dir) not in sys.path:
+            sys.path.insert(0, str(repo_dir))
 
-    try:
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "-e", str(repo_dir)])
-    except Exception as e:
-        print("[notebook_header] Editable install of repo failed:", e)
-
+    # utils on path + chdir for data paths
     utils_dir = repo_dir / "utils"
     if str(utils_dir) not in sys.path:
         sys.path.insert(0, str(utils_dir))
-
     try:
         os.chdir(repo_dir)
     except Exception:
