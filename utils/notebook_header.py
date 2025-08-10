@@ -109,6 +109,16 @@ def _resolve_branch(org: str, repo: str) -> str:
         return "main"
     return DEFAULT_BOOT_BRANCH
 
+def _ensure_qp_alias():
+    """Guarantee qp is available if qmcpy is importable."""
+    try:
+        ns = get_ipython().user_ns  # type: ignore[attr-defined]
+        if 'qp' not in ns:
+            import qmcpy as _qp
+            ns['qp'] = _qp
+    except Exception:
+        pass
+
 # ---------------------------
 # NB_PATH override + detection
 # ---------------------------
@@ -250,35 +260,24 @@ def show_colab_button(org: str, repo: str, branch: str, nb_path: str) -> None:
     url = f"https://colab.research.google.com/github/{org}/{repo}/blob/{branch}/{nb_quoted}"
     html = (
         'If you are not running this notebook in the '
-        '<code>conda qmcpy</code> environment, make sure that you '
+        '<code>conda qmcpy</code> environment, '
         f'<a target="_blank" href="{url}">'
         '<img src="https://colab.research.google.com/assets/colab-badge.svg" '
         'alt="Open In Colab"/></a>'
-        ' and rerun the cell above.  Otherwise, proceed to the next cell.'
     )
-
     display(HTML(html))
 
 # ---------------------------
 # Auto imports (optional)
 # ---------------------------
-def try_auto_imports() -> None:
-    """Inject aliases if utils/auto_imports.py exists (robust to path style)."""
+def try_auto_imports():
+    """Inject common aliases (np, pd, plt, sp, sy, qp) into the interactive namespace."""
     try:
-        # Package-style
-        from utils.auto_imports import inject_common  # type: ignore
-    except Exception:
-        try:
-            # Module-style (when only <repo>/utils is on sys.path)
-            import auto_imports  # type: ignore
-            inject_common = auto_imports.inject_common  # type: ignore[attr-defined]
-        except Exception:
-            return
-    try:
-        verbose = os.environ.get("AUTO_IMPORTS_VERBOSE","0").lower() in ("1","true","yes")
-        inject_common(get_ipython().user_ns, verbose=verbose)  # type: ignore[attr-defined]
-    except Exception:
-        pass
+        from utils import auto_imports  # type: ignore
+        ns = get_ipython().user_ns  # type: ignore[attr-defined]
+        auto_imports.inject_common(ns)
+    except Exception as e:
+        print("[notebook_header] auto_imports failed:", e)
 
 # ---------------------------
 # Post-run hook (rarely needed)
@@ -364,6 +363,7 @@ def main(force: bool = False, quiet: bool = True):
 
     # Optional auto-imports
     try_auto_imports()
+    _ensure_qp_alias()   # <- make qp always available when qmcpy is present
 
 def reload_header(quiet: bool = True):
     return main(force=True, quiet=quiet)
