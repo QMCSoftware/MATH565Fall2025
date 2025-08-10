@@ -208,6 +208,7 @@ def show_colab_button(org: str, repo: str, branch: str, nb_path: str) -> None:
         f'<a target="_blank" href="{url}">'
         '<img src="https://colab.research.google.com/assets/colab-badge.svg" '
         'alt="Open In Colab"/></a>'
+        ' and run the cell above again. Otherwise, continue to the next cell.'
     )
     display(HTML(html))
 
