@@ -196,18 +196,20 @@ def colab_bootstrap(org: str, repo: str, branch: str) -> pathlib.Path:
             try:
                 subprocess.check_call([sys.executable, "-m", "pip", "install", "-e", str(qmc_path)])
             except Exception as e:
-                print("[notebook_header] Editable install of QMCSoftware failed; adding to sys.path:", e)
-                if str(qmc_path) not in sys.path:
-                    sys.path.insert(0, str(qmc_path))
+                print("[notebook_header] Editable install of QMCSoftware failed; falling back to sys.path:", e)
+                # Fallback: support both flat and src layouts
+                candidates = [qmc_path / "src", qmc_path]
+                for c in candidates:
+                    add = c if (c / "qmcpy").exists() else None
+                    if add and str(add) not in sys.path:
+                        sys.path.insert(0, str(add))
         else:
-            if str(qmc_path) not in sys.path:
-                sys.path.insert(0, str(qmc_path))
+            # No packaging metadata: directly add the correct path to sys.path
+            add = qmc_path / "src" if (qmc_path / "src" / "qmcpy").exists() else qmc_path
+            if str(add) not in sys.path:
+                sys.path.insert(0, str(add))
     else:
         print("[notebook_header] WARNING: QMCSoftware submodule not found (looked for 'QMCSoftware' and 'qmcsoftware').")
-
-    # Top-level repo: never editable-install; just add to sys.path
-    if str(repo_dir) not in sys.path:
-        sys.path.insert(0, str(repo_dir))
 
     # Ensure utils on path + chdir for relative paths
     utils_dir = repo_dir / "utils"
