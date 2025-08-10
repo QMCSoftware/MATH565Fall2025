@@ -260,10 +260,11 @@ def show_colab_button(org: str, repo: str, branch: str, nb_path: str) -> None:
     url = f"https://colab.research.google.com/github/{org}/{repo}/blob/{branch}/{nb_quoted}"
     html = (
         'If you are not running this notebook in the '
-        '<code>conda qmcpy</code> environment, '
+        '<code>conda qmcpy</code> environment, then '
         f'<a target="_blank" href="{url}">'
         '<img src="https://colab.research.google.com/assets/colab-badge.svg" '
         'alt="Open In Colab"/></a>'
+        ' and rerun the cell above.  Otherwise proceed to the next cell.'
     )
     display(HTML(html))
 
