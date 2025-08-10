@@ -1,15 +1,17 @@
 """
 notebook_header.py — portable header for VS Code, JupyterLab, and Colab.
 
-Features:
-- Quiet by default, idempotent main(); re-run re-renders the badge.
+- Quiet by default; idempotent main(); re-running re-renders the badge.
 - Always shows an inline "Open in Colab" badge with guidance text.
 - Honors NB_PATH (from notebook user_ns or environment).
 - Org/repo detection prefers BOOT_ORG/BOOT_REPO, then git remote.
 - Branch resolution prefers BOOT_BRANCH; defaults to 'main' for MATH565Fall2025,
-  otherwise to DEFAULT_BOOT_BRANCH (e.g., 'bootstrap_colab').
-- Colab bootstrap: clone (w/ submodules), install requirements, pip -e QMCSoftware
-  if it’s a package, never editable-install the top-level repo (adds to sys.path).
+  else to DEFAULT_BOOT_BRANCH (e.g., 'bootstrap_colab').
+- Colab bootstrap:
+    • Clone (with submodules) and install requirements.
+    • Find QMCSoftware submodule under either 'QMCSoftware' or 'qmcsoftware'.
+    • pip -e the submodule if installable; else add to sys.path.
+    • Never editable-install the top-level repo; just add to sys.path.
 """
 
 from __future__ import annotations
@@ -145,8 +147,26 @@ def ensure_pip_packages(pkgs: List[str]) -> None:
 def _is_editable_installable(path: pathlib.Path) -> bool:
     return any((path / fname).exists() for fname in ("pyproject.toml", "setup.cfg", "setup.py"))
 
+def _find_qmc_submodule(repo_dir: pathlib.Path) -> Optional[pathlib.Path]:
+    # Common names used across repos
+    candidates = [
+        repo_dir / "QMCSoftware",
+        repo_dir / "qmcsoftware",
+    ]
+    for p in candidates:
+        if p.exists():
+            return p
+    # Fallback: shallow scan for a dir containing 'qmcpy'
+    try:
+        for p in repo_dir.iterdir():
+            if p.is_dir() and (p / "qmcpy").exists():
+                return p
+    except Exception:
+        pass
+    return None
+
 def colab_bootstrap(org: str, repo: str, branch: str) -> pathlib.Path:
-    """Clone repo (with submodules) and ensure imports work in Colab."""
+    """Clone repo (w/ submodules), ensure deps & imports work in Colab."""
     repo_dir = pathlib.Path("/content") / repo
     if not repo_dir.exists():
         print(f"[notebook_header] Cloning {org}/{repo}@{branch} (with submodules) ...")
@@ -157,6 +177,10 @@ def colab_bootstrap(org: str, repo: str, branch: str) -> pathlib.Path:
     else:
         print(f"[notebook_header] Using existing clone at {repo_dir}")
 
+    # Ensure submodules are present/up-to-date (even for reused shallow clones)
+    subprocess.check_call(["git", "-C", str(repo_dir), "submodule", "sync", "--recursive"])
+    subprocess.check_call(["git", "-C", str(repo_dir), "submodule", "update", "--init", "--recursive", "--depth", "1"])
+
     # requirements
     req = repo_dir / "requirements-colab.txt"
     if req.exists():
@@ -166,8 +190,8 @@ def colab_bootstrap(org: str, repo: str, branch: str) -> pathlib.Path:
         ensure_pip_packages(["numpy", "scipy", "matplotlib", "pandas", "ipynbname"])
 
     # QMCSoftware submodule: editable if possible; else add to sys.path
-    qmc_path = repo_dir / "QMCSoftware"
-    if qmc_path.exists():
+    qmc_path = _find_qmc_submodule(repo_dir)
+    if qmc_path:
         if _is_editable_installable(qmc_path):
             try:
                 subprocess.check_call([sys.executable, "-m", "pip", "install", "-e", str(qmc_path)])
@@ -178,6 +202,8 @@ def colab_bootstrap(org: str, repo: str, branch: str) -> pathlib.Path:
         else:
             if str(qmc_path) not in sys.path:
                 sys.path.insert(0, str(qmc_path))
+    else:
+        print("[notebook_header] WARNING: QMCSoftware submodule not found (looked for 'QMCSoftware' and 'qmcsoftware').")
 
     # Top-level repo: never editable-install; just add to sys.path
     if str(repo_dir) not in sys.path:
@@ -208,7 +234,6 @@ def show_colab_button(org: str, repo: str, branch: str, nb_path: str) -> None:
         f'<a target="_blank" href="{url}">'
         '<img src="https://colab.research.google.com/assets/colab-badge.svg" '
         'alt="Open In Colab"/></a>'
-        ' and run the cell above again. Otherwise, continue to the next cell.'
     )
     display(HTML(html))
 
@@ -223,7 +248,7 @@ def try_auto_imports() -> None:
         pass
 
 # ---------------------------
-# Post-run hook (kept minimal; not usually needed now)
+# Post-run hook (rarely needed now)
 # ---------------------------
 def _post_run_attempt_path(repo_root: pathlib.Path, org: str, repo: str, branch: str, quiet: bool):
     ip = get_ipython()  # type: ignore[attr-defined]
