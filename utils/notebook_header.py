@@ -1,18 +1,19 @@
 """
 notebook_header.py — portable header for VS Code, JupyterLab, and Colab.
 
-Features:
-- Minimal output (quiet=True). Re-running just re-renders the Colab badge.
-- Detects org/repo/branch with overrides via env (BOOT_ORG/BOOT_REPO/BOOT_BRANCH).
-- Local: ensures <repo_root> and <repo_root>/utils are importable.
-- Colab: clones/updates repo + submodules, installs deps, makes qmcpy importable.
-- Always shows an "Open in Colab" badge (top of notebook).
-- Auto-imports (np/pd/plt/sp/sy/qp) and optional plot prefs via AUTO_PLOT_PREFS=1.
-- Always injects LaTeX macros into MathJax (Markdown math) — no env toggle.
+Highlights:
+- Minimal output (quiet=True). Re-running re-renders the Colab badge.
+- Detects org/repo/branch with env overrides (BOOT_ORG/BOOT_REPO/BOOT_BRANCH).
+- Local: ensures <repo_root> and <repo_root>/utils on sys.path.
+- Colab: clone/update repo + submodules, ensure qmcpy importable.
+- Always shows an "Open in Colab" badge (inline).
+- Auto-imports (np/pd/plt/sp/sy/qp) + optional plot prefs via AUTO_PLOT_PREFS=1.
+- NEW: Ensures a hidden top Markdown cell with LaTeX macros is present on disk
+  so macros work in VS Code, JupyterLab, and Colab without per-user settings.
 """
 
 from __future__ import annotations
-import os, sys, re, subprocess, pathlib
+import os, sys, re, subprocess, pathlib, json
 from typing import Optional, List
 
 # --- State ---
@@ -202,7 +203,7 @@ def show_colab_button(org: str, repo: str, branch: str, nb_path: str):
     display(HTML(html))
 
 # =============================================================================
-# Auto imports + LaTeX macros
+# Auto imports
 # =============================================================================
 def try_auto_imports():
     try:
@@ -227,23 +228,73 @@ def _ensure_qp_alias():
     except Exception:
         pass
 
-def _inject_latex_macros():
-    """Define LaTeX macros via a Math block (works in JupyterLab/Colab without JS)."""
+# =============================================================================
+# Ensure a top Markdown cell with LaTeX macros (on disk)
+# =============================================================================
+_MACRO_CELL_SOURCE = [
+    "$\n",
+    "\\newcommand{\\vh}{\\boldsymbol{h}}\n",
+    "\\newcommand{\\vt}{\\boldsymbol{t}}\n",
+    "\\newcommand{\\vx}{\\boldsymbol{x}}\n",
+    "\\newcommand{\\vX}{\\boldsymbol{X}}\n",
+    "\\newcommand{\\cf}{\\mathcal{F}}\n",
+    "\\newcommand{\\cu}{\\mathcal{U}}\n",
+    "\\newcommand{\\dif}{\\mathrm{d}}\n",
+    "\\newcommand{\\Ex}{\\mathbb{E}}\n",
+    "\\DeclareMathOperator{\\disc}{disc}\n",
+    "\\newcommand{\\norm}[2][{}]{{\\left \\lVert #2 \\right \\rVert}_{#1}}\n",
+    "$\n",
+]
+
+def _has_macros(cell) -> bool:
+    if not isinstance(cell, dict):
+        return False
+    if cell.get("cell_type") != "markdown":
+        return False
+    src = "".join(cell.get("source", []))
+    # Look for a couple of signature macros
+    return ("\\newcommand{\\vx}" in src) or ("\\DeclareMathOperator{\\disc}" in src)
+
+def _ensure_macro_cell_on_disk(nb_path: pathlib.Path) -> bool:
+    """
+    Insert a hidden top Markdown cell with macros if not already present.
+    Returns True if macros are present (inserted or already there).
+    """
+    try:
+        if not nb_path.exists():
+            return False
+        with nb_path.open("r", encoding="utf-8") as f:
+            nb = json.load(f)
+        cells = nb.get("cells", [])
+        if any(_has_macros(c) for c in cells[:3]):
+            return True  # already there near the top
+        macro_cell = {
+            "cell_type": "markdown",
+            "metadata": {
+                # Hide in common UIs
+                "tags": ["hide-input", "hide_cell", "remove-input"],
+                "jupyter": {"source_hidden": True}
+            },
+            "source": list(_MACRO_CELL_SOURCE),
+        }
+        nb.setdefault("cells", [])
+        nb["cells"].insert(0, macro_cell)
+        with nb_path.open("w", encoding="utf-8") as f:
+            json.dump(nb, f, indent=1, ensure_ascii=False)
+        return True
+    except Exception:
+        return False
+
+def _inject_macros_runtime():
+    """
+    Fallback: define macros for the CURRENT session only
+    (used when the notebook file cannot be edited).
+    """
     if not in_ipython():
         return
     try:
         from IPython.display import Math, display
-        display(Math(r"""
-\newcommand{\vt}{\boldsymbol{t}}
-\newcommand{\vx}{\boldsymbol{x}}
-\newcommand{\vX}{\boldsymbol{X}}
-\newcommand{\cf}{\mathcal{F}}
-\newcommand{\cu}{\mathcal{U}}
-\newcommand{\dif}{\mathrm{d}}
-\newcommand{\Ex}{\mathbb{E}}
-\DeclareMathOperator{\disc}{disc}
-\newcommand{\norm}[2][{}]{{\left \lVert #2 \right \rVert}_{#1}}
-"""))
+        display(Math("".join(_MACRO_CELL_SOURCE)))
     except Exception:
         pass
 
@@ -274,6 +325,18 @@ def main(force: bool = False, quiet: bool = True):
     except Exception:
         pass
 
+    # Ensure macros are available everywhere
+    inserted = False
+    if os.environ.get("SKIP_MACRO_CELL", "").lower() not in ("1","true","yes"):
+        try:
+            if repo_root and _NB_PATH != "unknown.ipynb":
+                nb_abs = (repo_root / _NB_PATH).resolve()
+                inserted = _ensure_macro_cell_on_disk(nb_abs)
+        except Exception:
+            inserted = False
+    if not inserted:
+        _inject_macros_runtime()
+
     if in_colab():
         try:
             colab_bootstrap(org, repo, branch, quiet=quiet)
@@ -282,7 +345,6 @@ def main(force: bool = False, quiet: bool = True):
 
     try_auto_imports()
     _ensure_qp_alias()
-    _inject_latex_macros()
 
 def reload_header(quiet: bool = True):
     return main(force=True, quiet=quiet)
