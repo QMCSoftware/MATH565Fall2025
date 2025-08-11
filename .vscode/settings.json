@@ -1,0 +1,14 @@
+{
+  "markdown.math.enabled": true,
+  "markdown.math.macros": {
+    "\\vt": "\\boldsymbol{t}",
+    "\\vx": "\\boldsymbol{x}",
+    "\\vX": "\\boldsymbol{X}",
+    "\\cf": "\\mathcal{F}",
+    "\\cu": "\\mathcal{U}",
+    "\\dif": "\\mathrm{d}",
+    "\\Ex": "\\mathbb{E}",
+    "\\disc": "\\mathop{\\mathrm{disc}}",
+    "\\norm": "\\left\\lVert#1\\right\\rVert_{#2}"
+  }
+}
