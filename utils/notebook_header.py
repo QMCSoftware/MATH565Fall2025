@@ -207,18 +207,23 @@ def show_colab_button(org: str, repo: str, branch: str, nb_path: str):
 # Auto imports
 # =============================================================================
 def try_auto_imports():
+    """Load utils/auto_imports.inject_common silently unless AUTO_IMPORTS_VERBOSE=1."""
     try:
-        try:
-            from utils.auto_imports import inject_common
-        except ImportError:
-            import auto_imports
-            inject_common = auto_imports.inject_common
-        ns = get_ipython().user_ns  # type: ignore
         verbose = os.environ.get("AUTO_IMPORTS_VERBOSE", "0").lower() in ("1","true","yes")
+        try:
+            from utils.auto_imports import inject_common  # preferred
+            if verbose: print("[notebook_header] auto_imports: using utils.auto_imports")
+        except ImportError:
+            import auto_imports  # fallback
+            inject_common = auto_imports.inject_common
+            if verbose: print("[notebook_header] auto_imports: using local auto_imports")
+
+        ns = get_ipython().user_ns  # type: ignore[attr-defined]
         plot_prefs = os.environ.get("AUTO_PLOT_PREFS", "0").lower() in ("1","true","yes")
         inject_common(ns, verbose=verbose, plot_prefs=plot_prefs)
-    except Exception:
-        pass
+        if verbose: print("[notebook_header] auto_imports loaded successfully.")
+    except Exception as e:
+        print("[notebook_header] auto_imports failed:", e)
 
 def _ensure_qp_alias():
     try:
