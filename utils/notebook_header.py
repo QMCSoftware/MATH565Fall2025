@@ -228,42 +228,24 @@ def _ensure_qp_alias():
         pass
 
 def _inject_latex_macros():
-    """Always inject LaTeX macros into MathJax (Jupyter/Colab)."""
+    """Define LaTeX macros via a Math block (works in JupyterLab/Colab without JS)."""
     if not in_ipython():
         return
-    from IPython.display import HTML, display
-    # MathJax v3-friendly config: merge macros and re-typeset
-    script = r"""
-    <script>
-    (function() {
-      window.MathJax = window.MathJax || {};
-      const addMacros = {
-        tex: { macros: {
-          vt: "\\boldsymbol{t}",
-          vx: "\\boldsymbol{x}",
-          vX: "\\boldsymbol{X}",
-          cf: "\\mathcal{F}",
-          cu: "\\mathcal{U}",
-          dif: "\\mathrm{d}",
-          Ex: "\\mathbb{E}",
-          disc: "\\operatorname{disc}",
-          norm: ["\\left\\lVert #2 \\right\\rVert_{#1}", 2]
-        }}
-      };
-      // Deep-merge macros
-      const mj = window.MathJax;
-      mj.tex = Object.assign({}, mj.tex, {macros: Object.assign(
-        {},
-        (mj.tex && mj.tex.macros) || {},
-        addMacros.tex.macros
-      )});
-      // Re-typeset if MathJax is ready
-      if (mj && mj.typesetPromise) { mj.typesetPromise(); }
-      else if (mj && typeof MathJax !== "undefined" && MathJax.typeset) { MathJax.typeset(); }
-    })();
-    </script>
-    """
-    display(HTML(script))
+    try:
+        from IPython.display import Math, display
+        display(Math(r"""
+\newcommand{\vt}{\boldsymbol{t}}
+\newcommand{\vx}{\boldsymbol{x}}
+\newcommand{\vX}{\boldsymbol{X}}
+\newcommand{\cf}{\mathcal{F}}
+\newcommand{\cu}{\mathcal{U}}
+\newcommand{\dif}{\mathrm{d}}
+\newcommand{\Ex}{\mathbb{E}}
+\DeclareMathOperator{\disc}{disc}
+\newcommand{\norm}[2][{}]{{\left \lVert #2 \right \rVert}_{#1}}
+"""))
+    except Exception:
+        pass
 
 # =============================================================================
 # Main entry
