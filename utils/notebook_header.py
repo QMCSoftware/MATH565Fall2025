@@ -9,8 +9,27 @@ notebook_header.py — portable header for VS Code, JupyterLab, and Colab.
 - Colab-only execution time/timestamp hook (no duplicates in VS Code/JupyterLab).
 - Quiet by default; set AUTO_IMPORTS_VERBOSE=1 for light diagnostics.
 
-Env to set in first cell BEFORE importing this module:
-  BOOT_ORG, BOOT_REPO, NB_PATH, BOOT_BRANCH, NOTEBOOK_HEADER_AUTORUN, AUTO_PLOT_PREFS
+# ---------------------------------------------------------------------------
+# Environment Variables (set BEFORE importing notebook_header in your notebook)
+#
+# BOOT_ORG                – GitHub org for the repo (default: inferred from git remote or "QMCSoftware")
+# BOOT_REPO               – GitHub repo name (default: inferred from git remote or "QMCSoftware")
+# NB_PATH                 – Path to the notebook relative to repo root (default: auto-detected)
+# BOOT_BRANCH             – Branch used when cloning in Colab (precedence: BOOT_BRANCH → QMCSOFTWARE_REF → "bootstrap_colab")
+# QMCSOFTWARE_REF         – Fallback branch/tag ONLY for the Colab clone if BOOT_BRANCH is not set
+# NOTEBOOK_HEADER_AUTORUN – "1"/"true" to autorun on import (default: 1)
+# AUTO_IMPORTS_VERBOSE    – "1"/"true" for verbose auto_imports diagnostics (default: 0)
+# AUTO_PLOT_PREFS         – "1"/"true" to set common plotting defaults (default: 0)
+# QMCPY_BRANCH            – Branch/tag appended to the QMCSoftware pip URL if qmcpy isn’t importable
+# QMCPY_GITHUB_URL        – Full pip-installable URL for QMCSoftware fallback install
+#                            (default: git+https://github.com/QMCSoftware/QMCSoftware.git)
+# QMCPY_SKIP_GITHUB       – "1"/"true" to skip installing qmcpy from GitHub when not found (default: 0)
+#
+# Example (in a notebook cell, BEFORE running notebook_header):
+# import os
+# os.environ["QMCPY_GITHUB_URL"] = "git+https://github.com/yourfork/QMCSoftware.git"
+# os.environ["BOOT_BRANCH"] = "develop"
+# ---------------------------------------------------------------------------
 """
 
 from __future__ import annotations
@@ -33,6 +52,8 @@ DEFAULT_BOOT_BRANCH = (
     or os.environ.get("QMCSOFTWARE_REF")
     or "bootstrap_colab"
 )
+
+_QMCPY_GITHUB_URL_DEFAULT = "git+https://github.com/QMCSoftware/QMCSoftware.git"
 
 # ---------------- Basic env helpers ----------------
 def in_ipython() -> bool:
@@ -122,7 +143,8 @@ def ensure_pip_packages(pkgs: list, quiet: bool = True) -> None:
             print("[notebook_header] pip install:", " ".join(to_install))
         subprocess.check_call([sys.executable, "-m", "pip", "install", *to_install])
 
-def _have_tex_toolchain() -> bool:
+def have_tex_toolchain() -> bool:
+    """Return True if LaTeX + dvipng/dvisvgm + ghostscript are available."""
     have_latex = shutil.which("latex") is not None
     have_dvipng = (shutil.which("dvipng") is not None) or (shutil.which("dvisvgm") is not None)
     have_gs = (shutil.which("gs") is not None) or (shutil.which("ghostscript") is not None)
@@ -130,17 +152,22 @@ def _have_tex_toolchain() -> bool:
 
 def ensure_latex_toolchain(quiet: bool = True) -> bool:
     """Colab: install LaTeX if missing (prints 'this may take several minutes'). Local: no install."""
-    if _have_tex_toolchain():
+    if have_tex_toolchain():
         return True
     if in_colab():
+        # Be robust if Colab image ever changes or a similar environment lacks apt-get
+        if shutil.which("apt-get") is None:
+            print("[notebook_header] WARNING: 'apt-get' not found in this environment; "
+                  "cannot install LaTeX toolchain.")
+            return False
         try:
             print("[notebook_header] LaTeX not found — installing in Colab (this may take several minutes)...")
-            subprocess.check_call(["bash","-lc","apt-get -y update"])
+            subprocess.check_call(["apt-get", "-y", "update"], shell=False)
             subprocess.check_call([
-                "bash","-lc",
-                "apt-get -y install texlive-latex-extra texlive-fonts-recommended dvipng dvisvgm cm-super ghostscript"
-            ])
-            return _have_tex_toolchain()
+                "apt-get", "-y", "install",
+                "texlive-latex-extra", "texlive-fonts-recommended", "dvipng", "dvisvgm", "cm-super", "ghostscript"
+            ], shell=False)
+            return have_tex_toolchain()
         except Exception as e:
             print("[notebook_header] WARNING: LaTeX install failed; Matplotlib usetex may not work:", e)
             return False
@@ -220,15 +247,21 @@ def colab_bootstrap(org: str, repo: str, branch: str, quiet: bool = True) -> pat
     return repo_dir
 
 def ensure_qmcpy_from_github():
-    """If qmcpy is not importable, install from GitHub (optional branch via QMCPY_BRANCH)."""
+    """If qmcpy is not importable, install from GitHub unless skipped by QMCPY_SKIP_GITHUB."""
     try:
         import qmcpy  # noqa: F401
         return  # already available
     except Exception:
         pass
 
+    # Escape hatch for offline/prebuilt environments
+    skip = os.environ.get("QMCPY_SKIP_GITHUB", "0").lower() in ("1", "true", "yes")
+    if skip:
+        print("[notebook_header] qmcpy not found, but QMCPY_SKIP_GITHUB is set — skipping GitHub install.")
+        return
+
     branch = os.environ.get("QMCPY_BRANCH", "").strip()
-    url = "git+https://github.com/QMCSoftware/QMCSoftware.git"
+    url = os.environ.get("QMCPY_GITHUB_URL", _QMCPY_GITHUB_URL_DEFAULT)
     if branch:
         url += f"@{branch}"
     # '#egg=qmcpy' is optional; useful for some older pip resolutions
@@ -247,7 +280,7 @@ def show_colab_button(org: str, repo: str, branch: str, nb_path: str) -> None:
     url = f"https://colab.research.google.com/github/{org}/{repo}/blob/{branch}/{nb_quoted}"
     html = (
         '<div style="font-size:120%;">'
-        'If not running in the <code>conda qmcpy</code> environment, <br>'
+        'If not running in the <code>conda qmcpy</code> environment and not already in Colab, <br>'
         '<span style="margin-left:1.5em;">'
         f'push the button to <a target="_blank" href="{url}">'
         '<img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>'
@@ -277,17 +310,30 @@ def try_auto_imports() -> None:
 
 # ---------------- Colab-only execution timer ----------------
 def _register_execution_timer() -> None:
-    """Prints '[Executed in X.XXs at YYYY-MM-DD HH:MM:SS timezone]' after each cell (Colab only)."""
-    if _STATE.get("timer"):
-        return
-    # (rest as-is)
-    _STATE["timer"] = True
-    
+    """Colab-only: print '[Executed in X.XXs at YYYY-MM-DD HH:MM:SS TZ]' after each cell.
+
+    Idempotent across reloads: if handlers were registered before, we unregister them first.
+    """
+    # Only proceed in IPython (Colab/Jupyter). Main() already calls this only in Colab.
     if not in_ipython():
         return
     ip = get_ipython()  # type: ignore
     if not ip:
         return
+
+    # If we registered before, try to unregister old handlers to avoid duplicates.
+    prev = _STATE.get("timer_handlers")
+    if prev:
+        pre_old, post_old = prev
+        try:
+            ip.events.unregister("pre_run_cell", pre_old)
+        except Exception:
+            pass
+        try:
+            ip.events.unregister("post_run_cell", post_old)
+        except Exception:
+            pass
+
     _state = {"start": None}
 
     def pre_run_cell(_info):
@@ -300,9 +346,11 @@ def _register_execution_timer() -> None:
         ts = datetime.datetime.now().astimezone().strftime("%Y-%m-%d %H:%M:%S %Z")
         print(f"[Executed in {elapsed:.2f}s at {ts}]")
 
-    # Register hooks (idempotent enough for our usage)
+    # Register fresh handlers and remember them so we can unregister later.
     ip.events.register("pre_run_cell", pre_run_cell)
     ip.events.register("post_run_cell", post_run_cell)
+    _STATE["timer_handlers"] = (pre_run_cell, post_run_cell)
+    _STATE["timer"] = True  # keep legacy flag in case other code checks it
 
 # ---------------- Main ----------------
 def main(force: bool = False, quiet: bool = True):
