@@ -252,7 +252,7 @@ def try_auto_imports() -> None:
 
 # ---------------- Colab-only execution timer ----------------
 def _register_execution_timer() -> None:
-    """Prints '[Executed in X.XXs at YYYY-MM-DD HH:MM:SS UTC]' after each cell (Colab only)."""
+    """Prints '[Executed in X.XXs at YYYY-MM-DD HH:MM:SS timezone]' after each cell (Colab only)."""
     if not in_ipython():
         return
     ip = get_ipython()  # type: ignore
@@ -267,7 +267,7 @@ def _register_execution_timer() -> None:
         if _state["start"] is None:
             return
         elapsed = time.perf_counter() - _state["start"]
-        ts = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S %Z")
+        ts = ts = datetime.datetime.now().astimezone().strftime("%Y-%m-%d %H:%M:%S %Z")
         print(f"[Executed in {elapsed:.2f}s at {ts}]")
 
     # Register hooks (idempotent enough for our usage)
