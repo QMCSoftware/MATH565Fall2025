@@ -6,9 +6,10 @@ notebook_header.py — portable header for VS Code, JupyterLab, and Colab.
          and makes qmcpy importable from the qmcsoftware submodule (or installs from GitHub).
 - Always shows an "Open in Colab" badge (inline).
 - Auto-imports (np/pd/plt/sp/sy/qp) + plotting prefs via utils/auto_imports.py.
+- Colab-only execution time/timestamp hook (no duplicates in VS Code/JupyterLab).
 - Quiet by default; set AUTO_IMPORTS_VERBOSE=1 for light diagnostics.
 
-Env (set in first cell before importing this module):
+Env to set in first cell BEFORE importing this module:
   BOOT_ORG, BOOT_REPO, NB_PATH, BOOT_BRANCH, NOTEBOOK_HEADER_AUTORUN, AUTO_PLOT_PREFS
 """
 
@@ -19,6 +20,9 @@ import re
 import subprocess
 import pathlib
 import shutil
+import time
+import datetime
+from typing import Optional, Tuple
 
 # ---------------- State / Defaults ----------------
 _STATE = {"ran": False}
@@ -42,7 +46,7 @@ def in_colab() -> bool:
     return ("COLAB_RELEASE_TAG" in os.environ) or ("COLAB_GPU" in os.environ)
 
 # ---------------- Repo / path helpers ----------------
-def get_repo_root() -> pathlib.Path | None:
+def get_repo_root() -> Optional[pathlib.Path]:
     try:
         p = pathlib.Path(subprocess.check_output(
             ["git", "rev-parse", "--show-toplevel"], text=True
@@ -51,7 +55,7 @@ def get_repo_root() -> pathlib.Path | None:
     except Exception:
         return None
 
-def get_org_repo() -> tuple[str, str]:
+def get_org_repo() -> Tuple[str, str]:
     # Prefer explicit env overrides
     org = os.environ.get("BOOT_ORG")
     repo = os.environ.get("BOOT_REPO")
@@ -77,7 +81,7 @@ def _resolve_branch(org: str, repo: str) -> str:
         return "main"
     return DEFAULT_BOOT_BRANCH
 
-def get_nb_override() -> str | None:
+def get_nb_override() -> Optional[str]:
     # user_ns NB_PATH takes precedence
     try:
         if in_ipython():
@@ -104,7 +108,7 @@ def _ensure_local_paths(repo_root: pathlib.Path) -> None:
             sys.path.insert(0, sp)
 
 # ---------------- Colab helpers ----------------
-def ensure_pip_packages(pkgs: list[str], quiet: bool = True) -> None:
+def ensure_pip_packages(pkgs: list, quiet: bool = True) -> None:
     import importlib
     to_install = []
     for pkg in pkgs:
@@ -146,7 +150,7 @@ def ensure_latex_toolchain(quiet: bool = True) -> bool:
     return False
 
 # ---- QMCSoftware submodule discovery / importability ----
-def _find_qmc_submodule(repo_dir: pathlib.Path) -> pathlib.Path | None:
+def _find_qmc_submodule(repo_dir: pathlib.Path) -> Optional[pathlib.Path]:
     # Try common casings first
     for name in ("qmcsoftware", "QMCSoftware"):
         p = repo_dir / name
@@ -246,6 +250,30 @@ def try_auto_imports() -> None:
     except Exception as e:
         print("[notebook_header] auto_imports failed:", e)
 
+# ---------------- Colab-only execution timer ----------------
+def _register_execution_timer() -> None:
+    """Prints '[Executed in X.XXs at YYYY-MM-DD HH:MM:SS UTC]' after each cell (Colab only)."""
+    if not in_ipython():
+        return
+    ip = get_ipython()  # type: ignore
+    if not ip:
+        return
+    _state = {"start": None}
+
+    def pre_run_cell(_info):
+        _state["start"] = time.perf_counter()
+
+    def post_run_cell(_result):
+        if _state["start"] is None:
+            return
+        elapsed = time.perf_counter() - _state["start"]
+        ts = datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
+        print(f"[Executed in {elapsed:.2f}s at {ts}]")
+
+    # Register hooks (idempotent enough for our usage)
+    ip.events.register("pre_run_cell", pre_run_cell)
+    ip.events.register("post_run_cell", post_run_cell)
+
 # ---------------- Main ----------------
 def main(force: bool = False, quiet: bool = True):
     """Run header once; on subsequent calls, re-render the badge and exit."""
@@ -290,6 +318,8 @@ def main(force: bool = False, quiet: bool = True):
                 sys.executable, "-m", "pip", "install",
                 "git+https://github.com/QMCSoftware/QMCSoftware.git"
             ])
+        # Colab-only timing hook
+        _register_execution_timer()
 
     # Auto-imports + badge
     try_auto_imports()
