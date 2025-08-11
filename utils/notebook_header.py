@@ -239,14 +239,20 @@ def ensure_qmcpy_from_github():
     subprocess.check_call([sys.executable, "-m", "pip", "install", "--upgrade", url])
 
 # ---------------- Colab badge ----------------
+from urllib.parse import quote
+
 def show_colab_button(org: str, repo: str, branch: str, nb_path: str) -> None:
     from IPython.display import HTML, display
-    nb_quoted = nb_path.replace(" ", "%20")
+    nb_quoted = quote(nb_path, safe="/")
     url = f"https://colab.research.google.com/github/{org}/{repo}/blob/{branch}/{nb_quoted}"
     html = (
-        'If not running in <code>conda qmcpy</code>, open in '
-        f'<a target="_blank" href="{url}">'
-        '<img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>.'
+        '<div style="font-size:150%;">'
+        'If not running in the <code>conda qmcpy</code> environment, <br>'
+        '<span style="margin-left:1.5em;">'
+        f'push the button to <a target="_blank" href="{url}">'
+        '<img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>'
+        ' and then run from the top. <br>Otherwise continue to the next cell.'
+        '</div>'
     )
     display(HTML(html))
 
@@ -272,6 +278,11 @@ def try_auto_imports() -> None:
 # ---------------- Colab-only execution timer ----------------
 def _register_execution_timer() -> None:
     """Prints '[Executed in X.XXs at YYYY-MM-DD HH:MM:SS timezone]' after each cell (Colab only)."""
+    if _STATE.get("timer"):
+        return
+    # (rest as-is)
+    _STATE["timer"] = True
+    
     if not in_ipython():
         return
     ip = get_ipython()  # type: ignore
