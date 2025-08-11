@@ -1,21 +1,36 @@
 """
 notebook_header.py — portable header for VS Code, JupyterLab, and Colab.
 
-- Adds <repo_root> and <repo_root>/utils to sys.path locally; clones in Colab.
-- Always shows "Open in Colab" badge (inline).
-- Injects a top Markdown cell with your LaTeX macros into the notebook file.
-- Tries auto-imports + plotting prefs via utils/auto_imports.py.
-- Colab: installs a LaTeX toolchain if missing (prints a 'may take several minutes' notice).
+- Local: ensures <repo_root> and <repo_root>/utils are on sys.path.
+- Colab: clones repo (+ submodules), installs minimal deps, ensures LaTeX toolchain,
+         and makes qmcpy importable from the qmcsoftware submodule (or installs from GitHub).
+- Always shows an "Open in Colab" badge (inline).
+- Auto-imports (np/pd/plt/sp/sy/qp) + plotting prefs via utils/auto_imports.py.
+- Quiet by default; set AUTO_IMPORTS_VERBOSE=1 for light diagnostics.
+
+Env (set in first cell before importing this module):
+  BOOT_ORG, BOOT_REPO, NB_PATH, BOOT_BRANCH, NOTEBOOK_HEADER_AUTORUN, AUTO_PLOT_PREFS
 """
 
 from __future__ import annotations
-import os, sys, re, subprocess, pathlib, shutil
+import os
+import sys
+import re
+import subprocess
+import pathlib
+import shutil
 
-# ---------------- State ----------------
+# ---------------- State / Defaults ----------------
 _STATE = {"ran": False}
 _NB_PATH = "unknown.ipynb"
 
-# ------------- Basic env helpers -------------
+DEFAULT_BOOT_BRANCH = (
+    os.environ.get("BOOT_BRANCH")
+    or os.environ.get("QMCSOFTWARE_REF")
+    or "bootstrap_colab"
+)
+
+# ---------------- Basic env helpers ----------------
 def in_ipython() -> bool:
     try:
         get_ipython  # type: ignore
@@ -26,7 +41,7 @@ def in_ipython() -> bool:
 def in_colab() -> bool:
     return ("COLAB_RELEASE_TAG" in os.environ) or ("COLAB_GPU" in os.environ)
 
-# ------------- Repo / path helpers -------------
+# ---------------- Repo / path helpers ----------------
 def get_repo_root() -> pathlib.Path | None:
     try:
         p = pathlib.Path(subprocess.check_output(
@@ -37,15 +52,33 @@ def get_repo_root() -> pathlib.Path | None:
         return None
 
 def get_org_repo() -> tuple[str, str]:
+    # Prefer explicit env overrides
     org = os.environ.get("BOOT_ORG")
     repo = os.environ.get("BOOT_REPO")
     if org and repo:
-        return org, repo
-    # Fallbacks
+        return str(org), str(repo)
+    # Fallback: try git remote
+    try:
+        url = subprocess.check_output(
+            ["git", "config", "--get", "remote.origin.url"], text=True
+        ).strip()
+        m = re.search(r"[:/](?P<org>[^/]+)/(?P<repo>[^/\.]+)(?:\.git)?$", url)
+        if m:
+            return m.group("org"), m.group("repo")
+    except Exception:
+        pass
     return "QMCSoftware", "QMCSoftware"
 
+def _resolve_branch(org: str, repo: str) -> str:
+    env_branch = os.environ.get("BOOT_BRANCH")
+    if env_branch:
+        return env_branch
+    if repo == "MATH565Fall2025":
+        return "main"
+    return DEFAULT_BOOT_BRANCH
+
 def get_nb_override() -> str | None:
-    # Notebook user_ns first
+    # user_ns NB_PATH takes precedence
     try:
         if in_ipython():
             val = get_ipython().user_ns.get("NB_PATH")  # type: ignore
@@ -53,19 +86,24 @@ def get_nb_override() -> str | None:
                 return val
     except Exception:
         pass
-    # Then env
     val = os.environ.get("NB_PATH")
     return val if val else None
 
 def guess_nb_path(repo_root: pathlib.Path) -> str:
     try:
-        import ipynbname
+        import ipynbname  # type: ignore
         p = pathlib.Path(ipynbname.path()).resolve()
         return str(p.relative_to(repo_root))
     except Exception:
         return "unknown.ipynb"
 
-# ------------- Colab bootstrap -------------
+def _ensure_local_paths(repo_root: pathlib.Path) -> None:
+    for p in (repo_root, repo_root / "utils"):
+        sp = str(p)
+        if sp not in sys.path:
+            sys.path.insert(0, sp)
+
+# ---------------- Colab helpers ----------------
 def ensure_pip_packages(pkgs: list[str], quiet: bool = True) -> None:
     import importlib
     to_install = []
@@ -80,35 +118,6 @@ def ensure_pip_packages(pkgs: list[str], quiet: bool = True) -> None:
             print("[notebook_header] pip install:", " ".join(to_install))
         subprocess.check_call([sys.executable, "-m", "pip", "install", *to_install])
 
-def colab_bootstrap(org: str, repo: str, branch: str, quiet: bool = True) -> pathlib.Path:
-    repo_dir = pathlib.Path("/content") / repo
-    if not repo_dir.exists():
-        if not quiet:
-            print(f"[notebook_header] Cloning {org}/{repo}@{branch} (with submodules) ...")
-        subprocess.check_call([
-            "git","clone","--depth","1","--recurse-submodules",
-            "-b", branch, f"https://github.com/{org}/{repo}.git", str(repo_dir)
-        ])
-    # Make sure submodules are present (e.g., qmcsoftware)
-    subprocess.check_call(["git","-C",str(repo_dir),"submodule","sync","--recursive"])
-    subprocess.check_call(["git","-C",str(repo_dir),"submodule","update","--init","--recursive","--depth","1"])
-
-    # Common Python deps for header
-    ensure_pip_packages(["numpy","scipy","matplotlib","pandas","ipynbname"], quiet=quiet)
-
-    # Paths
-    if str(repo_dir) not in sys.path:
-        sys.path.insert(0, str(repo_dir))
-    utils_dir = repo_dir / "utils"
-    if str(utils_dir) not in sys.path:
-        sys.path.insert(0, str(utils_dir))
-    try:
-        os.chdir(repo_dir)
-    except Exception:
-        pass
-    return repo_dir
-
-# ------------- LaTeX toolchain (Colab install + local guidance) -------------
 def _have_tex_toolchain() -> bool:
     have_latex = shutil.which("latex") is not None
     have_dvipng = (shutil.which("dvipng") is not None) or (shutil.which("dvisvgm") is not None)
@@ -116,7 +125,7 @@ def _have_tex_toolchain() -> bool:
     return have_latex and have_dvipng and have_gs
 
 def ensure_latex_toolchain(quiet: bool = True) -> bool:
-    """Colab: install LaTeX if missing (prints 'may take several minutes'). Local: no install."""
+    """Colab: install LaTeX if missing (prints 'this may take several minutes'). Local: no install."""
     if _have_tex_toolchain():
         return True
     if in_colab():
@@ -131,60 +140,135 @@ def ensure_latex_toolchain(quiet: bool = True) -> bool:
         except Exception as e:
             print("[notebook_header] WARNING: LaTeX install failed; Matplotlib usetex may not work:", e)
             return False
-    # Non-Colab: do nothing silently; you manage local TeX yourself.
+    # Local/JupyterLab/VS Code: user manages TeX; stay quiet by default
     if not quiet:
-        print("[notebook_header] LaTeX toolchain not found locally. Please install TeX (TeX Live / MiKTeX) and dvipng/ghostscript.")
+        print("[notebook_header] LaTeX toolchain not found locally. Please install TeX + dvipng/ghostscript.")
     return False
 
-# ------------- Colab badge -------------
+# ---- QMCSoftware submodule discovery / importability ----
+def _find_qmc_submodule(repo_dir: pathlib.Path) -> pathlib.Path | None:
+    # Try common casings first
+    for name in ("qmcsoftware", "QMCSoftware"):
+        p = repo_dir / name
+        if p.exists():
+            return p
+    # Fallback: scan for a folder containing 'qmcpy' (flat or src layout)
+    try:
+        for p in repo_dir.iterdir():
+            if p.is_dir() and ((p / "qmcpy").exists() or (p / "src" / "qmcpy").exists()):
+                return p
+    except Exception:
+        pass
+    return None
+
+def _is_editable_installable(path: pathlib.Path) -> bool:
+    return any((path / f).exists() for f in ("pyproject.toml", "setup.cfg", "setup.py"))
+
+def _add_qmcpy_to_syspath(qmc_path: pathlib.Path) -> None:
+    # src-layout or flat
+    cand = qmc_path / "src" if (qmc_path / "src" / "qmcpy").exists() else qmc_path
+    sp = str(cand)
+    if sp not in sys.path:
+        sys.path.insert(0, sp)
+
+def colab_bootstrap(org: str, repo: str, branch: str, quiet: bool = True) -> pathlib.Path:
+    repo_dir = pathlib.Path("/content") / repo
+    if not repo_dir.exists():
+        if not quiet:
+            print(f"[notebook_header] Cloning {org}/{repo}@{branch} (with submodules) ...")
+        subprocess.check_call([
+            "git","clone","--depth","1","--recurse-submodules",
+            "-b", branch, f"https://github.com/{org}/{repo}.git", str(repo_dir)
+        ])
+    # Ensure submodules are present/up-to-date
+    subprocess.check_call(["git","-C",str(repo_dir),"submodule","sync","--recursive"])
+    subprocess.check_call(["git","-C",str(repo_dir),"submodule","update","--init","--recursive","--depth","1"])
+
+    # Minimal Python deps needed by header utilities
+    ensure_pip_packages(["numpy","scipy","matplotlib","pandas","ipynbname"], quiet=quiet)
+
+    # Make qmcpy importable from submodule
+    qmc_path = _find_qmc_submodule(repo_dir)
+    if qmc_path:
+        if _is_editable_installable(qmc_path):
+            try:
+                subprocess.check_call([sys.executable, "-m", "pip", "install", "-e", str(qmc_path)])
+            except Exception as e:
+                if not quiet:
+                    print("[notebook_header] WARNING: pip -e for QMCSoftware failed; falling back to sys.path:", e)
+                _add_qmcpy_to_syspath(qmc_path)
+        else:
+            _add_qmcpy_to_syspath(qmc_path)
+    else:
+        if not quiet:
+            print("[notebook_header] WARNING: QMCSoftware submodule not found; will try GitHub fallback later.")
+
+    # Add repo + utils to sys.path
+    for p in (repo_dir, repo_dir / "utils"):
+        sp = str(p)
+        if sp not in sys.path:
+            sys.path.insert(0, sp)
+
+    try:
+        os.chdir(repo_dir)
+    except Exception:
+        pass
+    return repo_dir
+
+# ---------------- Colab badge ----------------
 def show_colab_button(org: str, repo: str, branch: str, nb_path: str) -> None:
     from IPython.display import HTML, display
     nb_quoted = nb_path.replace(" ", "%20")
     url = f"https://colab.research.google.com/github/{org}/{repo}/blob/{branch}/{nb_quoted}"
     html = (
         'If not running in <code>conda qmcpy</code>, open in '
-        f'<a target="_blank" href="{url}"><img src="https://colab.research.google.com/assets/colab-badge.svg" '
-        'alt="Open In Colab"/></a>.'
+        f'<a target="_blank" href="{url}">'
+        '<img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>.'
     )
     display(HTML(html))
 
-# ------------- Auto-imports hook -------------
+# ---------------- Auto-imports hook ----------------
 def try_auto_imports() -> None:
     try:
         try:
-            from utils.auto_imports import inject_common  # preferred
+            from utils.auto_imports import inject_common  # preferred path
+            src = "utils.auto_imports"
         except ImportError:
             import auto_imports
             inject_common = auto_imports.inject_common
+            src = "auto_imports"
         ns = get_ipython().user_ns  # type: ignore
-        verbose = os.environ.get("AUTO_IMPORTS_VERBOSE","0").lower() in ("1","true","yes")
-        plot_prefs = os.environ.get("AUTO_PLOT_PREFS","0").lower() in ("1","true","yes")
+        verbose = os.environ.get("AUTO_IMPORTS_VERBOSE", "0").lower() in ("1","true","yes")
+        plot_prefs = os.environ.get("AUTO_PLOT_PREFS", "0").lower() in ("1","true","yes")
         inject_common(ns, verbose=verbose, plot_prefs=plot_prefs)
+        if verbose:
+            print(f"[notebook_header] auto_imports loaded from {src}")
     except Exception as e:
         print("[notebook_header] auto_imports failed:", e)
 
-
-# ------------- Main -------------
+# ---------------- Main ----------------
 def main(force: bool = False, quiet: bool = True):
-    """Run header once; on subsequent calls, just re-render the badge."""
+    """Run header once; on subsequent calls, re-render the badge and exit."""
     global _NB_PATH
 
+    repo_root = get_repo_root()
+    org, repo = get_org_repo()
+    branch = _resolve_branch(org, repo)
+
+    # Local path wiring
+    if repo_root and not in_colab():
+        _ensure_local_paths(repo_root)
+
     if _STATE["ran"] and not force:
-        # Re-render the badge so a re-run doesn't blank it out in some UIs
+        # Re-render badge so re-running the cell doesn't blank it
         try:
-            org, repo = get_org_repo()
-            branch = os.environ.get("BOOT_BRANCH", "main")
             show_colab_button(org, repo, branch, _NB_PATH)
         except Exception:
             pass
         return
     _STATE["ran"] = True
 
-    repo_root = get_repo_root()
-    org, repo = get_org_repo()
-    branch = os.environ.get("BOOT_BRANCH", "main")
-
-    # Resolve notebook path
+    # Determine notebook path
     nb_override = get_nb_override()
     if nb_override:
         _NB_PATH = nb_override
@@ -193,19 +277,19 @@ def main(force: bool = False, quiet: bool = True):
     else:
         _NB_PATH = "unknown.ipynb"
 
-    # Colab setup (clone + TeX install if missing)
+    # Colab setup
     if in_colab():
         colab_bootstrap(org, repo, branch, quiet=quiet)
         ensure_latex_toolchain(quiet=True)
-
-    # Local: add utils to path
-    if repo_root and not in_colab():
-        utils_dir = repo_root / "utils"
-        if str(utils_dir) not in sys.path:
-            sys.path.insert(0, str(utils_dir))
-        if str(repo_root) not in sys.path:
-            sys.path.insert(0, str(repo_root))
-
+        # Final fallback: ensure qmcpy importable even if submodule path/install failed
+        try:
+            import qmcpy  # noqa: F401
+        except Exception:
+            print("[notebook_header] Installing qmcpy from GitHub (this may take a moment)...")
+            subprocess.check_call([
+                sys.executable, "-m", "pip", "install",
+                "git+https://github.com/QMCSoftware/QMCSoftware.git"
+            ])
 
     # Auto-imports + badge
     try_auto_imports()
@@ -217,8 +301,8 @@ def main(force: bool = False, quiet: bool = True):
 def reload_header(quiet: bool = True):
     return main(force=True, quiet=quiet)
 
-# Autorun (can disable via NOTEBOOK_HEADER_AUTORUN=0)
-if os.environ.get("NOTEBOOK_HEADER_AUTORUN","1").lower() in ("1","true","yes"):
+# ---------------- Autorun ----------------
+if os.environ.get("NOTEBOOK_HEADER_AUTORUN", "1").lower() in ("1", "true", "yes"):
     if in_ipython():
         try:
             main(False)
