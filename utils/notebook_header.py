@@ -219,6 +219,25 @@ def colab_bootstrap(org: str, repo: str, branch: str, quiet: bool = True) -> pat
         pass
     return repo_dir
 
+def ensure_qmcpy_from_github():
+    """If qmcpy is not importable, install from GitHub (optional branch via QMCPY_BRANCH)."""
+    try:
+        import qmcpy  # noqa: F401
+        return  # already available
+    except Exception:
+        pass
+
+    branch = os.environ.get("QMCPY_BRANCH", "").strip()
+    url = "git+https://github.com/QMCSoftware/QMCSoftware.git"
+    if branch:
+        url += f"@{branch}"
+    # '#egg=qmcpy' is optional; useful for some older pip resolutions
+    url += "#egg=qmcpy"
+
+    print("[notebook_header] Installing qmcpy from GitHub"
+          f"{' (branch: ' + branch + ')' if branch else ''} ...")
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "--upgrade", url])
+
 # ---------------- Colab badge ----------------
 def show_colab_button(org: str, repo: str, branch: str, nb_path: str) -> None:
     from IPython.display import HTML, display
@@ -267,7 +286,7 @@ def _register_execution_timer() -> None:
         if _state["start"] is None:
             return
         elapsed = time.perf_counter() - _state["start"]
-        ts = ts = datetime.datetime.now().astimezone().strftime("%Y-%m-%d %H:%M:%S %Z")
+        ts = datetime.datetime.now().astimezone().strftime("%Y-%m-%d %H:%M:%S %Z")
         print(f"[Executed in {elapsed:.2f}s at {ts}]")
 
     # Register hooks (idempotent enough for our usage)
@@ -309,17 +328,8 @@ def main(force: bool = False, quiet: bool = True):
     if in_colab():
         colab_bootstrap(org, repo, branch, quiet=quiet)
         ensure_latex_toolchain(quiet=True)
-        # Final fallback: ensure qmcpy importable even if submodule path/install failed
-        try:
-            import qmcpy  # noqa: F401
-        except Exception:
-            print("[notebook_header] Installing qmcpy from GitHub (this may take a moment)...")
-            subprocess.check_call([
-                sys.executable, "-m", "pip", "install",
-                "git+https://github.com/QMCSoftware/QMCSoftware.git"
-            ])
-        # Colab-only timing hook
-        _register_execution_timer()
+        ensure_qmcpy_from_github()
+        _register_execution_timer()  # Colab-only timing hook
 
     # Auto-imports + badge
     try_auto_imports()
