@@ -267,7 +267,7 @@ def _register_execution_timer() -> None:
         if _state["start"] is None:
             return
         elapsed = time.perf_counter() - _state["start"]
-        ts = datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S UTC")
+        ts = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S %Z")
         print(f"[Executed in {elapsed:.2f}s at {ts}]")
 
     # Register hooks (idempotent enough for our usage)
