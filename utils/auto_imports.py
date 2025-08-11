@@ -68,30 +68,22 @@ def inject_common(ns, *, verbose=False, plot_prefs=None):
         rc['lines.linewidth']    = 2.0
         rc['lines.markersize']   = 4.0
 
-        # Always-LaTeX plot text (requires toolchain; Colab install handled in header)
+        # Enable LaTeX text + macro preamble
         rc['text.usetex'] = True
-        rc['text.latex.preamble'] = (
-            r"\usepackage{amsmath,amssymb}"
-            r"\newcommand{\vh}{\boldsymbol{h}}"
-            r"\newcommand{\vt}{\boldsymbol{t}}"
-            r"\newcommand{\vx}{\boldsymbol{x}}"
-            r"\newcommand{\vX}{\boldsymbol{X}}"
-            r"\newcommand{\cf}{\mathcal{F}}"
-            r"\newcommand{\cu}{\mathcal{U}}"
-            r"\newcommand{\dif}{\mathrm{d}}"
-            r"\newcommand{\Ex}{\mathbb{E}}"
-            r"\DeclareMathOperator{\disc}{disc}"
-            r"\newcommand{\norm}[2]{{\left \lVert #2 \right \rVert}_{#1}}"  # <- two-argument version (robust)
-        )
+        try:
+            from utils.latex_macros import MATPLOTLIB_PREAMBLE
+            rc['text.latex.preamble'] = MATPLOTLIB_PREAMBLE
+        except Exception as e:
+            if verbose:
+                print("[auto_imports] WARNING: latex_macros import failed:", e)
 
-        # Optional smoke test (silent unless verbose)
+        # Optional smoke test
         if verbose:
             try:
-                import matplotlib.pyplot as _plt
-                fig = _plt.figure()
-                _plt.text(0.5, 0.5, r"$\vx,\ \norm{2}{x}$")
+                fig = plt.figure()
+                plt.text(0.5, 0.5, r"$\vx,\ \norm{2}{x}$")
                 fig.canvas.draw()
-                _plt.close(fig)
+                plt.close(fig)
                 print("[auto_imports] rcParams set (usetex=True, preamble OK).")
             except Exception as e:
                 print("[auto_imports] WARNING: LaTeX render test failed. "
