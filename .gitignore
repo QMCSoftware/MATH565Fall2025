@@ -37,3 +37,8 @@ venv/
 
 # Node.js (if you ever add JS tooling)
 node_modules/
+
+
+# BFG reports
+.bfg-report/
+bfg-report/
