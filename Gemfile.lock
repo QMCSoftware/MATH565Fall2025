@@ -322,9 +322,7 @@ PLATFORMS
 
 DEPENDENCIES
   github-pages
-  jekyll
   jekyll-last-modified-at
-  minima
 
 BUNDLED WITH
    2.6.9
