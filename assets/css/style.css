@@ -28,3 +28,45 @@ summary::marker {
   margin-top: 2em;
   text-align: left; /* optional */
 }
+
+/* Old footer rule
+.footer-meta {
+  display: flex;
+  justify-content: space-between; 
+  flex-wrap: wrap;                 
+  font-size: 0.85em;
+  color: #666;
+  margin-top: 2em;
+}
+*/
+
+.footer-meta span {
+  margin: 0.25em 0;
+}
+
+/* 1) Beat Minima's `.site-footer .wrapper { text-align:center; }` */
+.site-footer > .wrapper { 
+  text-align: initial !important;
+}
+
+/* 2) Force flex on your footer row and give it full width */
+.site-footer > .wrapper.footer-meta {
+  display: flex !important;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  width: 100%;
+}
+
+/* 3) As a belt-and-suspenders push, send the copyright to the right */
+.site-footer > .wrapper.footer-meta .copyright {
+  margin-left: auto;
+}
+
+/* (Keep your existing small text styles) */
+.site-footer .last-updated,
+.site-footer .copyright {
+  font-size: 0.85em;
+  color: #666;
+  margin: 0;
+}

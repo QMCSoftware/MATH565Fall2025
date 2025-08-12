@@ -30,7 +30,7 @@ This course teaches students Monte Carlo simulation techniques, focusing on appl
 
 </details>
 
-**Textbook:** Art Owen, [*Monte Carlo Theory, Methods, and Examples*](https://artowen.su.domains/mc/), 2025+  
+**Textbook:** Art B. Owen, [*Monte Carlo Theory, Methods, and Examples*](https://artowen.su.domains/mc/), 2025+  
 
 <details markdown = 1>
 <summary><strong>Recommended resources</strong></summary>
@@ -48,7 +48,7 @@ This course teaches students Monte Carlo simulation techniques, focusing on appl
 <details markdown = 1>
 <summary><strong>Prerequisites</strong></summary>
 * A calculus-based probability course, such as MATH 474 or MATH 475  
-* Facility in programming
+* Facility in numerical programming
 
 </details>
 
