@@ -41,12 +41,12 @@
     <main class="page-content" aria-label="Content">
       <div class="wrapper">
         {{ content }}
+        <div class="last-updated">
+          Page last updated: {{ page.last_modified_at | date: "%Y-%m-%d %H:%M" }}
       </div>
     </main>
 
-    <p class="last-updated">
-      Last updated: {{ page.last_modified_at | date: "%B %-d, %Y" }}
-    </p>
+   
 
     <footer class="site-footer">
       <div class="wrapper">

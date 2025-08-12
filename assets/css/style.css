@@ -26,5 +26,5 @@ summary::marker {
   font-size: 0.85em;
   color: #666;
   margin-top: 2em;
-  text-align: right; /* optional */
+  text-align: left; /* optional */
 }

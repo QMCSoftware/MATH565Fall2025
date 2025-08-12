@@ -2,5 +2,6 @@ source "https://rubygems.org"
 gem "jekyll"
 gem "minima"
 group :jekyll_plugins do
-  gem 'jekyll-last-modified-at'
+  gem "github-pages"      # if you’re using it
+  gem "jekyll-last-modified-at"
 end

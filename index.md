@@ -141,6 +141,6 @@ For a comprehensive list of resources regarding counseling services, medical ass
 ---
 
 <small>
-**Syllabus prepared by:** Fred Hickernell and Yuhan Ding  
-**Date:** 2024-02-06 and later
+**Prepared by:** Fred Hickernell and Yuhan Ding  
+**Date:** 2024-02-06 to the present
 </small>
