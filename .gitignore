@@ -1,0 +1,39 @@
+# Jekyll build output
+_site/
+.jekyll-cache/
+.jekyll-metadata
+.sass-cache/
+
+# Bundler & Ruby
+.bundle/
+vendor/
+
+# macOS system files
+.DS_Store
+
+# Python-related (for notebooks/utils/qmcsoftware/lite)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+*.egg
+
+# Virtual environments (if used)
+env/
+venv/
+.venv/
+
+# Logs and temporary files
+*.log
+*.tmp
+*~
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# VS Code (if you use it)
+.vscode/
+
+# Node.js (if you ever add JS tooling)
+node_modules/
