@@ -2,3 +2,22 @@
 .wrapper {
   max-width: 1200px;
 }
+
+/* Match <details> spacing to paragraphs */
+details {
+  display: block;
+  margin-bottom: var(--spacing, 0em);
+}
+
+/* Make the <details> arrow bigger */
+summary {
+  font-weight: bold; /* optional, keeps label text strong */
+}
+
+summary::-webkit-details-marker {
+  font-size: 1.8em;  /* Chrome, Edge, Safari */
+}
+
+summary::marker {
+  font-size: 1.8em;  /* Firefox */
+}

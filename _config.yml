@@ -18,3 +18,6 @@ defaults:
     values:
       layout: default
       css: "/assets/css/style.css"
+
+header_pages:
+  - syllabus.md
