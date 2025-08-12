@@ -47,7 +47,7 @@
    <footer class="site-footer">
       <div class="wrapper footer-meta">
         <span class="last-updated">
-          Updated: {{ page.last_modified_at | date: "%Y-%m-%d %H:%M" }}
+          Updated: <span id="updated-ts"></span>
         </span>
         <span class="copyright">
           &copy; Fred Hickernell, Illinois Institute of Technology. All rights reserved.  
@@ -55,6 +55,20 @@
         </span>
       </div>
     </footer>
+
+    <script>
+      (function () {
+        var el = document.getElementById('updated-ts');
+        if (!el) return;
+        var d = new Date(document.lastModified);
+        if (isNaN(d)) return;
+        el.textContent = d.toLocaleString([], {
+          year: 'numeric', month: 'long', day: '2-digit',
+          hour: '2-digit', minute: '2-digit',
+          hour12: false, timeZoneName: 'short'  // e.g., CDT
+        });
+      })();
+    </script>
 
   </body>
       
