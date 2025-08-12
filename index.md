@@ -81,7 +81,6 @@ For a comprehensive list of resources regarding counseling services, medical ass
 
 </details>
 
-
 ## Course Outline
 
 <details markdown = 1>
