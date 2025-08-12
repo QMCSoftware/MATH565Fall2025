@@ -100,3 +100,43 @@ summary::marker {
   color: #777;             /* subtle gray */
   margin-top: 0.25em;
 }
+
+/* Reduce default paragraph spacing */
+p {
+  margin-top: 0em;
+  margin-bottom: 1em;
+}
+
+/* Reduce spacing between list items */
+li {
+  margin-bottom: 0em;
+}
+
+/* Reduce spacing after details */
+details {
+  margin-bottom: 0em; /* small positive value instead of negative */
+}
+
+details + details {
+  margin-top: 0em; /* remove gap between consecutive details elements */
+}
+
+
+/* Remove extra gap after the summary toggle */
+summary {
+  margin-bottom: 0em; /* ensures no extra space after the summary line */
+}
+
+/* Tighten spacing for content inside details */
+details p,
+details ul,
+details ol {
+  margin-top: 0em;
+  margin-bottom: 0em;
+}
+
+/* Optional: tighten headings to following text */
+h1, h2, h3 {
+  margin-top: 0.2em;
+  margin-bottom: 0.2em;
+}

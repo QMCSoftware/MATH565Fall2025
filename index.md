@@ -81,7 +81,6 @@ For a comprehensive list of resources regarding counseling services, medical ass
 
 </details>
 
-<br>
 
 ## Course Outline
 
@@ -132,7 +131,6 @@ For a comprehensive list of resources regarding counseling services, medical ass
 
 </details>
 
-<br>
 
 ## Assessment
 - **Homework:** 15%  
