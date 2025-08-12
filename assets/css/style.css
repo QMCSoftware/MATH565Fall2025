@@ -92,3 +92,11 @@ summary::marker {
     display: block;      /* ensures each sits on its own line */
   }
 }
+
+/* AI credit line */
+.site-footer .credit {
+  display: block;         /* new line under copyright */
+  font-size: 0.8em;        /* slightly smaller */
+  color: #777;             /* subtle gray */
+  margin-top: 0.25em;
+}
