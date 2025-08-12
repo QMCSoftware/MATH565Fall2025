@@ -19,14 +19,16 @@ This course teaches students Monte Carlo simulation techniques, focusing on appl
 * _Office hours:_ TBD
 * _Phone:_ 312-567-8983
 * _Email:_ [hickernell@illinoistech.edu](mailto: hickernell@illinoistech.edu)
-* _Website:_ [www.iit.edu/directory/people/fred-hickernell](https://www.iit.edu/directory/people/fred-hickernell)
+* [_Website_](https://www.iit.edu/directory/people/fred-hickernell)
+* [_LinkedIn_](https://www.linkedin.com/in/fjhickernell/)
+* [_Google Scholar_](https://scholar.google.com/citations?user=dJbMJG8AAAAJ&hl=en)
 * _Brief bio:_ Fred J. Hickernell is professor of applied mathematics. His research focuses on increasing the efficiency of computer simulations and determining justifiable stopping criteria for simulation. A major area of interest is Monte Carlo methods. 
 
   Hickernell’s research has been funded by the National Science Foundation and the Department of Energy. He is a Fellow of the Institute of Mathematical Statistics. In 2016, he received the Joseph F. Traub Prize for Achievement in Information-Based Complexity. He has served on the editorial boards of the Journal of Complexity, Mathematics of Computation, and the SIAM Journal on Numerical Analysis.
 
   Hickernell received his Ph.D. in mathematics from MIT and his B.A. in mathematics and physics from Pomona College. He came to Illinois Tech in 2005 as department chair and has also served as vice provost for research.  Before coming to Illinois Tech, Hickernell was a professor in mathematics at Hong Kong Baptist University and assistant professor of mathematics at the University of Southern California. 
   
-  Hickernell speaks Cantonese and enjoys Chinese food. His married with adult children.  His most important identity is a disciple of Jesus.
+  Hickernell speaks Cantonese and enjoys Chinese food. He is married with adult children.  His most important identity is a disciple of Jesus.
 
 </details>
 
