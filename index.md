@@ -69,7 +69,7 @@ Reasonable accommodations will be made for students with documented disabilities
 </details>
 
 <details markdown = 1>
-<summary><strong>Illinois Tech’s Sexual Harassment and Discrimination Information</strong></summary>
+<summary><strong>Sexual Harassment and Discrimination Information</strong></summary>
 Illinois Tech prohibits all sexual harassment, sexual misconduct, and gender discrimination by any member of our community. This includes harassment among students, staff, or faculty. Sexual harassment of a student by a faculty member or sexual harassment of an employee by a supervisor is particularly serious. Such conduct may easily create an intimidating, hostile, or offensive environment.
 Illinois Tech encourages anyone experiencing sexual harassment or sexual misconduct to speak with the Office of Title IX Compliance for information on support options and the resolution process. 
 You can report sexual harassment electronically at [iit.edu/incidentreport](https://iit.edu/incidentreport), which may be completed anonymously. You may additionally report by contacting the Title IX Coordinator, Virginia Foster at [foster@illinoistech.edu](mailto: foster@illinoistech.edu).
