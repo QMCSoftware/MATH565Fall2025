@@ -36,11 +36,17 @@
       </div>
     </header>
 
+    <script src="{{ '/assets/js/new-tab-links.js' | relative_url }}"></script>
+
     <main class="page-content" aria-label="Content">
       <div class="wrapper">
         {{ content }}
       </div>
     </main>
+
+    <p class="last-updated">
+      Last updated: {{ page.last_modified_at | date: "%B %-d, %Y" }}
+    </p>
 
     <footer class="site-footer">
       <div class="wrapper">

@@ -21,3 +21,10 @@ summary::-webkit-details-marker {
 summary::marker {
   font-size: 1.8em;  /* Firefox */
 }
+
+.last-updated {
+  font-size: 0.85em;
+  color: #666;
+  margin-top: 2em;
+  text-align: right; /* optional */
+}

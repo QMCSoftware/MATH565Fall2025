@@ -10,6 +10,9 @@ exclude:
 sass:
   style: compressed
 
+plugins:
+  - jekyll-last-modified-at
+
 # Use custom stylesheet
 defaults:
   -
