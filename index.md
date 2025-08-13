@@ -5,7 +5,7 @@ title: Home
 
 # Welcome to MATH 565 (Fall 2025)
 
-## <span style="color: darkgreen;">This website is continually under construction </span>
+## <span style="color: darkgreen;">This website is continually improving </span>
 
 ## Course Description 
 This course teaches students Monte Carlo simulation techniques, focusing on applications in financial risk management, uncertainty quantification, and Bayesian inference. These sampling methods are used to compute the expected values, quantiles, and densities. Advanced techniques, such as Quasi-Monte Carlo methods and Markov chain Monte Carlo, are covered. Students will gain experience using popular computer languages for Monte Carlo computations.
