@@ -12,7 +12,7 @@ This course teaches students Monte Carlo simulation techniques, focusing on appl
 
 **Enrollment:** Graduate elective  
 
-<details markdown = 1>
+<details markdown="1">
 <summary><strong>Instructor:</strong> Fred J. Hickernell</summary>
 
 * _Office:_ RE 208
@@ -34,7 +34,7 @@ This course teaches students Monte Carlo simulation techniques, focusing on appl
 
 **Textbook:** Art B. Owen, [*Monte Carlo Theory, Methods, and Examples*](https://artowen.su.domains/mc/), 2025+  
 
-<details markdown = 1>
+<details markdown="1">
 <summary><strong>Recommended resources</strong></summary>
 
 * [VS Code](https://code.visualstudio.com)
@@ -47,7 +47,7 @@ This course teaches students Monte Carlo simulation techniques, focusing on appl
 * [Course Repository](https://github.com/QMCSoftware/MATH565Fall2025)
 </details>
 
-<details markdown = 1>
+<details markdown="1">
 <summary><strong>Prerequisites</strong></summary>
 * A calculus-based probability course, such as MATH 474 or MATH 475  
 * Facility in numerical programming
@@ -55,7 +55,7 @@ This course teaches students Monte Carlo simulation techniques, focusing on appl
 </details>
 
 
-<details markdown = 1>
+<details markdown="1">
 <summary><strong>Objectives</strong></summary>
 By the end of this course, students will be able to:
 - Understand the basics of Monte Carlo and Quasi-Monte Carlo Methods.
@@ -65,12 +65,12 @@ By the end of this course, students will be able to:
 - Understand basic implementation issues in performing Monte Carlo calculations.
 </details>
 
-<details markdown = 1>
+<details markdown="1">
 <summary><strong>Accommodations for Disabilities</strong></summary>
 Reasonable accommodations will be made for students with documented disabilities. In order to receive accommodations, students must obtain a letter of accommodation from the Center for Disability Resources and make an appointment to speak with me, Fred Hickernell, as soon as possible. The Center for Disability Resources (CDR) is located in 3424 S. State St., room 1C3-2 (on the first floor), telephone 312-567-5744 or [disabilities@illinoistech.edu](mailto: disabilities@illinoistech.edu). 
 </details>
 
-<details markdown = 1>
+<details markdown="1">
 <summary><strong>Sexual Harassment and Discrimination Information</strong></summary>
 Illinois Tech prohibits all sexual harassment, sexual misconduct, and gender discrimination by any member of our community. This includes harassment among students, staff, or faculty. Sexual harassment of a student by a faculty member or sexual harassment of an employee by a supervisor is particularly serious. Such conduct may easily create an intimidating, hostile, or offensive environment.
 Illinois Tech encourages anyone experiencing sexual harassment or sexual misconduct to speak with the Office of Title IX Compliance for information on support options and the resolution process. 
@@ -81,9 +81,22 @@ For a comprehensive list of resources regarding counseling services, medical ass
 
 </details>
 
+<details markdown="1">
+<summary><strong>Where to Find It</strong></summary>
+
+| **Course Website**                                   | **Canvas Website**                                   |
+| ---------------------------------------------------- | ---------------------------------------------------- |
+| [Syllabus](./syllabus.html)                          | [Syllabus on Canvas](https://canvas.institution.edu/courses/1234/pages/syllabus) |
+| [Schedule](./schedule.html)                          | [Modules](https://canvas.institution.edu/courses/1234/modules) |
+| [Lecture Notes](./lectures.html)                     | [Assignments](https://canvas.institution.edu/courses/1234/assignments) |
+| [Resources](./resources.html)                        | [Grades](https://canvas.institution.edu/courses/1234/grades) |
+| [Announcements](./announcements.html)                | [Announcements on Canvas](https://canvas.institution.edu/courses/1234/announcements) |
+
+</details>
+
 ## Course Outline
 
-<details markdown = 1>
+<details markdown="1">
 <summary><strong>Introduction</strong> — 9 hours</summary>
 
 - What is a Monte Carlo method?
@@ -93,7 +106,7 @@ For a comprehensive list of resources regarding counseling services, medical ass
 
 </details>
 
-<details markdown = 1>
+<details markdown="1">
 <summary><strong>Generating Random Vectors</strong> — 6 hours</summary>
 
 - Pseudo-random numbers
@@ -101,7 +114,7 @@ For a comprehensive list of resources regarding counseling services, medical ass
 
 </details>
 
-<details markdown = 1>
+<details markdown="1">
 <summary><strong>Markov Chain Monte Carlo</strong> — 9 hours</summary>
 
 - Markov chains
@@ -112,7 +125,7 @@ For a comprehensive list of resources regarding counseling services, medical ass
 
 </details>
 
-<details markdown = 1>
+<details markdown="1">
 <summary><strong>Enhancing Efficiency</strong> — 15 hours</summary>
 
 - Control variates
@@ -123,7 +136,7 @@ For a comprehensive list of resources regarding counseling services, medical ass
 
 </details>
 
-<details markdown = 1>
+<details markdown="1">
 <summary><strong>Selected Topics</strong> — 6 hours</summary>
 
 - *(TBA)*
