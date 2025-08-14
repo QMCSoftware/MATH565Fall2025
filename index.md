@@ -14,19 +14,22 @@ This course teaches students Monte Carlo simulation techniques, focusing on appl
 
 <details markdown="1">
 <summary><strong>Instructor:</strong> Fred J. Hickernell</summary>
+
 <a href="{{ '/assets/images/FredHickernell.jpeg' | relative_url }}">
   <img src="{{ '/assets/images/FredHickernell.jpeg' | relative_url }}"
        alt="Fred J. Hickernell"
        width="200"
-       style="float:right; margin-left:10px;">
+       style="float:right; margin-left:10px; margin-bottom:6px;">
 </a>
-* _Office:_ RE 208
-* _Office hours:_ TBD
-* _Phone:_ 312-567-8983
-* _Email:_ [hickernell@illinoistech.edu](mailto: hickernell@illinoistech.edu)
-* [_Website_](https://www.iit.edu/directory/people/fred-hickernell)
-* [_LinkedIn_](https://www.linkedin.com/in/fjhickernell/)
-* [_Google Scholar_](https://scholar.google.com/citations?user=dJbMJG8AAAAJ&hl=en)
+
+* _Office:_ RE 208  
+* _Office hours:_ TBD  
+* _Phone:_ 312-567-8983  
+* _Email:_ [hickernell@illinoistech.edu](mailto:hickernell@illinoistech.edu)  
+* [_Website_](https://www.iit.edu/directory/people/fred-hickernell)  
+* [_LinkedIn_](https://www.linkedin.com/in/fjhickernell/)  
+* [_Google Scholar_](https://scholar.google.com/citations?user=dJbMJG8AAAAJ&hl=en)  
+
 * _Brief bio:_ Fred J. Hickernell is professor of applied mathematics. His research focuses on increasing the efficiency of computer simulations and determining justifiable stopping criteria for simulation. A major area of interest is Monte Carlo methods. 
 
   Hickernell’s research has been funded by the National Science Foundation and the Department of Energy. He is a Fellow of the Institute of Mathematical Statistics. In 2016, he received the Joseph F. Traub Prize for Achievement in Information-Based Complexity. He has served on the editorial boards of the Journal of Complexity, Mathematics of Computation, and the SIAM Journal on Numerical Analysis.
