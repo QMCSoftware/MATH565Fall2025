@@ -91,13 +91,13 @@ For a comprehensive list of resources regarding counseling services, medical ass
 <details markdown="1">
 <summary><strong>Where to Find It</strong></summary>
 
-| **Course Website**                                   | **Canvas Website**                                   |
+| **This Github Website**                                   | **Canvas Website**                                   |
 | ---------------------------------------------------- | ---------------------------------------------------- |
-| [Syllabus](./syllabus.html)                          | [Syllabus on Canvas](https://canvas.institution.edu/courses/1234/pages/syllabus) |
-| [Schedule](./schedule.html)                          | [Modules](https://canvas.institution.edu/courses/1234/modules) |
-| [Lecture Notes](./lectures.html)                     | [Assignments](https://canvas.institution.edu/courses/1234/assignments) |
-| [Resources](./resources.html)                        | [Grades](https://canvas.institution.edu/courses/1234/grades) |
-| [Announcements](./announcements.html)                | [Announcements on Canvas](https://canvas.institution.edu/courses/1234/announcements) |
+| [Syllabus](./index.html)                          | Grades |
+| [Schedule](./schedule.html)                          | Online Discussions |
+| [Lecture Notes](./lectures.html)                     |  |
+| [Notebooks ](./notebooks.html)                        |  |
+| [Class Git Repository](https://github.com/QMCSoftware/MATH565Fall2025) <br> scroll to the bottom for instructions on how to copy from the template              |  |
 
 </details>
 

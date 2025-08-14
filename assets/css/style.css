@@ -93,6 +93,18 @@ summary::marker {
   }
 }
 
+details table {
+  table-layout: fixed; /* makes widths equal */
+  width: 100%;         /* fill container */
+}
+
+details table th,
+details table td {
+  width: 1%;                /* any small % forces equal distribution */
+  white-space: normal;      /* wrap text */
+  word-break: break-word;   /* break long URLs */
+}
+
 /* AI credit line */
 .site-footer .credit {
   display: block;         /* new line under copyright */
