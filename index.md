@@ -14,7 +14,7 @@ This course teaches students Monte Carlo simulation techniques, focusing on appl
 
 <details markdown="1">
 <summary><strong>Instructor:</strong> Fred J. Hickernell</summary>
-<img src="/assets/images/FredHickernell.jpeg" alt="Fred J. Hickernell" width="250" style="float:right; margin-left:10px;">
+<img src="{{ site.baseurl }}/assets/images/FredHickernell.jpeg" alt="Fred J. Hickernell" width="250" style="float:right; margin-left:10px;">
 * _Office:_ RE 208
 * _Office hours:_ TBD
 * _Phone:_ 312-567-8983

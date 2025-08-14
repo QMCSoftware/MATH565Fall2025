@@ -7,6 +7,9 @@ exclude:
   - .gitignore
   - README.md
 
+url: "https://QMCPySoftware.github.io"
+baseurl: "/MATH565Fall2025"
+
 sass:
   style: compressed
 
