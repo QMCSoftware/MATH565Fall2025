@@ -100,3 +100,82 @@ summary::marker {
   color: #777;             /* subtle gray */
   margin-top: 0.25em;
 }
+
+/* Reduce default paragraph spacing */
+p {
+  margin-top: 0em;
+  margin-bottom: 1em;
+}
+
+/* Reduce spacing between list items */
+li {
+  margin-bottom: 0em;
+}
+
+/* --- Compact, Cross-Browser Details / Accordion Styling --- */
+
+/* Tunable spacing variables */
+:root {
+  --details-gap-collapsed: 0.25rem;  /* space between unopened <details> */
+  --details-gap-expanded: 0.75rem;   /* space after an OPEN <details> */
+}
+
+/* Base: remove browser default margins */
+details {
+  display: block;
+  margin: 0;
+}
+
+/* Tight gap between consecutive collapsed accordions */
+details + details {
+  margin-top: var(--details-gap-collapsed);
+}
+
+/* When open, give breathing room after the block */
+details[open] {
+  margin-bottom: var(--details-gap-expanded);
+}
+
+/* Summary line: bold, clickable, no bottom gap */
+summary {
+  font-weight: bold;
+  cursor: pointer;
+  margin: 0;
+
+  /* Keep arrows visible in all browsers */
+  list-style: disclosure-closed; /* Firefox & Safari */
+}
+
+/* Arrow state when open */
+details[open] > summary {
+  list-style: disclosure-open; /* Firefox & Safari */
+}
+
+/* Bigger disclosure arrow in all browsers */
+summary::-webkit-details-marker { font-size: 1.8em; } /* Chrome, Safari */
+summary::marker { font-size: 1.8em; } /* Firefox */
+
+/* Remove top gap before first revealed element */
+details[open] > summary + * {
+  margin-top: 0 !important;
+}
+
+/* Keep inner content tight but readable */
+details p,
+details ul,
+details ol,
+details table {
+  margin-top: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+/* No extra space at the very end */
+details > :not(summary):last-child {
+  margin-bottom: 0;
+}
+
+/* Optional: tighten headings to following text */
+h1, h2, h3 {
+  margin-top: 0.2em;
+  margin-bottom: 0.2em;
+}
