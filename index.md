@@ -40,6 +40,21 @@ This course teaches students Monte Carlo simulation techniques, focusing on appl
 
 </details>
 
+<details markdown="1">
+<summary><strong>Teaching Assistant:</strong> Rahul Prasad</summary>
+
+<a href="{{ '/assets/images/RahulPrasad.jpg' | relative_url }}">
+  <img src="{{ '/assets/images/RahulPrasad.jpg' | relative_url }}"
+       alt="Rahul Prasad"
+       width="200"
+       style="float:right; margin-left:10px; margin-bottom:6px; filter: brightness(1.2)">
+</a>
+
+* _Office:_ ???  
+* _Office hours:_ TBD    
+* _Email:_ [rprasad1@hawk.illinoistech.edu](mailto:rprasad1@hawk.illinoistech.edu)  
+</details>
+
 **Textbook:** Art B. Owen, [*Monte Carlo Theory, Methods, and Examples*](https://artowen.su.domains/mc/), 2025+  
 
 <details markdown="1">
@@ -152,7 +167,7 @@ For a comprehensive list of resources regarding counseling services, medical ass
 
 
 ## Assessment
-- **Homework:** 15%  
+- **Assignments:** 15%  
 - **Project:** 20%  
 - **Midterm Exam(s):** 25%  
 - **Final Exam:** 40%  
