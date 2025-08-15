@@ -1,6 +1,7 @@
 ---
-layout: default
 title: Schedule
+layout: default
+permalink: /schedule/
 ---
 
 # Course Schedule

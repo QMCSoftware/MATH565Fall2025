@@ -27,10 +27,17 @@
           </label>
 
           <div class="trigger">
-            <a class="page-link" href="{{ '/' | relative_url }}">Home</a>
-            <a class="page-link" href="{{ '/schedule.html' | relative_url }}">Schedule</a>
-            <a class="page-link" href="{{ '/assignments/' | relative_url }}">Assignments</a>
-            <a class="page-link" href="{{ '/lectures/' | relative_url }}">Lectures</a>
+            {% if site.data.navigation %}
+              {% for item in site.data.navigation %}
+                <a class="page-link" href="{{ item.url | relative_url }}">{{ item.title }}</a>
+              {% endfor %}
+            {% else %}
+              <!-- Fallback if navigation.yml isn't present -->
+              <a class="page-link" href="{{ '/' | relative_url }}">Home</a>
+              <a class="page-link" href="{{ '/policies/' | relative_url }}">Policies</a>
+              <a class="page-link" href="{{ '/schedule/' | relative_url }}">Schedule</a>
+              <a class="page-link" href="{{ '/assignments/' | relative_url }}">Assignments</a>
+            {% endif %}
           </div>
         </nav>
       </div>

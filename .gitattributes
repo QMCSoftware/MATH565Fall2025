@@ -2,33 +2,30 @@
 * text=auto
 
 # Force LF for source/text files
-*.md   text eol=lf
-*.yml  text eol=lf
-*.yaml text eol=lf
-*.html text eol=lf
-*.css  text eol=lf
-*.js   text eol=lf
-*.py   text eol=lf
-*.rb   text eol=lf
-*.sh   text eol=lf
+*.md    text eol=lf
+*.yml   text eol=lf
+*.yaml  text eol=lf
+*.html  text eol=lf
+*.css   text eol=lf
+*.js    text eol=lf
+*.py    text eol=lf
+*.rb    text eol=lf
+*.sh    text eol=lf
 
 # Notebooks — strip outputs on commit for cleaner diffs
 *.ipynb filter=nbstripout
+*.ipynb diff=ipynb
 
 # Common binaries/assets
-*.png  binary
-*.jpg  binary
-*.jpeg binary
-*.gif  binary
-*.svg  text
-*.pdf  binary
-*.woff binary
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.svg   text
+*.pdf   binary
+*.woff  binary
 *.woff2 binary
 
 # Optional: mark lecture/assignment PDFs as documentation in GitHub linguist
-lectures/** linguist-documentation
+lectures/**    linguist-documentation
 assignments/** linguist-documentation
-
-
-*.zpln filter=nbstripout
-*.ipynb diff=ipynb

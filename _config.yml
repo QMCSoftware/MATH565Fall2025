@@ -1,14 +1,18 @@
 title: MATH 565 Monte Carlo Methods, Fall 2025
 markdown: kramdown
 theme: minima
+
 exclude:
   - qmcsoftware
   - .gitmodules
   - .gitignore
   - README.md
 
-url: "https://QMCPySoftware.github.io"
+url: "https://qmcsoftware.github.io"
 baseurl: "/MATH565Fall2025"
+repo_owner: QMCSoftware
+repo_name: MATH565Fall2025
+repo_branch: main
 
 sass:
   style: compressed
@@ -16,14 +20,24 @@ sass:
 plugins:
   - jekyll-last-modified-at
 
-# Use custom stylesheet
+# Defaults
 defaults:
-  -
-    scope:
+  - scope:
       path: ""
     values:
       layout: default
       css: "/assets/css/style.css"
+  - scope:
+      path: "assignments"
+      type: "assignments"
+    values:
+      layout: default
 
-header_pages:
-  - syllabus.md
+# Collections
+collections:
+  assignments:
+    output: true
+    permalink: /assignments/:name/
+
+# Clean URLs for regular pages too
+permalink: /:path/

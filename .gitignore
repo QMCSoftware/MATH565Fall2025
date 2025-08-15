@@ -41,4 +41,6 @@ node_modules/
 
 # BFG reports
 .bfg-report/
-bfg-report/
+bfg-report/_site/
+.jekyll-cache/
+.jekyll-metadata
