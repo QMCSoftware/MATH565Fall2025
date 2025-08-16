@@ -44,3 +44,37 @@ node_modules/
 bfg-report/_site/
 .jekyll-cache/
 .jekyll-metadata
+
+# --- OS cruft ---
+.DS_Store
+Thumbs.db
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+pip-wheel-metadata/
+
+# --- Environments ---
+.venv/
+venv/
+.env
+.pyenv/
+.mypy_cache/
+
+# --- Jupyter / VS Code ---
+**/.ipynb_checkpoints/
+**/.virtual_documents/
+**/.jupyter/
+# If you DO want to keep project-wide VS Code settings, comment the next line
+.vscode/
+# Or, if your team wants a curated set, use this instead:
+# .vscode/*
+# !.vscode/extensions.json
+# !.vscode/settings.json
+
+# --- Misc editors ---
+*.swp
+*.swo.DS_Store
