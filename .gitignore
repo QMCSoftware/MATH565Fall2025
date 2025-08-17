@@ -1,51 +1,14 @@
-# Jekyll build output
+# --- Jekyll build output ---
 _site/
 .jekyll-cache/
 .jekyll-metadata
 .sass-cache/
-
-# Bundler & Ruby
 .bundle/
 vendor/
-
-# macOS system files
-.DS_Store
-
-# Python-related (for notebooks/utils/qmcsoftware/lite)
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-*.egg-info/
-*.egg
-
-# Virtual environments (if used)
-env/
-venv/
-.venv/
-
-# Logs and temporary files
-*.log
-*.tmp
-*~
-
-# Jupyter Notebook checkpoints
-.ipynb_checkpoints/
-
-# VS Code (if you use it)
-.vscode/
-
-# Node.js (if you ever add JS tooling)
-node_modules/
-
-
-# BFG reports
-.bfg-report/
+bfg-report/
 bfg-report/_site/
-.jekyll-cache/
-.jekyll-metadata
 
-# --- OS cruft ---
+# --- macOS / Windows system files ---
 .DS_Store
 Thumbs.db
 
@@ -53,28 +16,30 @@ Thumbs.db
 __pycache__/
 *.py[cod]
 *.egg-info/
+*.egg
 dist/
 build/
 pip-wheel-metadata/
+.mypy_cache/
 
-# --- Environments ---
+# --- Virtual environments ---
 .venv/
 venv/
 .env
 .pyenv/
-.mypy_cache/
+
+# --- Logs and temp files ---
+*.log
+*.tmp
+*~
+*.swp
+*.swo
 
 # --- Jupyter / VS Code ---
 **/.ipynb_checkpoints/
 **/.virtual_documents/
 **/.jupyter/
-# If you DO want to keep project-wide VS Code settings, comment the next line
 .vscode/
-# Or, if your team wants a curated set, use this instead:
-# .vscode/*
-# !.vscode/extensions.json
-# !.vscode/settings.json
 
-# --- Misc editors ---
-*.swp
-*.swo.DS_Store
+# --- Node.js (if added later) ---
+node_modules/
