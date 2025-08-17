@@ -1,5 +1,6 @@
 """
 mc_class.py — lightweight plotting init for MATH 565
+"""
 
 import numpy as np
 import matplotlib.pyplot as plt
