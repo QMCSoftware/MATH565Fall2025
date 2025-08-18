@@ -6,7 +6,9 @@ permalink: /notebooks/
 
 # Notebooks
 
-> You can run notebooks in [Google Colab](https://colab.research.google.com/), view them on GitHub, or download and open them locally (e.g., JupyterLab, VS Code).
+> ⚙️ **First time here?** Please follow the [Conda environment setup instructions]({{ site.baseurl }}/conda-setup/) before running the notebooks in JupyterLab.
+<br>
+You can run notebooks in [Google Colab](https://colab.research.google.com/), view them on GitHub, or download and open them locally (e.g., JupyterLab, VS Code).
 
 {% assign owner  = site.repo_owner  | default: 'QMCSoftware' %}
 {% assign name   = site.repo_name   | default: 'MATH565Fall2025' %}
