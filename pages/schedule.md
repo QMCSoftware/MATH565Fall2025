@@ -8,7 +8,7 @@ permalink: /schedule/
 
 | Date     | Topic               | Notes         |
 |----------|---------------------|---------------|
-| Aug 18   | Introduction        | [Lecture 1](lectures/lecture1.pdf) |
+| Aug 18   | What is a Monte Carlo?        | [ Introduction]({{ site.baseurl }}/lectures/MATH565MonteCarloMethodsNotesPart1.pdf) |
 | Aug 20   |                     |               |
 | Aug 25   |                     |               |
 | Aug 27   |                     |               |
