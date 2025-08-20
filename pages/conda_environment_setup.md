@@ -72,6 +72,22 @@ pip install -r requirements-course.txt --upgrade
 
 ---
 
+### 7. Verify installation
+
+Run this to check that `qmcpy` is installed and working:
+
+```bash
+python -c "import qmcpy; print('QMCSoftware version:', qmcpy.__version__)"
+```
+
+You should see output like:
+
+```
+QMCSoftware version: 2.0
+```
+
+---
+
 ### Troubleshooting
 
 - **Apple Silicon (M1/M2/M3):** Prefer [miniforge](https://github.com/conda-forge/miniforge) and `mamba`.  
