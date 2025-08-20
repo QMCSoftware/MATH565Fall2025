@@ -14,7 +14,7 @@ permalink: /schedule/
 | Aug 27   |                     |               |
 | Sep 1    | **Labor Day (no class)**                    |               |
 | Sep 3    |                     |               |
-| **Friday, Sep 5** |                    |               |
+| **Friday, Sep 5** |  **Assignment 1 Due**                  |               |
 | Sep 8    |                     |               |
 | Sep 10   |                     |               |
 | Sep 15   |                     |               |
