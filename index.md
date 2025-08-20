@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Home
+title: Welcome
 ---
 
 # Welcome to MATH 565 (Fall 2025)
@@ -23,7 +23,7 @@ This course teaches students Monte Carlo simulation techniques, focusing on appl
 </a>
 
 * _Office:_ RE 208  
-* _Office hours:_ TBD  
+* _Office hours:_ Mondays, 3:15 – 4:45 PM, and by appointment  
 * _Phone:_ 312-567-8983  
 * _Email:_ [hickernell@illinoistech.edu](mailto:hickernell@illinoistech.edu)  
 * [_Website_](https://www.iit.edu/directory/people/fred-hickernell)  
@@ -55,7 +55,7 @@ This course teaches students Monte Carlo simulation techniques, focusing on appl
 * _Email:_ [rprasad1@hawk.illinoistech.edu](mailto:rprasad1@hawk.illinoistech.edu)  
 </details>
 
-**Textbook:** Art B. Owen, [*Monte Carlo Theory, Methods, and Examples*](https://artowen.su.domains/mc/), 2025+  
+**Textbook:** Art B. Owen, [*Monte Carlo Theory, Methods, and Examples*]({{ site.Owen_text }}), 2025+  
 
 <details markdown="1">
 <summary><strong>Recommended resources</strong></summary>
