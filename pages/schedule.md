@@ -7,7 +7,7 @@ permalink: /schedule/
 <h1 style="position:relative;">
   Course Schedule
   <a href="{{ "/class-setup/" | relative_url }}"
-     style="position:absolute; right:0; font-size:40%; top:1.6em;">⚙️</a>
+     style="position:absolute; right:0; font-size:40%; top:1.4em;">⚙️</a>
 </h1>
 
 | Date     | Topic               | Notes         |
