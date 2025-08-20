@@ -19,8 +19,8 @@ permalink: /schedule/
 | Sep 1    | **Labor Day (no class)**                    |               |
 | Sep 3    |                     |               |
 | **Friday, Sep 5** |  **Assignment 1 Due**                  |               |
-| Sep 8    |                     |               |
-| Sep 10   |                     |               |
+| Sep 8 <br>  **Fred out of town <br> lectures pre-recorded**    |    |               |
+| Sep 10 <br>  **Fred out of town <br> lectures pre-recorded**  |     |               |
 | Sep 15   |                     |               |
 | Sep 17   |                     |               |
 | Sep 22   |                     |               |
