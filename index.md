@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Home
+title: Welcome
 ---
 
 # Welcome to MATH 565 (Fall 2025)
