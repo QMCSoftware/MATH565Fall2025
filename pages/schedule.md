@@ -13,7 +13,7 @@ permalink: /schedule/
 | Date     | Topic               | Notes         |
 |----------|---------------------|---------------|
 | Aug 18   | What is a Monte Carlo?        | [ Introduction]({{ site.baseurl }}/lectures/MATH565MonteCarloMethodsNotesPart1.pdf) |
-| Aug 20   |  Probability & Sampling   |   (see above)            |
+| Aug 20   |  Probability & Sampling   |            |
 | Aug 25   |                     |               |
 | Aug 27   |                     |               |
 | Sep 1    | **Labor Day (no class)**                    |               |
