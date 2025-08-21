@@ -4,19 +4,25 @@ layout: default
 permalink: /schedule/
 ---
 
-# Course Schedule
+<h1 style="position:relative;">
+  Course Schedule
+  <a href="{{ "/class-setup/" | relative_url }}"
+     style="position:absolute; right:0; font-size:40%; top:1.4em;">⚙️</a>
+</h1>
+
+The first page of the notes indicates when it was most recently updated.
 
 | Date     | Topic               | Notes         |
 |----------|---------------------|---------------|
 | Aug 18   | What is a Monte Carlo?        | [ Introduction]({{ site.baseurl }}/lectures/MATH565MonteCarloMethodsNotesPart1.pdf) |
-| Aug 20   |                     |               |
+| Aug 20   |  Probability & Sampling   |            |
 | Aug 25   |                     |               |
 | Aug 27   |                     |               |
 | Sep 1    | **Labor Day (no class)**                    |               |
 | Sep 3    |                     |               |
-| **Friday, Sep 5** |                    |               |
-| Sep 8    |                     |               |
-| Sep 10   |                     |               |
+| **Friday, Sep 5** |  **Assignment 1 Due**                  |               |
+| Sep 8 <br>  **Fred out of town <br> lectures pre-recorded**    |    |               |
+| Sep 10 <br>  **Fred out of town <br> lectures pre-recorded**  |     |               |
 | Sep 15   |                     |               |
 | Sep 17   |                     |               |
 | Sep 22   |                     |               |

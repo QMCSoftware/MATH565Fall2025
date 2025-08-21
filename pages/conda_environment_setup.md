@@ -8,17 +8,11 @@ These steps set up Python and the `qmcpy` environment so you can run the course 
 
 ---
 
-### 1. Clone this repository (with submodules)
+### 1. Clone this repository
 
 ```bash
-git clone --recurse-submodules https://github.com/QMCSoftware/MATH565Fall2025.git
+git clone https://github.com/QMCSoftware/MATH565Fall2025.git
 cd MATH565Fall2025
-```
-
-If you already cloned without submodules:
-
-```bash
-git submodule update --init --recursive
 ```
 
 ---
@@ -37,7 +31,7 @@ conda activate qmcpy
 ### 3. Install QMCSoftware (editable)
 
 ```bash
-pip install -e submodules/QMCSoftware[dev]
+pip install -e "qmcsoftware[dev]"
 ```
 
 This installs `qmcpy` plus its development extras (JupyterLab, matplotlib, pandas, etc.).
@@ -70,11 +64,26 @@ When the repo or QMCSoftware changes:
 
 ```bash
 git pull
-git submodule update --init --recursive
 
 conda activate qmcpy
-pip install -e submodules/QMCSoftware[dev] --upgrade
+pip install -e "qmcsoftware[dev]" --upgrade
 pip install -r requirements-course.txt --upgrade
+```
+
+---
+
+### 7. Verify installation
+
+Run this to check that `qmcpy` is installed and working:
+
+```bash
+python -c "import qmcpy; print('QMCSoftware version:', qmcpy.__version__)"
+```
+
+You should see output like:
+
+```
+QMCSoftware version: 2.0
 ```
 
 ---
@@ -89,7 +98,7 @@ pip install -r requirements-course.txt --upgrade
   conda env remove -n qmcpy
   conda create -n qmcpy python=3.12 -y
   conda activate qmcpy
-  pip install -e submodules/QMCSoftware[dev]
+  pip install -e "qmcsoftware[dev]"
   pip install -r requirements-course.txt
   ```
 
