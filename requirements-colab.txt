@@ -1,7 +1,0 @@
-ipynbname
-numpy
-scipy
-pandas
-matplotlib
-sympy
-scikit-learn

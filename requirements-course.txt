@@ -1,3 +1,5 @@
 # requirements-course.txt packages to be installed for this course
 ipynbname
 jupyterlab_execute_time
+ipywidgets
+statsmodels
