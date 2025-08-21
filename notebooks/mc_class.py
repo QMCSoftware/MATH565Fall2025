@@ -79,4 +79,4 @@ def plot_rate_line(ax, x_range, y_start, rate,
     y1 = y_start * (x1 / x0) ** (-rate)
     if label is None:
         label = rf"$\mathcal{{O}}(n^{{-{rate}}})$"
-    ax.loglog([x0, x1], [y0, y1], color=color,
+    ax.loglog([x0, x1], [y0, y1], color=color, linestyle=ls, label=label)
