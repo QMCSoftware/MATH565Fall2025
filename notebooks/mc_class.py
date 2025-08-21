@@ -1,7 +1,6 @@
 """
 mc_class.py — lightweight plotting + notebook init for MATH 565
 """
-# also sets highlight color
 
 import numpy as np
 import matplotlib.pyplot as plt
