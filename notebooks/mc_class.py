@@ -1,9 +1,10 @@
 """
-mc_class.py — lightweight plotting init for MATH 565
+mc_class.py — lightweight plotting + notebook init for MATH 565
 """
 
 import numpy as np
 import matplotlib.pyplot as plt
+from IPython.display import display, HTML
 
 def init(
     *,
@@ -15,8 +16,9 @@ def init(
     tick_labelsize: int = 14,
     legend_fontsize: int = 14,
     legend_frameon: bool = False,
+    highlight_color: str = "#e6f7ff",   # <<< NEW
 ) -> None:
-    """Set global plotting style and numeric safety."""
+    """Set global plotting style, numeric safety, and notebook CSS."""
     # numeric safety
     np.seterr(divide="raise", invalid="raise")
 
@@ -33,6 +35,16 @@ def init(
         "legend.frameon": legend_frameon,
     })
 
+    # inject CSS for highlighted cells
+    css = f"""
+    <style>
+    .tag_highlight {{
+        background-color: {highlight_color} !important;
+    }}
+    </style>
+    """
+    display(HTML(css))
+
 def get_py_colors():
     """Return the default Matplotlib color cycle as a dict of 10 named colors."""
     color_cycle = plt.rcParams["axes.prop_cycle"].by_key()["color"]
@@ -44,13 +56,6 @@ def plot_rate_line(ax, x_range, y_start, rate,
                    color="black", label=None, ls="--"):
     """
     Plot a reference line showing O(n^{-rate}) on a log-log plot.
-
-    Parameters
-    ----------
-    ax : matplotlib.axes.Axes
-    x_range : tuple (x0, x1)
-    y_start : float at x0
-    rate : float (e.g., 0.5 for O(n^{-1/2}))
     """
     x0, x1 = x_range
     y0 = y_start
