@@ -111,12 +111,10 @@ By the end of this course, students will be able to:
 ## Course Outline
 
 <details markdown="1">
-<summary><strong>Introduction</strong> — 9 hours</summary>
+<summary><strong>Introduction</strong> — 4 hours</summary>
 
 - What is a Monte Carlo method?
-- Point and interval estimators
-- Monte Carlo for numerical integration
-- Monte Carlo for option pricing
+- Point and interval estimators of means, variances, probabililty distribution functions, and quantile functions
 
 </details>
 
