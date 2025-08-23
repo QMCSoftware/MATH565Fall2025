@@ -163,6 +163,11 @@ By the end of this course, students will be able to:
 - **Project:** 20%  
 - **Midterm Exam(s):** 25%  
 - **Final Exam:** 40%  
+- **Extra Credit:** up to 10%, Beginning August 25, if you find an error in
+    - My lecture slides, Jupyter Notebooks, or assignments at least 24 hours after I have presented them in class, or
+    - Art Owen's book, 
+
+  Then I will award you 0.5 or 1 extra credit points, up to a total of 10 points.  These are added to your final weighted total.
 
 ---
 
