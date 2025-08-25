@@ -16,7 +16,7 @@ The first page of the notes indicates when it was most recently updated.
 |----------|---------------------|---------------|
 | Aug 18   | What is a Monte Carlo?        | [ Introduction]({{ site.baseurl }}/lectures/MATH565MonteCarloMethodsNotesPart1Intro.pdf) |
 | Aug 20   |  Probability & Sampling   |            |
-| Aug 25   | Conditional Probability & Random Number Generation |  [ Introduction]({{ site.baseurl }}/lectures/MATH565MonteCarloMethodsNotesPart2GenerateRVs.pdf)              |
+| Aug 25   | Conditional Probability & Random Number Generation |  [ Generating Random Vectors]({{ site.baseurl }}/lectures/MATH565MonteCarloMethodsNotesPart2GenerateRVs.pdf)              |
 | Aug 27   |                     |               |
 | Sep 1    | **Labor Day (no class)**                    |               |
 | Sep 3    |                     |               |
