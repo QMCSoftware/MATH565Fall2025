@@ -69,6 +69,18 @@ def get_py_colors():
              "brown", "pink", "gray", "yellow", "cyan"]
     return dict(zip(names, color_cycle[:len(names)]))
 
+def get_tol_colors():
+    """Return Paul Tol's Bright 7-color palette as a dict."""
+    return {
+        "blue":   "#4477AA",
+        "cyan":   "#66CCEE",
+        "green":  "#228833",
+        "yellow": "#CCBB44",
+        "red":    "#EE6677",
+        "purple": "#AA3377",
+        "gray":   "#BBBBBB",
+    }
+
 def plot_rate_line(ax, x_range, y_start, rate,
                    color="black", label=None, ls="--"):
     """
