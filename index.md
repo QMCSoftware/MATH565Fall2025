@@ -114,12 +114,13 @@ By the end of this course, students will be able to:
 <summary><strong>Introduction</strong> — 4 hours</summary>
 
 - What is a Monte Carlo method?
+- Probability review
 - Point and interval estimators of means, variances, probabililty distribution functions, and quantile functions
 
 </details>
 
 <details markdown="1">
-<summary><strong>Generating Random Vectors</strong> — 6 hours</summary>
+<summary><strong>Generating Samples</strong> — 6 hours</summary>
 
 - Pseudo-random numbers
 - Random vectors with different distributions
