@@ -158,7 +158,7 @@ By the end of this course, students will be able to:
 
 
 ## Assessment
-- **Assignments:** 15%  
+- [**Assignments:**]({{ site.baseurl }}/assignments/) 15%  
 - [**Project:**]({{ site.baseurl }}/project/) 20%  
 - **Midterm Exam(s):** 25%  
 - **Final Exam:** 40%  

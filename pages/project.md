@@ -15,7 +15,7 @@ its applications. This must be done individually.  Each student’s article must
 ## Submission 
 - Everyone must submit your project topic by 10/1/25 using [this form](https://forms.office.com/r/0a2nykbDmn).
 - After the deadline for project topic submissions, please go to [this spreadsheet](https://iit0-my.sharepoint.com/:x:/r/personal/hickernell_illinoistech_edu/Documents/MATH%20565%20Project%20Selection.xlsx?d=wdf1db5bd20cf49a7ac4d095bddf2da57&csf=1&web=1&e=HTVx6w) to make sure your
-topic is okay.
+proposed topic is accepted.
 - Prepare a 15-minute (+5 minute question & answer) oral presentation with handouts describing
 either
    1. The main point of the article, illustrating it with some examples of your own, making any criticisms that are
@@ -30,35 +30,35 @@ will prepare written reports of 10–15 pages instead that are due 11/25/25.
 - **Article Reviews.** These must cover topics not already covered in lecture. In general, articles must
 have been published no less than fifteen years ago. 
 - **`qmcpy` Feature.** Discuss possibilities with the instructor to ensure that what you plan is the right size.
-- Keep your report focused on the big picture. Don’t get bogged down in details. You do not enough
-time for too many technical details.
-- Pick a simple example that illustrates the main point. Making it simple will help us to understand
+- Keep your report focused on the big picture. Don’t get bogged down in details.
+- Pick a simple example that illustrates the main point and helps us to understand
 better.
 - Look at your audience while you are speaking. Do not read your notes.
 - Motivate your talk by describing the background, previous work, and/or relevant application.
 - Discuss the strengths and weaknesses or pros and cons of the article or feature.
 - Make suggestions for further work or alternative approaches.
-- Don’t use too many slides; about one per minute should be enough. Don’t put too much on a slide.
+- Don’t use too many slides; about one per minute should be enough. 
+- Don’t put too much on a slide.
 - Show pictures, plots, and tables to illustrate your points.
-- Don’t use the whiteboard too much; it takes too much time.
-- Include any key formulas and/or figures directly in your slides. Don’t make the audience look at the
-source paper.
+- Don’t use the whiteboard much; it takes too much time.
+- Include key formulas and/or figures directly in your slides rather than making the audience look at the
+source.
 - Use your own words on your slides. Do not plagiarize.
-- Make the best use of your time, but do not go overtime.
+- Make the best use of your presentation time, and do not go overtime.
 - Practice beforehand. Ask your classmates for feedback.
-- Bring your own laptop or borrow a friend’s laptop. Try it out with the video projector beforehand to
+- Bring your own laptop or borrow a friend’s laptop. Try it with the video projector beforehand to
 ensure that it works satisfactorily. Make sure that you know how to work the projector, configure your
 laptop, and bring any necessary connector for your laptop.
 - You will be assessed by your observers and myself using this [Project Assessment Form]({{ site.baseurl }}/project_assessment/). Look at this form
 beforehand.
 - The presentations will be conducted like a colloquium talk or a conference talk.
-- Come early for your presentation (or observation) so that you can set up. We must keep a strict schedule.
-- I will act as the session chair and introduce you at the beginning of your talk.
-- You will be given one or two warnings when your time is getting short.
-- Your presentation will be stopped when the time reaches 15 minutes.
-At the end of your talk, say “Thank you,” or “That concludes what I would like to say.” Don’t ask for
-questions. That is my job.
-- The audience will clap in appreciation after you finish your talk.
-- As the chair, I will invite the audience to ask questions.
-- The audience will clap again to thank you for your talk.
-- The next speaker set up quickly.
+   - Come early for your presentation (or observation) so that you can set up. We must keep a strict schedule.
+   - I will be the session chair and introduce you before your talk.
+   - You will be given one or two warnings when your time is getting short.
+   - Your presentation will be stopped when the time reaches 15 minutes.
+   - At the end of your talk, say “Thank you,” or “That concludes what I would like to say.” Don’t ask for
+   questions; that is my job.
+   - The audience will clap in appreciation after you finish your talk.
+   - As the chair, I will invite the audience to ask questions.
+   - The audience will clap again to thank you for your talk.
+   - The next speaker will set up quickly.
