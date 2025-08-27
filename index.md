@@ -159,7 +159,7 @@ By the end of this course, students will be able to:
 
 ## Assessment
 - **Assignments:** 15%  
-- **Project:** 20%  
+- [**Project:**]({{ site.baseurl }}/project/) 20%  
 - **Midterm Exam(s):** 25%  
 - **Final Exam:** 40%  
 - **Extra Credit:** up to 10%, Beginning August 25, if you are the first to find an error in
