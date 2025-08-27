@@ -8,7 +8,7 @@ permalink: /project/
 
 ## Types
 You are required to do a project. There are two types of projects that you may do (choose one):
-- Review a research article published in the scholarly literature of interest related to Monte Carlo methods or
+- Review a research article published in the scholarly literature related to Monte Carlo methods or
 its applications. This must be done individually.  Each student’s article must be diﬀerent. 
 - Create a new feature for `qmcpy`.  This can be done in a group of up to two.
 
