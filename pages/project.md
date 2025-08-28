@@ -16,7 +16,7 @@ its applications. This must be done individually.  Each student’s article must
 - Everyone must submit your project topic by 10/1/25 using [this form](https://forms.office.com/r/0a2nykbDmn).
 - After the deadline for project topic submissions, please go to [this spreadsheet](https://iit0-my.sharepoint.com/:x:/r/personal/hickernell_illinoistech_edu/Documents/MATH%20565%20Project%20Selection.xlsx?d=wdf1db5bd20cf49a7ac4d095bddf2da57&csf=1&web=1&e=HTVx6w) to make sure your
 proposed topic is accepted.
-- Prepare a 15-minute (+5 minute question & answer) oral presentation with handouts describing
+- Prepare a 15-minute (+5 minute question & answer) oral presentation with handouts (for the audience) describing
 either
    1. The main point of the article, illustrating it with some examples of your own, making any criticisms that are
 warranted, and describing future work, or
@@ -30,7 +30,7 @@ will prepare written reports of 10–15 pages instead that are due 11/25/25.
 - **Article Reviews.** These must cover topics not already covered in lecture. In general, articles must
 have been published no less than fifteen years ago. 
 - **`qmcpy` Feature.** Discuss possibilities with the instructor to ensure that what you plan is the right size.
-- Keep your report focused on the big picture. Don’t get bogged down in details.
+- Keep your presentation focused on the big picture. Don’t get bogged down in details.
 - Pick a simple example that illustrates the main point and helps us to understand
 better.
 - Look at your audience while you are speaking. Do not read your notes.
@@ -52,6 +52,10 @@ laptop, and bring any necessary connector for your laptop.
 - You will be assessed by your observers and myself using this [Project Assessment Form]({{ site.baseurl }}/project_assessment/). Look at this form
 beforehand.
 - The presentations will be conducted like a colloquium talk or a conference talk.
+   - Your audience will include 
+      - the students assigned to observe your presentation,
+      - any other classmates that wish to come, and 
+      - me.
    - Come early for your presentation (or observation) so that you can set up. We must keep a strict schedule.
    - I will be the session chair and introduce you before your talk.
    - You will be given one or two warnings when your time is getting short.
