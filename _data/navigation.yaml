@@ -4,7 +4,9 @@
   url: /policies/
 - title: Schedule
   url: /schedule/
-- title: Assignments
-  url: /assignments/
 - title: Notebooks
   url: /notebooks/
+- title: Assignments
+  url: /assignments/
+- title: Tests
+  url: /tests/

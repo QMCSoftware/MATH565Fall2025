@@ -116,6 +116,7 @@ By the end of this course, students will be able to:
 - What is a Monte Carlo method?
 - Probability review
 - Point and interval estimators of means, variances, probabililty distribution functions, and quantile functions
+- Conditional Monte Carlo
 
 </details>
 
@@ -124,6 +125,8 @@ By the end of this course, students will be able to:
 
 - Pseudo-random numbers
 - Random vectors with different distributions
+- Low discrepancy sampling
+- Accpeptance-rejection sampling
 
 </details>
 
@@ -160,7 +163,7 @@ By the end of this course, students will be able to:
 ## Assessment
 - [**Assignments:**]({{ site.baseurl }}/assignments/) 15%  
 - [**Project:**]({{ site.baseurl }}/project/) 20%  
-- **Midterm Exam(s):** 25%  
+- [**Midterm Test(s):**]({{ site.baseurl }}/tests/) 25%  
 - **Final Exam:** 40%  
 - **Extra Credit:** up to 10%, Beginning August 25, if you are the first to find an error in
     - My lecture slides, Jupyter Notebooks, or assignments at least 24 hours after I have presented them in class, or
