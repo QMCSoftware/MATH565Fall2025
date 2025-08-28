@@ -95,6 +95,8 @@ By the end of this course, students will be able to:
 - Understand basic implementation issues in performing Monte Carlo calculations.
 </details>
 
+[**How to Study for This Course**]({{ site.baseurl }}/howtostudy/)
+
 <details markdown="1">
 <summary><strong>Where to Find It</strong></summary>
 
