@@ -7,6 +7,15 @@ exclude:
   - .gitmodules
   - .gitignore
   - README.md
+  - vendor
+  - vendor/bundle
+  - node_modules
+  - Gemfile
+  - Gemfile.lock
+  - .bundle
+  - .jekyll-cache
+  - .sass-cache
+  - tmp
 
 url: "https://qmcsoftware.github.io"
 baseurl: "/MATH565Fall2025"

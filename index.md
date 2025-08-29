@@ -166,7 +166,7 @@ By the end of this course, students will be able to:
 - [**Assignments:**]({{ site.baseurl }}/assignments/) 15%  
 - [**Project:**]({{ site.baseurl }}/project/) 20%  
 - [**Midterm Test(s):**]({{ site.baseurl }}/tests/) 25%  
-- **Final Exam:** 40%  
+- **Final Exam (Take-Home + In-Class):** 40%  
 - **Extra Credit:** up to 10%, Beginning August 25, if you are the first to find an error in
     - My lecture slides, Jupyter Notebooks, or assignments at least 24 hours after I have presented them in class, or
     - Art Owen's book, 
@@ -176,6 +176,6 @@ By the end of this course, students will be able to:
 ---
 
 <small>
-**Prepared by:** Fred Hickernell and Yuhan Ding  
+**Syllabus prepared by:** Fred Hickernell and Yuhan Ding  
 **Date:** 2024-02-06 to the present
 </small>
