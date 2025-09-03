@@ -42,4 +42,5 @@ venv/
 .vscode/
 
 # --- Node.js (if added later) ---
-node_modules/
+node_modules/.DS_Store
+*/.ipynb_checkpoints/
