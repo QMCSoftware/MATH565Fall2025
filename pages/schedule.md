@@ -20,7 +20,7 @@ The first page of the notes indicates when it was most recently updated.
 | Aug 27   |  Quantile Function to Generate Non-Uniform Samples <br>Multivariate Normal; Gaussian Processes; Brownian Motion  |               |
 | Sep 1    | **Labor Day (no class)**                    |               |
 | Sep 3    |  Option Pricing <br>Low Discrepancy Sampling                   |               |
-| **Friday, Sep 5** |  **Assignment 1 Due**                  |               |
+| **Friday, Sep 5** |  **Assignment 1 Due** <br>Acceptance Rejection Sampling                 |               |
 | Sep 8 <br>  **Fred out of town <br> lectures pre-recorded**    |    |               |
 | Sep 10 <br>  **Fred out of town <br> lectures pre-recorded**  |     |               |
 | Sep 15   |                     |               |
