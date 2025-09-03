@@ -15,11 +15,11 @@ The first page of the notes indicates when it was most recently updated.
 | Date     | Topic               | Notes         |
 |----------|---------------------|---------------|
 | Aug 18   | What is a Monte Carlo?        | [ Introduction]({{ site.baseurl }}/lectures/MATH565MonteCarloMethodsNotesPart1Intro.pdf) |
-| Aug 20   | Probability;  Sampling   |            |
-| Aug 25   | Conditional Probability;  Random Number Generation |  [ Generating Samples]({{ site.baseurl }}/lectures/MATH565MonteCarloMethodsNotesPart2GenerateSamples.pdf)              |
-| Aug 27   |  Generating Non-Uniform Random Samples; Low Discrepancy Sampling  |               |
+| Aug 20   | Probability;  Sampling; <br>Low Discrepancy Sampling   |            |
+| Aug 25   | Conditional Probability;  <br>Random Number Generation; Quantile Function to Generate Non-Uniform Samples |  [ Generating Samples]({{ site.baseurl }}/lectures/MATH565MonteCarloMethodsNotesPart2GenerateSamples.pdf)              |
+| Aug 27   |  Quantile Function to Generate Non-Uniform Samples <br>Multivariate Normal; Gaussian Processes; Brownian Motion  |               |
 | Sep 1    | **Labor Day (no class)**                    |               |
-| Sep 3    |                     |               |
+| Sep 3    |  Option Pricing <br>Low Discrepancy Sampling                   |               |
 | **Friday, Sep 5** |  **Assignment 1 Due**                  |               |
 | Sep 8 <br>  **Fred out of town <br> lectures pre-recorded**    |    |               |
 | Sep 10 <br>  **Fred out of town <br> lectures pre-recorded**  |     |               |
