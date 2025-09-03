@@ -21,7 +21,7 @@ The first page of the notes indicates when it was most recently updated.
 | Sep 1    | **Labor Day (no class)**                    |               |
 | Sep 3    |  Option Pricing <br>Low Discrepancy Sampling                   |               |
 | **Friday, Sep 5** |  **Assignment 1 Due** <br>Acceptance Rejection Sampling                 |               |
-| Sep 8 <br>  **Fred out of town <br> lectures pre-recorded**    |    |               |
+| Sep 8 <br>  **Fred out of town <br> lectures pre-recorded** <br>`qmcpy` tutorial   |    |               |
 | Sep 10 <br>  **Fred out of town <br> lectures pre-recorded**  |     |               |
 | Sep 15   |                     |               |
 | Sep 17   |                     |               |
