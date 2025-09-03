@@ -1,3 +1,4 @@
 [submodule "qmcsoftware"]
 	path = qmcsoftware
 	url = https://github.com/QMCSoftware/QMCSoftware.git
+	branch = develop
