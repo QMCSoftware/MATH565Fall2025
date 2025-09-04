@@ -12,7 +12,8 @@ Below are the planned tests and exams for the semester, with links to PDFs as th
 
 Date       | Assessment | Coverage / Notes                     | PDF                                                                 
 ---------- | ---------- | ------------------------------------- | -------------------------------------------------------------------
-Oct ?? | Test 1     | TBD                | <!-- Example reference:[PDF]({{ '/assets/tests/current/MATH565_Fa2025_Test1.pdf' | relative_url }}) -->
+Sep 24 | Test 1     | Parts 1 Introduction and Part 2 Generating Samples                | <!-- Example reference:[PDF]({{ '/assets/tests/current/MATH565_Fa2025_Test1.pdf' | relative_url }}) -->
+TBD | Test 2 
 
 
 ---
