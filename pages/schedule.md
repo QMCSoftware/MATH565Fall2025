@@ -25,10 +25,11 @@ The first page of the notes indicates when it was most recently updated.
 | Sep 10 <br>  **Fred out of town <br> lectures to be recorded** <br>`qmcpy` tutorial  |     |               |
 | Sep 15   |                     |               |
 | Sep 17   |                     |               |
+| Sep 19  |  **Assignment 2 Due**
 | Sep 22   |                     |               |
-| Sep 24   |                     |               |
+| Sep 24   | **Test on Parts 1 Introduction and Part 2 Generating Samples**                   |               |
 | Sep 29   |                     |               |
-| Oct 1    |                     |               |
+| Oct 1    | **Project Proposals Due**     |               |
 | Oct 6    |                     |               |
 | Oct 8    |                     |               |
 | Oct 13   | **Fall Break (no class)**                    |               |

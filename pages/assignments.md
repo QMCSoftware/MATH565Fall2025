@@ -34,4 +34,4 @@ permalink: /assignments/
 | Assignment     | Due Date
 |----------|---------------------|
 | [Assignment 1]({{ site.baseurl }}/assgn1/)    | Sep 5
-|   |                     |
+|  [Assignment 2]({{ site.baseurl }}/assgn2/)  |    Sep 19                 |
