@@ -17,7 +17,7 @@ permalink: /assignments/
     <li>
       A self-contained, working copy of  
       <ul>
-        <li>A Jupyter notebook that runs under the <code>qmcpy</code> environment, OR</li>
+        <li>A Jupyter notebook that runs under the <code>qmcpy</code> environment (if needed), OR</li>
         <li>A MATLAB Live file, OR</li>
         <li>An equivalent.</li>
       </ul>
