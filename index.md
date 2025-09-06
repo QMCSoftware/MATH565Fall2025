@@ -171,7 +171,7 @@ By the end of this course, students will be able to:
     - My lecture slides, Jupyter Notebooks, or assignments at least 24 hours after I have presented them in class, or
     - Art Owen's book, 
 
-  Then I will award you 0.5 or 1 extra credit points, up to a maximum of 10 points.  These are added to your final weighted total.
+  Then I will award you 0.5 or 1 extra credit points, up to a maximum of 10 points.  These are added to your final weighted total. \[Note that the weighted total may not correctly reflect the extra credit until grades are recorded for all categories.\]
 
 ---
 
