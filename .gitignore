@@ -41,3 +41,7 @@ venv/
 
 # --- Editor configs ---
 .vscode/
+
+# --- Editor settings / cache ---
+desktop-settings.json
+default-*/
