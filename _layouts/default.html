@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>{{ page.title }} | {{ site.title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="{{ '/assets/main.css' | relative_url }}">
+    <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+  </head>
+
+  <body>
+    <header class="site-header" role="banner">
+      <div class="wrapper">
+        <a class="site-title" href="{{ '/' | relative_url }}">
+          <img src="{{ '/assets/images/qmcpy_logo.png' | relative_url }}" alt="Logo" style="height: 40px; vertical-align: middle; margin-right: 10px;">
+          {{ site.title }}
+        </a>
+
+        <nav class="site-nav">
+          <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+          <label for="nav-trigger">
+            <span class="menu-icon">
+              <svg viewBox="0 0 18 15" width="18px" height="15px">
+                <path fill="#424242" d="M18,1.5v2H0v-2H18z M18,6.5v2H0v-2H18z M18,11.5v2H0v-2H18z"/>
+              </svg>
+            </span>
+          </label>
+
+          <div class="trigger">
+            {% if site.data.navigation %}
+              {% for item in site.data.navigation %}
+                <a class="page-link" href="{{ item.url | relative_url }}">{{ item.title }}</a>
+              {% endfor %}
+            {% else %}
+              <!-- Fallback if navigation.yml isn't present -->
+              <a class="page-link" href="{{ '/' | relative_url }}">Home</a>
+              <a class="page-link" href="{{ '/policies/' | relative_url }}">Policies</a>
+              <a class="page-link" href="{{ '/schedule/' | relative_url }}">Schedule</a>
+              <a class="page-link" href="{{ '/assignments/' | relative_url }}">Assignments</a>
+            {% endif %}
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <script src="{{ '/assets/js/new-tab-links.js' | relative_url }}"></script>
+
+    <main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        {{ content }}
+      </div>
+    </main>
+
+   <footer class="site-footer">
+      <div class="wrapper footer-meta">
+        <span class="last-updated">
+          Updated: <span id="updated-ts"></span>
+        </span>
+        <span class="copyright">
+          &copy; Fred Hickernell, Illinois Institute of Technology. All rights reserved.  
+          <span class="credit">This site and its content constructed with the help of ChatGPT.</span>
+        </span>
+      </div>
+    </footer>
+
+    <script>
+      (function () {
+        var el = document.getElementById('updated-ts');
+        if (!el) return;
+        var d = new Date(document.lastModified);
+        if (isNaN(d)) return;
+        el.textContent = d.toLocaleString([], {
+          year: 'numeric', month: 'long', day: '2-digit',
+          hour: '2-digit', minute: '2-digit',
+          hour12: false, timeZoneName: 'short'  // e.g., CDT
+        });
+      })();
+    </script>
+
+  </body>
+      
+  
+</html>

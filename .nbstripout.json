@@ -1,0 +1,26 @@
+{
+  "replace": false,
+  "filters": {
+    "output": {
+      "metadata": {},
+      "output_type": {
+        "remove": [
+          "display_data",
+          "execute_result"
+        ]
+      },
+      "data": {
+        "image/png": "remove",
+        "image/jpeg": "remove",
+        "text/html": "remove",
+        "text/markdown": "remove",
+        "text/latex": "remove",
+        "application/javascript": "remove",
+        "application/vnd.jupyter.widget-view+json": "remove"
+      },
+      "text/plain": {
+        "max_size": 2048
+      }
+    }
+  }
+}

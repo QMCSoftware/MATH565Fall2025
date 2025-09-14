@@ -1,0 +1,194 @@
+/* Override minima default wrapper width */
+.wrapper {
+  max-width: 1200px;
+}
+
+/* Match <details> spacing to paragraphs */
+details {
+  display: block;
+  margin-bottom: var(--spacing, 0em);
+}
+
+/* Make the <details> arrow bigger */
+summary {
+  font-weight: bold; /* optional, keeps label text strong */
+}
+
+summary::-webkit-details-marker {
+  font-size: 1.8em;  /* Chrome, Edge, Safari */
+}
+
+summary::marker {
+  font-size: 1.8em;  /* Firefox */
+}
+
+.last-updated {
+  font-size: 0.85em;
+  color: #666;
+  margin-top: 2em;
+  text-align: left; /* optional */
+}
+
+/* Old footer rule
+.footer-meta {
+  display: flex;
+  justify-content: space-between; 
+  flex-wrap: wrap;                 
+  font-size: 0.85em;
+  color: #666;
+  margin-top: 2em;
+}
+*/
+
+.footer-meta span {
+  margin: 0.25em 0;
+}
+
+/* 1) Beat Minima's `.site-footer .wrapper { text-align:center; }` */
+.site-footer > .wrapper { 
+  text-align: initial !important;
+}
+
+/* 2) Force flex on your footer row and give it full width */
+.site-footer > .wrapper.footer-meta {
+  display: flex !important;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  width: 100%;
+}
+
+/* 3) As a belt-and-suspenders push, send the copyright to the right */
+.site-footer > .wrapper.footer-meta .copyright {
+  margin-left: auto;
+}
+
+/* (Keep your existing small text styles) */
+.site-footer .last-updated,
+.site-footer .copyright {
+  font-size: 0.85em;
+  color: #666;
+  margin: 0;
+}
+
+/* Let timestamp/copyright wrap correctly inside flex (iOS fix) */
+.site-footer .wrapper.footer-meta .last-updated,
+.site-footer .wrapper.footer-meta .copyright {
+  min-width: 0;          /* critical for wrapping in flex items */
+  flex: 1 1 auto;        /* allow shrinking/wrapping */
+  white-space: normal;   /* allow wrapping */
+  line-height: 1.3;
+}
+
+/* Stack on narrow screens so each gets full width */
+@media (max-width: 800px) {
+  .site-footer .wrapper.footer-meta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .site-footer .wrapper.footer-meta .last-updated,
+  .site-footer .wrapper.footer-meta .copyright {
+    width: 100%;
+    display: block;      /* ensures each sits on its own line */
+  }
+}
+
+details table {
+  table-layout: fixed; /* makes widths equal */
+  width: 100%;         /* fill container */
+}
+
+details table th,
+details table td {
+  width: 1%;                /* any small % forces equal distribution */
+  white-space: normal;      /* wrap text */
+  word-break: break-word;   /* break long URLs */
+}
+
+/* AI credit line */
+.site-footer .credit {
+  display: block;         /* new line under copyright */
+  font-size: 0.8em;        /* slightly smaller */
+  color: #777;             /* subtle gray */
+  margin-top: 0.25em;
+}
+
+/* Reduce default paragraph spacing */
+p {
+  margin-top: 0em;
+  margin-bottom: 1.5em;
+}
+
+/* Reduce spacing between list items */
+li {
+  margin-bottom: 0em;
+}
+
+/* --- Compact, Cross-Browser Details / Accordion Styling --- */
+
+/* Tunable spacing variables */
+:root {
+  --details-gap-collapsed: 0.25rem;  /* space between unopened <details> */
+  --details-gap-expanded: 0.75rem;   /* space after an OPEN <details> */
+}
+
+/* Base: remove browser default margins */
+details {
+  display: block;
+  margin: 0;
+}
+
+/* Tight gap between consecutive collapsed accordions */
+details + details {
+  margin-top: var(--details-gap-collapsed);
+}
+
+/* When open, give breathing room after the block */
+details[open] {
+  margin-bottom: var(--details-gap-expanded);
+}
+
+/* Summary line: bold, clickable, no bottom gap */
+summary {
+  font-weight: bold;
+  cursor: pointer;
+  margin: 0;
+
+  /* Keep arrows visible in all browsers */
+  list-style: disclosure-closed; /* Firefox & Safari */
+}
+
+/* Arrow state when open */
+details[open] > summary {
+  list-style: disclosure-open; /* Firefox & Safari */
+}
+
+/* Bigger disclosure arrow in all browsers */
+summary::-webkit-details-marker { font-size: 1.8em; } /* Chrome, Safari */
+summary::marker { font-size: 1.8em; } /* Firefox */
+
+/* Remove top gap before first revealed element */
+details[open] > summary + * {
+  margin-top: 0 !important;
+}
+
+/* Keep inner content tight but readable */
+details p,
+details ul,
+details ol,
+details table {
+  margin-top: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+/* No extra space at the very end */
+details > :not(summary):last-child {
+  margin-bottom: 0;
+}
+
+/* Optional: tighten headings to following text */
+h1, h2, h3 {
+  margin-top: 0.2em;
+  margin-bottom: 0.2em;
+}
+
