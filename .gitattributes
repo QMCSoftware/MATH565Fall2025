@@ -13,7 +13,7 @@
 *.sh    text eol=lf
 
 # Notebooks — strip outputs on commit for cleaner diffs
-*.ipynb filter=nbstripout
+*.ipynb
 *.ipynb diff=ipynb
 
 # Common binaries/assets
