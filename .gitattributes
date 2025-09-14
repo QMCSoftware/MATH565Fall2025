@@ -12,9 +12,8 @@
 *.rb    text eol=lf
 *.sh    text eol=lf
 
-# Notebooks — strip outputs on commit for cleaner diffs
-*.ipynb
-*.ipynb diff=ipynb
+# Notebooks — keep outputs, but use ipynb-aware diffs
+*.ipynb diff=ipynb text
 
 # Common binaries/assets
 *.png   binary

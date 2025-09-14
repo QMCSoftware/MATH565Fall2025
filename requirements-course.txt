@@ -3,4 +3,3 @@ ipynbname
 jupyterlab_execute_time
 ipywidgets
 statsmodels
-# nbstripout is optional
