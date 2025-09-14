@@ -1,3 +1,43 @@
+# --- Jekyll build output ---
+_site/
+.jekyll-cache/
+.jekyll-metadata
+.sass-cache/
+.bundle/
+vendor/
+bfg-report/
+bfg-report/_site/
+
+# --- macOS / Windows system files ---
+.DS_Store
+Thumbs.db
+
+# --- Jupyter ---
+**/.ipynb_checkpoints/
+
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+dist/
+build/
+pip-wheel-metadata/
+.mypy_cache/
+
+# --- Virtual environments ---
+.venv/
+venv/
+.env
+.pyenv/
+
+# --- Logs and temp files ---
+*.log
+*.tmp
+*~
+*.swp
+*.swo
 
 # --- Editor configs ---
 .vscode/
