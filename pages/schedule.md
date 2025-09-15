@@ -23,7 +23,7 @@ The first page of the notes indicates when it was most recently updated.
 | **Friday, Sep 5** |  **Assignment 1 Due** <br>Acceptance Rejection Sampling <br>Also see material recorded on September 6                 |               |
 | Sep 8 <br>  **Fred out of town <br> lectures to be recorded and will be announced when available**    |    `qmcpy` tutorial   |         |
 | Sep 10 <br>  **Fred out of town <br> lectures to be recorded and will be announced when available**   | `qmcpy` tutorial    |               |
-| Sep 15   |                     |               |
+| Sep 15   |   Markov Chain Monte Carlo                  |  [ Markov Chain Monte Carlo]({{ site.baseurl }}/lectures/MATH565MonteCarloMethodsNotesPart3MarkovChainMonteCarlo.pdf) |             |
 | Sep 17   |                     |               |
 | Sep 19  |  **Assignment 2 Due**
 | Sep 22   |                     |               |
