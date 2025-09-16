@@ -16,14 +16,14 @@ The first page of the notes indicates when it was most recently updated.
 |----------|---------------------|---------------|
 | Aug 18   | What is a Monte Carlo?        | [ Introduction]({{ site.baseurl }}/lectures/MATH565MonteCarloMethodsNotesPart1Intro.pdf) |
 | Aug 20   | Probability;  Sampling; <br>Low Discrepancy Sampling   |            |
-| Aug 25   | Conditional Probability;  <br>Random Number Generation; Quantile Function to Generate Non-Uniform Samples |  [ Generating Samples]({{ site.baseurl }}/lectures/MATH565MonteCarloMethodsNotesPart2GenerateSamples.pdf)              |
+| Aug 25   | Conditional Probability;  <br>Random Number Generation <br>Quantile Function to Generate Non-Uniform Samples |  [ Generating Samples]({{ site.baseurl }}/lectures/MATH565MonteCarloMethodsNotesPart2GenerateSamples.pdf)              |
 | Aug 27   |  Quantile Function to Generate Non-Uniform Samples <br>Multivariate Normal; Gaussian Processes; Brownian Motion  |               |
 | Sep 1    | **Labor Day (no class)**                    |               |
 | Sep 3    |  Option Pricing <br>Low Discrepancy Sampling                   |               |
 | **Friday, Sep 5** |  **Assignment 1 Due** <br>Acceptance Rejection Sampling <br>Also see material recorded on September 6                 |               |
-| Sep 8 <br>  **Fred out of town <br> lectures to be recorded and will be announced when available**    |    `qmcpy` tutorial   |         |
-| Sep 10 <br>  **Fred out of town <br> lectures to be recorded and will be announced when available**   | `qmcpy` tutorial    |               |
-| Sep 15   |   Markov Chain Monte Carlo                  |  [ Markov Chain Monte Carlo]({{ site.baseurl }}/lectures/MATH565MonteCarloMethodsNotesPart3MarkovChainMonteCarlo.pdf) |             |
+| Sep 8 <br>  **Fred out of town <br> lectures to be recorded <br>will be announced when available**    |    `qmcpy` tutorial   |         |
+| Sep 10 <br>  **Fred out of town <br> lectures to be recorded <br>will be announced when available**   | `qmcpy` tutorial    |               |
+| Sep 15   |   Metropolis-Hastings Algorithm <br>Discrepancy                  |  [ Markov Chain Monte Carlo]({{ site.baseurl }}/lectures/MATH565MonteCarloMethodsNotesPart3MarkovChainMonteCarlo.pdf) |  
 | Sep 17   |                     |               |
 | Sep 19  |  **Assignment 2 Due**
 | Sep 22   |                     |               |
