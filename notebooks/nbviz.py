@@ -318,3 +318,93 @@ def plot_log_trend_line(
 
     ax.loglog([x0, x1], [y0, y1], color=color, linestyle=ls, label=label)
     return power, coef
+
+
+def plot_power_line(
+    ax: plt.Axes,
+    x: Iterable[float] | tuple[float, float],
+    *,
+    power: float,
+    coef: float | None = None,
+    anchor: tuple[float, float] | None = None,  # (x_ref, y_ref) to infer coef if coef is None
+    endpoints: str | tuple[float, float] | None = None,
+    color: str | None = None,
+    ls: str = "--",
+    label: str | None = None,
+    show_as_rate: bool = True,
+    decimals: int = 2,
+):
+    """
+    Plot y = coef * x**power on log–log between chosen endpoints.
+
+    Parameters
+    ----------
+    x : array-like or (x0, x1)
+        If array-like, we use first→last unless `endpoints` overrides.
+        If a 2-tuple, it's treated as explicit (x0, x1).
+    power : float
+        The log–log slope (decays typically have negative power).
+    coef : float, optional
+        Coefficient in y = coef * x**power. If omitted, `anchor` must be given.
+    anchor : (x_ref, y_ref), optional
+        If provided (and `coef` is None), we set coef = y_ref / x_ref**power.
+    endpoints : "data" | "ends" | (x0, x1) | None
+        - "data": span min(x)→max(x) if x is array-like
+        - "ends": span first→last of x (after flattening)
+        - (x0, x1): explicit endpoints
+        - None: if x is a 2-tuple, use it; else use "ends".
+    color, ls, label : styling
+    show_as_rate : bool
+        If True, label as O(n^{-alpha}) with alpha = -power; else O(n^{power}).
+    decimals : int
+        Digits in the default label.
+
+    Returns
+    -------
+    power, coef : tuple[float, float]
+        The (power, coef) actually used to draw the line.
+    """
+    # Resolve endpoints
+    if isinstance(x, tuple) and len(x) == 2 and endpoints is None:
+        x0, x1 = float(x[0]), float(x[1])
+    else:
+        xs = np.asarray(list(x), float).ravel()
+        if endpoints is None or endpoints == "ends":
+            if xs.size < 2:
+                raise ValueError("Need at least two x values or a 2-tuple for endpoints.")
+            x0, x1 = float(xs[0]), float(xs[-1])
+        elif endpoints == "data":
+            x0, x1 = float(np.min(xs)), float(np.max(xs))
+        elif isinstance(endpoints, tuple) and len(endpoints) == 2:
+            x0, x1 = map(float, endpoints)
+        else:
+            raise ValueError("Invalid `endpoints`. Use 'data', 'ends', a 2-tuple, or None.")
+
+    if x0 <= 0 or x1 <= 0:
+        raise ValueError("Endpoints must be positive for log–log plotting.")
+
+    # Determine coefficient
+    if coef is None:
+        if anchor is None:
+            raise ValueError("Provide either `coef` or `anchor=(x_ref, y_ref)`.")
+        x_ref, y_ref = map(float, anchor)
+        if x_ref <= 0 or y_ref <= 0:
+            raise ValueError("Anchor must have positive x_ref and y_ref.")
+        coef = float(y_ref / (x_ref ** power))
+    else:
+        coef = float(coef)
+
+    # Build points
+    y0 = coef * (x0 ** power)
+    y1 = coef * (x1 ** power)
+
+    # Default label
+    if label is None:
+        if show_as_rate:
+            alpha = -power
+            label = rf"$\mathcal{{O}}(n^{{-{alpha:.{decimals}f}}})$"
+        else:
+            label = rf"$\mathcal{{O}}(n^{{{power:.{decimals}f}}})$"
+
+    ax.loglog([x0, x1], [y0, y1], color=color, linestyle=ls, label=label)
+    return float(power), float(coef)
