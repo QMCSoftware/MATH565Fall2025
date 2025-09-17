@@ -112,46 +112,32 @@ def _cd_term_1d(a: np.ndarray, b: np.ndarray, g: float) -> np.ndarray:
     """Return the 1D matrix: 1 + (g^2/2)(|a-1/2| + |b-1/2| - |a-b|)."""
     return 1.0 + 0.5*(g*g)*(np.abs(a - 0.5) + np.abs(b - 0.5) - np.abs(a - b))
 
-def make_cd_kernel(weights, domain: str = "unit"):
-    """
-    Centered discrepancy product kernel with coordinate weights gamma_j.
+import numpy as np
 
-    Parameters
-    ----------
-    weights : float | Sequence[float]
-        If scalar, broadcast to all coordinates. If array-like, length must equal d.
-    domain : {"unit","none"}
-        "unit" enforces inputs in [0,1]^d (raises if violated). "none" skips the check.
-
-    Returns
-    -------
-    K : callable
-        K(A,B) -> (n,m) Gram matrix with product over coordinates of the 1D term.
+def make_cd_kernel(d: int, gamma):
     """
-    w = np.asarray(weights, float).reshape(-1)  # store for closure
+    Centered-discrepancy kernel on [0,1]^d with per-coordinate weights gamma:
+
+        K(t, x) = ∏_{j=1}^d [ 1 + (γ_j^2 / 2) ( |t_j - 1/2| + |x_j - 1/2| - |t_j - x_j| ) ].
+
+    Notes
+    -----
+    - If gamma is scalar, it is broadcast to all d coordinates.
+    - With gamma = 0, K ≡ 1.
+    """
+    g = np.asarray(gamma, float)
+    if g.ndim == 0:
+        g = np.full(d, float(g))
+    if g.size != d:
+        raise ValueError(f"gamma must be scalar or length {d}, got {g.size}")
+    g2 = (g ** 2)
 
     def K(A, B):
         A = np.atleast_2d(np.asarray(A, float))
         B = np.atleast_2d(np.asarray(B, float))
-        n, d = A.shape
-        m, dB = B.shape
-        if d != dB:
-            raise ValueError(f"Dim mismatch: A has d={d}, B has d={dB}.")
-        if w.size not in (1, d):
-            raise ValueError(f"weights must be scalar or length d={d}; got {w.size}.")
-        gam = (np.repeat(w, d) if w.size == 1 else w)
-
-        if domain == "unit":
-            if not ((A >= 0).all() and (A <= 1).all()):
-                raise ValueError("A contains points outside [0,1]^d for centered discrepancy kernel.")
-            if not ((B >= 0).all() and (B <= 1).all()):
-                raise ValueError("B contains points outside [0,1]^d for centered discrepancy kernel.")
-
-        G = np.ones((n, m), float)
-        for j in range(d):
-            aj = A[:, j][:, None]  # (n,1)
-            bj = B[:, j][None, :]  # (1,m)
-            G *= _cd_term_1d(aj, bj, gam[j])
-        return G
+        a = A[:, None, :]                  # (nA, 1, d)
+        b = B[None, :, :]                  # (1, nB, d)
+        term = 1.0 + 0.5 * g2 * (np.abs(a - 0.5) + np.abs(b - 0.5) - np.abs(a - b))
+        return np.prod(term, axis=-1)      # (nA, nB)
 
     return K
