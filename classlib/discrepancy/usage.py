@@ -7,30 +7,48 @@ __all__ = ["show_mmd_usage", "MMD_USAGE"]
 MMD_USAGE = r"""
 ### MMD / Discrepancy Quick Guide
 
-- **Kernel**: `"se"`/`"sqexp"` (squared exponential), `"matern"`, `"linear"`, or a callable `K(A,B)`.
-  *We avoid the ambiguous name “RBF”; ‘radial basis function’ is more general.*
+- **Kernels**:
+  - `"se"` / `"sqexp"`: Squared Exponential kernel  
+    *(sometimes called "RBF" in ML, but we avoid that ambiguous term).*
+  - `"matern"`: Matérn family (ν = 0.5, 1.5, 2.5, or general with SciPy).  
+  - `"linear"`: Linear kernel.  
+  - `make_cd_kernel(weights)`: Centered discrepancy kernel on [0,1]^d with coordinate weights γ_j.
+
 - **Domain**:
-  - $\mathbb{R}^d$ (default): `kernel="se"` or `make_kernel("se", sigma)`
-  - $[0,1]^d$ (strict): `K = make_kernel("se", sigma, domain="unit")` then `mmd(..., kernel=K)`
+  - $\mathbb{R}^d$ (default): e.g. `kernel="se"` or `make_kernel("se", sigma)`
+  - $[0,1]^d$ (strict): e.g. `K = make_kernel("se", sigma, domain="unit")`  
+    or `K = make_cd_kernel(weights, domain="unit")`
+
 - **Estimator**:
   - `biased=True` (default): includes diagonals, always nonnegative.
   - `biased=False`: unbiased U-statistic (only when both sides are samples).
-- **Analytic distribution**:
+
+- **Analytic distributions**:
   - Wrap as `AnalyticalMeasure(k_mean, k_self)` providing exact integrals.
-  - (Stubs for Uniform[0,1]^d are in `classlib.discrepancy.measures`.)
+  - For Uniform[0,1]^d with centered discrepancy:  
+    ```python
+    from classlib.discrepancy import cd_uniform_k_mean, cd_uniform_k_self, AnalyticalMeasure
+    U01 = AnalyticalMeasure(k_mean=cd_uniform_k_mean(weights),
+                            k_self=cd_uniform_k_self(weights))
+    ```
 
 **Examples**
 ```python
-from classlib.discrepancy import mmd, make_kernel, AnalyticalMeasure
+from classlib.discrepancy import (
+    mmd, make_kernel, make_cd_kernel,
+    AnalyticalMeasure, cd_uniform_k_mean, cd_uniform_k_self
+)
 
-# Sample vs sample on [0,1]^d with strict domain
+# Sample vs sample on [0,1]^d with strict domain (squared exponential kernel)
 K = make_kernel("se", sigma=0.25, domain="unit")
 val = mmd(X, Y, kernel=K, biased=True, return_squared=True)
 
-# Sample vs analytic measure (e.g., Uniform[0,1]^d with your CD kernel)
-from classlib.discrepancy.measures import uniform_unit_cube_k_mean, uniform_unit_cube_k_self
-U01 = AnalyticalMeasure(k_mean=uniform_unit_cube_k_mean(), k_self=uniform_unit_cube_k_self())
-val2 = mmd(X, U01, kernel="se", sigma=0.25, biased=True)
+# Sample vs analytic Uniform[0,1]^d using centered discrepancy kernel
+weights = 1.0   # or np.array([...]) for coordinate weights
+K_cd = make_cd_kernel(weights, domain="unit")
+U01 = AnalyticalMeasure(k_mean=cd_uniform_k_mean(weights),
+                        k_self=cd_uniform_k_self(weights))
+val2 = mmd(X, U01, kernel=K_cd, biased=True, return_squared=True)
 ```
 """
 

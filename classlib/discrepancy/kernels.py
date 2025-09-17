@@ -105,3 +105,53 @@ def make_kernel(kernel: Any = "se", sigma: float = 1.0, nu: float = 1.5, domain:
     if domain == "unit":
         K = restrict_to_unit_cube(K)
     return K
+
+# --- Centered Discrepancy kernel (product form on [0,1]^d) ---
+
+def _cd_term_1d(a: np.ndarray, b: np.ndarray, g: float) -> np.ndarray:
+    """Return the 1D matrix: 1 + (g^2/2)(|a-1/2| + |b-1/2| - |a-b|)."""
+    return 1.0 + 0.5*(g*g)*(np.abs(a - 0.5) + np.abs(b - 0.5) - np.abs(a - b))
+
+def make_cd_kernel(weights, domain: str = "unit"):
+    """
+    Centered discrepancy product kernel with coordinate weights gamma_j.
+
+    Parameters
+    ----------
+    weights : float | Sequence[float]
+        If scalar, broadcast to all coordinates. If array-like, length must equal d.
+    domain : {"unit","none"}
+        "unit" enforces inputs in [0,1]^d (raises if violated). "none" skips the check.
+
+    Returns
+    -------
+    K : callable
+        K(A,B) -> (n,m) Gram matrix with product over coordinates of the 1D term.
+    """
+    w = np.asarray(weights, float).reshape(-1)  # store for closure
+
+    def K(A, B):
+        A = np.atleast_2d(np.asarray(A, float))
+        B = np.atleast_2d(np.asarray(B, float))
+        n, d = A.shape
+        m, dB = B.shape
+        if d != dB:
+            raise ValueError(f"Dim mismatch: A has d={d}, B has d={dB}.")
+        if w.size not in (1, d):
+            raise ValueError(f"weights must be scalar or length d={d}; got {w.size}.")
+        gam = (np.repeat(w, d) if w.size == 1 else w)
+
+        if domain == "unit":
+            if not ((A >= 0).all() and (A <= 1).all()):
+                raise ValueError("A contains points outside [0,1]^d for centered discrepancy kernel.")
+            if not ((B >= 0).all() and (B <= 1).all()):
+                raise ValueError("B contains points outside [0,1]^d for centered discrepancy kernel.")
+
+        G = np.ones((n, m), float)
+        for j in range(d):
+            aj = A[:, j][:, None]  # (n,1)
+            bj = B[:, j][None, :]  # (1,m)
+            G *= _cd_term_1d(aj, bj, gam[j])
+        return G
+
+    return K
