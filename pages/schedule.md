@@ -23,10 +23,10 @@ The first page of the notes indicates when it was most recently updated.
 | **Friday, Sep 5** |  **Assignment 1 Due** <br>Acceptance-Rejection Sampling <br>Also see material recorded on September 6                 |               |
 | Sep 8 <br>  **Fred out of town <br> lectures to be recorded <br>will be announced when available**    |    `qmcpy` tutorial   |         |
 | Sep 10 <br>  **Fred out of town <br> lectures to be recorded <br>will be announced when available**   | `qmcpy` tutorial    |               |
-| Sep 15   |   Metropolis-Hastings Algorithm <br>Discrepancy                  |  [ Markov Chain Monte Carlo (MCMC)]({{ site.baseurl }}/lectures/MATH565MonteCarloMethodsNotesPart3MarkovChainMonteCarlo.pdf) |  
+| Sep 15   |   Metropolis-Hastings Algorithm <br>Discrepancy                  |  [ Markov Chain Monte Carlo (MCMC) + Disrepancy]({{ site.baseurl }}/lectures/MATH565MonteCarloMethodsNotesPart3MarkovChainMonteCarlo.pdf) |  
 | Sep 17   | Discrepancy                    |               |
 | Sep 19  |  **Assignment 2 Due**
-| Sep 22   |                     |               |
+| Sep 22   |  Discrepancy<br>Bayesian Inference     |               |
 | Sep 24   | **Test on Parts 1 Introduction and Part 2 Generating Samples**                   |               |
 | Sep 29   |                     |               |
 | Oct 1    | **Project Proposals Due**     |               |
