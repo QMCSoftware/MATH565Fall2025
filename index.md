@@ -133,10 +133,12 @@ By the end of this course, students will be able to:
 </details>
 
 <details markdown="1">
-<summary><strong>Markov Chain Monte Carlo</strong> — 9 hours</summary>
+<summary><strong>Markov Chain Monte Carlo + Discrepancy</strong> — 9 hours</summary>
 
 - Markov chains
 - Metropolis-Hastings
+- Kernel-based discrepancies
+- Sample quality
 - Gibbs sampler
 - Convergence diagnostics
 - Error estimation
