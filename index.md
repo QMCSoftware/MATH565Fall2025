@@ -123,7 +123,7 @@ By the end of this course, students will be able to:
 </details>
 
 <details markdown="1">
-<summary><strong>Generating Samples</strong> — 6 hours</summary>
+<summary><strong>Generating Samples</strong> — 8 hours</summary>
 
 - Pseudo-random numbers
 - Random vectors with different distributions
@@ -137,7 +137,8 @@ By the end of this course, students will be able to:
 
 - Markov chains
 - Metropolis-Hastings
-- Kernel-based discrepancies
+- Kernel-based discrepancies and maximum mean discrepancy
+- Discrepancy as a measure of cubature error
 - Sample quality
 - Gibbs sampler
 - Convergence diagnostics

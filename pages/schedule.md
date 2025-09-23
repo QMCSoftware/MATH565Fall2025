@@ -26,9 +26,9 @@ The first page of the notes indicates when it was most recently updated.
 | Sep 15   |   Metropolis-Hastings Algorithm <br>Discrepancy                  |  [ Markov Chain Monte Carlo (MCMC) + Disrepancy]({{ site.baseurl }}/lectures/MATH565MonteCarloMethodsNotesPart3MarkovChainMonteCarlo.pdf) |  
 | Sep 17   | Discrepancy                    |               |
 | Sep 19  |  **Assignment 2 Due**
-| Sep 22   |  Discrepancy<br>Bayesian Inference     |               |
+| Sep 22   |  Review of Generating Non-Uniform Samples    |               |
 | Sep 24   | **Test on Parts 1 Introduction and Part 2 Generating Samples**                   |               |
-| Sep 29   |                     |               |
+| Sep 29   |  Discrepancy<br>Bayesian Inference    |               |
 | Oct 1    | **Project Proposals Due**     |               |
 | Oct 6    |                     |               |
 | Oct 8    |                     |               |
