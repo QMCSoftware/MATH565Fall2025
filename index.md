@@ -40,7 +40,7 @@ This course teaches students Monte Carlo simulation techniques, focusing on appl
 
 </details>
 
-<details markdown="1">
+<details markdown="1" style="margin-bottom:1em;">
 <summary><strong>Teaching Assistant:</strong> Rahul Prasad</summary>
 
 <a href="{{ '/assets/images/RahulPrasad.jpg' | relative_url }}">
@@ -54,7 +54,9 @@ This course teaches students Monte Carlo simulation techniques, focusing on appl
 * _Email:_ [rprasad1@hawk.illinoistech.edu](mailto:rprasad1@hawk.illinoistech.edu)  
 </details>
 
-**Textbook:** Art B. Owen, [*Monte Carlo Theory, Methods, and Examples*]({{ site.Owen_text }}), 2025+  
+<div style="margin-top:1em; margin-bottom:0.4em;">
+<strong>Textbook:</strong> Art B. Owen, [*Monte Carlo Theory, Methods, and Examples*]({{ site.Owen_text }}), 2025+
+</div>
 
 <details markdown="1">
 <summary><strong>Recommended resources</strong></summary>
@@ -70,6 +72,8 @@ This course teaches students Monte Carlo simulation techniques, focusing on appl
 
 <details markdown="1">
 <summary><strong>Prerequisites/Requirements</strong></summary>
+* Calculus
+* Matrix algebra
 * A calculus-based probability course, such as MATH 474 or MATH 475; you should understand
   * Discrete and continuous random variables
   * Probability mass and density functions, cumulative distribution functions
@@ -80,7 +84,7 @@ This course teaches students Monte Carlo simulation techniques, focusing on appl
   * Programming in Python, or some other language such as MATLAB, or R
   * Using an integrated development environment (IDE), such as VS Code
   * You are highly encouraged to become familiar with GitHub
-* Facility with LaTeX or some other technical document preparation system
+* Facility with LaTeX or some other technical document preparation system; Markdown is helpful
 
 </details>
 
@@ -93,9 +97,11 @@ By the end of this course, students will be able to:
 - Understand how these methods are used for computations.
 - Assess the performance of Monte Carlo methods and improve their effectiveness.
 - Understand basic implementation issues in performing Monte Carlo calculations.
-</details>
 
 [**How to Study for This Course**]({{ site.baseurl }}/howtostudy/)
+</details>
+
+
 
 <details markdown="1">
 <summary><strong>Where to Find It</strong></summary>
