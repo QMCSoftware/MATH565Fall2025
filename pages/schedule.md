@@ -28,12 +28,13 @@ The first page of the notes indicates when it was most recently updated.
 | Sep 19  |  **Assignment 2 Due**
 | Sep 22   |  Review of Generating Non-Uniform Samples    |               |
 | Sep 24   | **Test on Parts 1 Introduction and Part 2 Generating Samples**                   |               |
-| Sep 29   |  Discrepancy<br>Bayesian Inference    |               |
-| Oct 1    | **Project Proposals Due**     |               |
+| Sep 29   | Worst case error<br>  |               |
+| Oct 1    | Average case error<br>Bayesian Inference <br>**Project Proposals Due**     |               |
 | Oct 6    |                     |               |
 | Oct 8    |                     |               |
 | Oct 13   | **Fall Break (no class)**                    |               |
 | Oct 15   |                     |               |
+| Oct 17   | **Assignment 3 Due**   |               |
 | Oct 20   |                     |               |
 | Oct 22   |                     |               |
 | Oct 27   |                     |               |
