@@ -1,5 +1,7 @@
 title: MATH 565 Monte Carlo Methods, Fall 2025
 markdown: kramdown
+kramdown:
+  math_engine: mathjax
 theme: minima
 
 exclude:
