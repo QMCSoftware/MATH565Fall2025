@@ -173,8 +173,8 @@ By the end of this course, students will be able to:
 
 ## Assessment
 - [**Assignments:**]({{ site.baseurl }}/assignments/) 15%  
-- [**Project:**]({{ site.baseurl }}/project/) 20%  
-- [**Midterm Test(s):**]({{ site.baseurl }}/tests/) 25%  
+- [**Project:**]({{ site.baseurl }}/project/) 25%  
+- [**Midterm Test(s):**]({{ site.baseurl }}/tests/) 20%  
 - **Final Exam (Take-Home + In-Class):** 40%  
 - **Extra Credit:** up to 10%, Beginning August 25, if you are the first to find an error in
     - My lecture slides, Jupyter Notebooks, or assignments at least 24 hours after I have presented them in class, or
