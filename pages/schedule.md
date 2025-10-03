@@ -27,7 +27,7 @@ The first page of the notes indicates when it was most recently updated.
 | Sep 17   | Discrepancy                    |               |
 | Sep 19  |  **Assignment 2 Due**
 | Sep 22   |  Review of Generating Non-Uniform Samples    |               |
-| Sep 24   | **Test on Parts 1 Introduction and Part 2 Generating Samples**                   |               |
+| Sep 24   | **Test 1 on Parts 1 Introduction and Part 2 Generating Samples**                   |               |
 | Sep 29   | Worst case error<br>  |               |
 | Oct 1    | Average case error<br>Bayesian Inference <br>**Project Proposals Due**     |               |
 | Oct 6    |                     |               |
@@ -38,7 +38,7 @@ The first page of the notes indicates when it was most recently updated.
 | Oct 20   |                     |               |
 | Oct 22   |                     |               |
 | Oct 27   |                     |               |
-| Oct 29   |                     |               |
+| Oct 29   |  **Test 2 on TBD**                      |               |
 | Nov 3    |                     |               |
 | Nov 5    |                     |               |
 | Nov 10   |                     |               |

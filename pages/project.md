@@ -14,7 +14,7 @@ its applications. This must be done individually.  Each student’s article must
 
 ## Submission 
 - Everyone must submit your project topic by 10/1/25 using [this form](https://forms.office.com/r/0a2nykbDmn).
-- _After_ the deadline for project topic submissions, please go to [this spreadsheet](https://iit.instructure.com/courses/17839/files?preview=702631) to make sure your
+- _After_ the deadline for project topic submissions, please go to [this spreadsheet](https://iit0-my.sharepoint.com/:x:/g/personal/hickernell_illinoistech_edu/Eb21Hd_PIKdJrE0JW93y2lcBwKoeptd8mMiJ6FuARJ83fQ?e=F9a3el) to make sure your
 proposed topic is accepted.
 - Prepare a 15-minute (+5 minute question & answer) oral presentation with handouts (for the audience) describing
 either
