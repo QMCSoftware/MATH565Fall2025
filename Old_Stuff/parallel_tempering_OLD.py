@@ -90,24 +90,19 @@ def parallel_tempering(
     x_list = [np.array(x0, float).reshape(-1) for x0 in x0_list]
     assert len(x_list) == R, "x0_list must have the same length as betas"
 
+    # Build tempered targets from the base
     tempered = [_make_tempered_log_density(base_log_density, beta) for beta in betas]
 
+    # Book-keeping
     d = x_list[0].size
     trace_cold = np.empty((n_outer, d))
-
-    # --- within-temp acceptance: aggregate + history for cold ---
-    acc_sums = np.zeros(R, float)          # numerator (accepted) as "rate * tries"
-    total_steps = 0                        # denominator (tries) per replica
-    acc_cold_hist = np.empty(n_outer)      # store cold-chain block acceptance rates
-
-    # --- swap diagnostics: overall + per-edge ---
+    acc_sums = np.zeros(R, float)
+    total_steps = 0
     swap_attempts = 0
     swap_accepts = 0
-    swap_try_edge = np.zeros(R-1, dtype=int)
-    swap_acc_edge = np.zeros(R-1, dtype=int)
 
     for k in range(n_outer):
-        # 1) advance each replica
+        # 1) Advance each replica using YOUR Metropolis kernel
         for r in range(R):
             samples, acc = metropolis(
                 tempered[r],
@@ -117,43 +112,30 @@ def parallel_tempering(
                 rng=rng,
             )
             x_list[r] = samples[-1]
-            acc_sums[r] += acc * block_len   # estimated accepted count in this block
-
-            if r == 0:
-                acc_cold_hist[k] = acc       # keep cold-chain block acceptance
-
+            acc_sums[r] += acc * block_len
         total_steps += block_len
+
+        # Record cold chain (β=1.0 assumed to be first)
         trace_cold[k] = x_list[0]
 
-        # 2) adjacent swaps
+        # 2) Swaps—adjacent pairs only
         if swap_neighbors != "adjacent":
             raise NotImplementedError("Only adjacent swaps are supported.")
         for r in range(R - 1):
             xr, xs = x_list[r], x_list[r + 1]
             br, bs = betas[r], betas[r + 1]
+            # Replica-exchange MH log ratio: Δ = (β_r - β_s) [log π(x_s) - log π(x_r)]
             delta = (br - bs) * (float(base_log_density(xs)) - float(base_log_density(xr)))
             swap_attempts += 1
-            swap_try_edge[r] += 1
             if np.log(rng.uniform()) < delta:
                 x_list[r], x_list[r + 1] = xs, xr
                 swap_accepts += 1
-                swap_acc_edge[r] += 1
-
-    # summarize
-    acceptance_rates = acc_sums / total_steps                       # per-replica within-temp
-    swap_rate_overall = (swap_accepts / swap_attempts) if swap_attempts else 0.0
-    swap_rate_edge = np.divide(swap_acc_edge, swap_try_edge, out=np.zeros_like(swap_acc_edge, float), where=swap_try_edge>0)
 
     stats = {
+        "acceptance_rates": acc_sums / total_steps,
+        "swap_attempts": swap_attempts,
+        "swap_accepts": swap_accepts,
+        "swap_rate": (swap_accepts / swap_attempts) if swap_attempts else 0.0,
         "betas": betas.copy(),
-        "acceptance_rates": acceptance_rates,        # length R
-        "acc_cold_hist": acc_cold_hist,              # length n_outer
-        "swap_attempts": int(swap_attempts),
-        "swap_accepts": int(swap_accepts),
-        "swap_rate": swap_rate_overall,
-        "swap_try_edge": swap_try_edge,              # length R-1
-        "swap_acc_edge": swap_acc_edge,              # length R-1
-        "swap_rate_edge": swap_rate_edge,            # length R-1
     }
-
     return trace_cold, x_list, stats
