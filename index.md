@@ -54,7 +54,7 @@ This course teaches students Monte Carlo simulation techniques, focusing on appl
 * _Email:_ [rprasad1@hawk.illinoistech.edu](mailto:rprasad1@hawk.illinoistech.edu)  
 </details>
 
-<div style="margin-top:1em; margin-bottom:0.4em;">
+<div markdown="1" style="margin-top:1em; margin-bottom:0.4em;">
 <strong>Textbook:</strong> Art B. Owen, [*Monte Carlo Theory, Methods, and Examples*]({{ site.Owen_text }}), 2025+
 </div>
 

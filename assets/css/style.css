@@ -192,3 +192,7 @@ h1, h2, h3 {
   margin-bottom: 0.2em;
 }
 
+/* Ordered list markers by depth */
+ol { list-style-type: decimal; }          /* 1., 2., 3. */
+ol ol { list-style-type: lower-alpha; }   /* a., b., c. */
+ol ol ol { list-style-type: lower-roman; }/* i., ii., iii. */
