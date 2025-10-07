@@ -1,159 +1,170 @@
 from __future__ import annotations
-
-from typing import Callable, Iterable, Optional, Tuple, Dict, List
+from typing import Sequence, Tuple, Dict, Any, List
 import numpy as np
 from .metropolis import metropolis
 
 
-def _make_tempered_log_density(
-    log_density: Callable[[np.ndarray], float],
-    beta: float,
-) -> Callable[[np.ndarray], float]:
-    """
-    Default tempering: scale the *entire* log density, log π_beta(x) = beta * log π(x).
-
-    This is a pragmatic choice that preserves the mode structure and is sufficient
-    for demonstration/teaching. If you want the exact tempered posterior with
-    likelihood^beta * prior, pass a custom log_density that already encodes beta.
-    """
-    if beta == 1.0:
-        return log_density
-
-    def f(x: np.ndarray) -> float:
-        return beta * float(log_density(x))
-
-    return f
-
-
 def parallel_tempering(
-    base_log_density: Callable[[np.ndarray], float],
-    x0_list: Iterable[np.ndarray | float],
-    betas: Iterable[float] = (1.0, 0.6, 0.3),
-    *,
+    base_log_density,
+    x0_list: Sequence[np.ndarray],
+    betas: Sequence[float],
     n_outer: int = 400,
     block_len: int = 100,
-    proposal_sd: float = 0.30,
-    swap_neighbors: str = "adjacent",
-    rng: Optional[np.random.Generator | int] = None,
-) -> Tuple[np.ndarray, List[np.ndarray], Dict[str, np.ndarray | float]]:
+    proposal_sd: float | Sequence[float] = 0.30,
+    swap_neighbors: bool = True,
+    rng=None,
+) -> Tuple[np.ndarray, List[np.ndarray], Dict[str, Any]]:
     """
-    Parallel tempering (replica exchange) **reusing** the provided Metropolis kernel.
-
-    Strategy
-    --------
-    Run R replicas at inverse temperatures `betas`. Each outer iteration:
-      1) For each replica r, take `block_len` Metropolis steps targeting π_beta_r.
-      2) Attempt swaps of states between chains (adjacent by default).
+    Parallel tempering (replica exchange) for an unnormalized log-density.
 
     Parameters
     ----------
     base_log_density : callable
-        The target log density for β=1 (cold chain).
-    x0_list : iterable of array_like
-        Initial states for each replica; length must equal len(betas).
-    betas : iterable of float
-        Inverse temperatures (β_1=1.0 ≥ β_2 ≥ ... > 0). Order is respected.
+        f(x) -> log target (unnormalized).
+    x0_list : sequence of ndarray
+        Initial state for each replica r = 0..R-1 (all same dimension).
+    betas : sequence of float
+        Inverse temperatures for each replica (0 < beta <= 1). Largest beta is "cold".
     n_outer : int
-        Number of exchange rounds. Each chain runs `n_outer * block_len` MH steps.
+        Number of exchange rounds.
     block_len : int
-        Number of MH steps per replica between exchange attempts.
-    proposal_sd : float
-        RW proposal SD passed into the Metropolis kernel.
-    swap_neighbors : {"adjacent"}
-        Currently only adjacent swaps are supported.
-    rng : np.random.Generator | int | None
-        RNG or seed.
+        Metropolis steps per replica per round.
+    proposal_sd : float or sequence of float (len R)
+        Proposal standard deviation(s). Scalar applies to all replicas; a sequence
+        specifies per-replica values.
+    swap_neighbors : bool
+        If True, attempt neighbor swaps with even/odd alternation each round.
+    rng : None | int | np.random.Generator
+        Random generator. If None, creates default_rng(); if int, used as seed.
 
     Returns
     -------
-    trace_cold : ndarray, shape (n_outer, d)
-        Trace of the cold chain (β=1) at the end of each outer block.
-    final_states : list of ndarray
-        Final states of all replicas in the order of `betas`.
+    trace_cold : ndarray
+        Concatenation of the cold replica's samples across all rounds.
+        Shape (n_outer*block_len,) for 1D; (n_outer*block_len, d) otherwise.
+    finals : list[ndarray]
+        Final state of each replica.
     stats : dict
-        - "acceptance_rates": ndarray shape (R,) average per-replica acceptance.
-        - "swap_attempts": int total number of swap attempts.
-        - "swap_accepts": int number of accepted swaps.
-        - "swap_rate": float accepted / attempted.
-        - "betas": ndarray of betas used.
-
-    Notes
-    -----
-    If you want *exact* tempered posteriors of the form likelihood^β * prior,
-    construct custom callables `log_density_beta_r` and pass this function
-    with those betas one-at-a-time; or fork this function to supply a pair
-    (log_likelihood, log_prior).
+        {
+          'betas'            : (R,) array
+          'acceptance_rates' : (R,) array of overall MH acceptance (0..1)
+          'acc_cold_hist'    : (n_outer,) array of cold acceptance per round
+          'swap_attempts'    : int
+          'swap_accepts'     : int
+          'swap_rate'        : float
+          'swap_try_edge'    : (R-1,) int array
+          'swap_acc_edge'    : (R-1,) int array
+          'swap_rate_edge'   : (R-1,) float array
+        }
     """
-    rng = np.random.default_rng(rng)
-    betas = np.array(list(betas), dtype=float)
-    R = len(betas)
-    x_list = [np.array(x0, float).reshape(-1) for x0 in x0_list]
-    assert len(x_list) == R, "x0_list must have the same length as betas"
+    # RNG normalize
+    if rng is None or isinstance(rng, (int, np.integer)):
+        rng = np.random.default_rng(rng)
 
-    tempered = [_make_tempered_log_density(base_log_density, beta) for beta in betas]
+    # Replicas & shapes
+    x_list = [np.asarray(x0, dtype=float).copy() for x0 in x0_list]
+    R = len(x_list)
+    if R < 2:
+        raise ValueError("Need at least 2 replicas for parallel tempering.")
+    betas = np.asarray(betas, dtype=float)
+    if betas.shape != (R,):
+        raise ValueError(f"'betas' must have length {R}, got shape {betas.shape}")
 
-    d = x_list[0].size
-    trace_cold = np.empty((n_outer, d))
+    # proposal_sd -> per-replica list of floats
+    if np.ndim(proposal_sd) == 0:
+        prop_sds = [float(proposal_sd)] * R
+    else:
+        prop_sds = [float(s) for s in proposal_sd]
+        if len(prop_sds) != R:
+            raise ValueError(f"'proposal_sd' must be scalar or length {R}, got {len(prop_sds)}")
 
-    # --- within-temp acceptance: aggregate + history for cold ---
-    acc_sums = np.zeros(R, float)          # numerator (accepted) as "rate * tries"
-    total_steps = 0                        # denominator (tries) per replica
-    acc_cold_hist = np.empty(n_outer)      # store cold-chain block acceptance rates
+    # Tempered log-densities
+    tempered = [ (lambda f, b: (lambda z, _f=f, _b=b: _b * _f(z)))(base_log_density, b) for b in betas ]
 
-    # --- swap diagnostics: overall + per-edge ---
+    # Cold replica is defined by temperature, not by which state sits there
+    cold_idx = int(np.argmax(betas))
+
+    # Book-keeping
+    acc_sums = np.zeros(R, dtype=float)          # accepted steps count (sum over blocks)
+    acc_cold_hist: List[float] = []
+    cold_blocks: List[np.ndarray] = []
+
+    swap_try_edge = np.zeros(R - 1, dtype=int)
+    swap_acc_edge = np.zeros(R - 1, dtype=int)
     swap_attempts = 0
-    swap_accepts = 0
-    swap_try_edge = np.zeros(R-1, dtype=int)
-    swap_acc_edge = np.zeros(R-1, dtype=int)
+    swap_accepts  = 0
+
+    # Cache current log f(x) for swaps
+    logf_curr = np.array([base_log_density(x) for x in x_list], dtype=float)
 
     for k in range(n_outer):
-        # 1) advance each replica
+        # 1) Advance each replica (one MH block); capture the cold block's samples
+        round_acc = np.zeros(R, dtype=float)
+        round_samples: List[np.ndarray] = [None] * R  # type: ignore
+
         for r in range(R):
             samples, acc = metropolis(
-                tempered[r],
-                x_list[r],
+                log_target_density=tempered[r],
+                x0=x_list[r],
                 n_samples=block_len,
-                proposal_sd=proposal_sd,
+                proposal_sd=prop_sds[r],   # scalar per replica
                 rng=rng,
             )
             x_list[r] = samples[-1]
-            acc_sums[r] += acc * block_len   # estimated accepted count in this block
+            logf_curr[r] = base_log_density(x_list[r])
 
-            if r == 0:
-                acc_cold_hist[k] = acc       # keep cold-chain block acceptance
+            # Convert acc (fraction) to accepted count for robust averaging
+            acc_sums[r] += acc * block_len
+            round_acc[r] = acc
+            round_samples[r] = samples
 
-        total_steps += block_len
-        trace_cold[k] = x_list[0]
+        acc_cold_hist.append(round_acc[cold_idx])
+        cold_blocks.append(round_samples[cold_idx])
 
-        # 2) adjacent swaps
-        if swap_neighbors != "adjacent":
-            raise NotImplementedError("Only adjacent swaps are supported.")
-        for r in range(R - 1):
-            xr, xs = x_list[r], x_list[r + 1]
-            br, bs = betas[r], betas[r + 1]
-            delta = (br - bs) * (float(base_log_density(xs)) - float(base_log_density(xr)))
-            swap_attempts += 1
-            swap_try_edge[r] += 1
-            if np.log(rng.uniform()) < delta:
-                x_list[r], x_list[r + 1] = xs, xr
-                swap_accepts += 1
-                swap_acc_edge[r] += 1
+        # 2) Neighbor swaps with even/odd alternation
+        if swap_neighbors:
+            start = k % 2  # even rounds: (0,1), (2,3), ... ; odd: (1,2), (3,4), ...
+            for i in range(start, R - 1, 2):
+                j = i + 1
+                swap_attempts += 1
+                swap_try_edge[i] += 1
 
-    # summarize
-    acceptance_rates = acc_sums / total_steps                       # per-replica within-temp
-    swap_rate_overall = (swap_accepts / swap_attempts) if swap_attempts else 0.0
-    swap_rate_edge = np.divide(swap_acc_edge, swap_try_edge, out=np.zeros_like(swap_acc_edge, float), where=swap_try_edge>0)
+                # MH acceptance on exchange
+                delta = (betas[i] - betas[j]) * (logf_curr[j] - logf_curr[i])
+                if np.log(rng.random()) < min(0.0, delta):
+                    # accept: swap states & cached log f
+                    x_list[i], x_list[j] = x_list[j], x_list[i]
+                    logf_curr[i], logf_curr[j] = logf_curr[j], logf_curr[i]
+                    swap_accepts += 1
+                    swap_acc_edge[i] += 1
+                # Note: cold_idx never changes; it is defined by beta, not by state position.
 
-    stats = {
-        "betas": betas.copy(),
-        "acceptance_rates": acceptance_rates,        # length R
-        "acc_cold_hist": acc_cold_hist,              # length n_outer
-        "swap_attempts": int(swap_attempts),
-        "swap_accepts": int(swap_accepts),
-        "swap_rate": swap_rate_overall,
-        "swap_try_edge": swap_try_edge,              # length R-1
-        "swap_acc_edge": swap_acc_edge,              # length R-1
-        "swap_rate_edge": swap_rate_edge,            # length R-1
-    }
+    # Final per-replica acceptance (as fraction over total steps)
+    total_steps = n_outer * block_len
+    acceptance_rates = acc_sums / total_steps
 
-    return trace_cold, x_list, stats
+    # Cold trace concatenation
+    trace_cold = np.concatenate(cold_blocks, axis=0)
+    if trace_cold.ndim == 2 and trace_cold.shape[1] == 1:
+        trace_cold = trace_cold[:, 0]
+
+    finals = [np.asarray(x).copy() for x in x_list]
+
+    # Swap rates
+    swap_rate = (swap_accepts / swap_attempts) if swap_attempts > 0 else np.nan
+    with np.errstate(divide="ignore", invalid="ignore"):
+        swap_rate_edge = np.where(swap_try_edge > 0, swap_acc_edge / swap_try_edge, np.nan)
+
+    stats: Dict[str, Any] = dict(
+        betas=betas.copy(),
+        acceptance_rates=acceptance_rates,
+        acc_cold_hist=np.asarray(acc_cold_hist, dtype=float),
+        swap_attempts=int(swap_attempts),
+        swap_accepts=int(swap_accepts),
+        swap_rate=float(swap_rate),
+        swap_try_edge=swap_try_edge,
+        swap_acc_edge=swap_acc_edge,
+        swap_rate_edge=swap_rate_edge,
+    )
+
+    return trace_cold, finals, stats

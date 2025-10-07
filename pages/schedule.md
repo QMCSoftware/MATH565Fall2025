@@ -30,7 +30,7 @@ The first page of the notes indicates when it was most recently updated.
 | Sep 24   | **Test 1 on Parts 1 Introduction and Part 2 Generating Samples**                   |               |
 | Sep 29   | Worst case error<br>  |               |
 | Oct 1    | Average case error<br>Bayesian Inference <br>**Project Proposals Due**     |               |
-| Oct 6    |                     |               |
+| Oct 6    |  Bayesian inference<br>Queues |               |
 | Oct 8    |                     |               |
 | Oct 13   | **Fall Break (no class)**                    |               |
 | Oct 15   |                     |               |

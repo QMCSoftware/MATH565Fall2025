@@ -62,10 +62,17 @@ def _inject_css(color: str) -> None:
         background: rgba(230,247,255,0.35);
       }}
       .highlight-note {{
-        padding: .6em .8em;
-        border-left: 4px solid {color};
-        background: rgba(230,247,255,0.25);
+        padding: 0.75em 1em;
+        border-left: 5px solid {color};
+        background-color: #e3f3f9;
         border-radius: 6px;
+        margin: 1em 0;
+      }}
+      .highlight-note strong {{
+        color: #224466;
+      }}
+      .highlight-note em {{
+        color: #2c3e50;
       }}
     </style>
     """
@@ -74,7 +81,6 @@ def _inject_css(color: str) -> None:
     except Exception:
         # If display isn't available (e.g., non-notebook), just skip.
         pass
-
 
 def _tol_list(order: Iterable[int | str] | None = None) -> list[str]:
     """Return Tol Bright hexes in requested order (names or 1-based indices)."""
