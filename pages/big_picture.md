@@ -1,8 +1,14 @@
+---
+title: Big Picture
+layout: default
+permalink: /big_picture/
+---
+
 # Big Picture of Monte Carlo
 
 | **Concept** | **Representative Quantities / Methods** | **Purpose / Idea** |
 |:-------------|:---------------------------------------|:-------------------|
-| **Population/Truth** | random variable $Y$, mean $\mu$, variance $\sigma^2$, probability density/mass function $\varrho$, cumulative distribution function *F*, quantile function *Q* | Describe the true (often unknown) distribution or system behavior |
+ **Population/Truth** | random variable $Y=f(\boldsymbol{X})$, mean $\mu$, variance $\sigma^2$, probability density/mass function $\varrho$, cumulative distribution function *F*, quantile function *Q* | The system whose behavior one wants to understand, which is governed by randomness or uncertainty 
 | **Sampling** | IID, low-discrepancy (QMC), Markov Chain Monte Carlo (MCMC), acceptance–rejection | Generate representative points from the population |
 | **Estimation** | Sample mean, variance, histogram, ECDF, quantile estimates | Approximate population quantities using finite samples |
 | **Uncertainty** | Central Limit Theorem (CL T), bootstrap, Bayesian credible intervals | Quantify the reliability of Monte Carlo estimates |
