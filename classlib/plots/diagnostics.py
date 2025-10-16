@@ -99,6 +99,7 @@ def plot_middle_half_sample_mean(
     # CI for the *median across reps* (via SE of med ≈ 1.253 * SE of mean across reps)
     # First compute across-rep SD at each n:
     sd_across_rep = np.std(cum_means, axis=0, ddof=1)
+    sd_mean_final = sd_across_rep[-1]
     se_mean_across_rep = sd_across_rep / np.sqrt(n_rep)
     # For normal-ish across-rep distributions, SE(median) ≈ 1.253 * SE(mean)
     se_median_across_rep = 1.253314137 * se_mean_across_rep
@@ -157,6 +158,7 @@ def plot_middle_half_sample_mean(
         ci_lower=ci_lower,
         ci_upper=ci_upper,
         sd_across_rep=sd_across_rep,
+        sd_mean_final=sd_mean_final,
     )
     return ax, info
 
@@ -172,6 +174,7 @@ def plot_multiple_middle_half_sample_means(
     title: str | None = None,
     legend_loc: str | None = "outside",
     ylim: tuple[float, float] | None = None,
+    figsize: tuple[float, float] = (10.2, 6),
 ):
     """
     Compare running means for multiple (sampler, f) combinations.
@@ -182,7 +185,7 @@ def plot_multiple_middle_half_sample_means(
       - callable: sampler only (requires `default_f`)
     Missing "sampler" or "f" fall back to `default_sampler` / `default_f`.
     """
-    fig, ax = plt.subplots(figsize=(7.2, 4.5))
+    fig, ax = plt.subplots(figsize=figsize)
     info_dict: Dict[str, Dict[str, Any]] = {}
 
     # Default color cycling from Tol Bright if none provided
@@ -195,7 +198,7 @@ def plot_multiple_middle_half_sample_means(
         # Normalize entry
         if isinstance(cfg, tuple) and len(cfg) == 2:
             sampler, f = cfg
-            cfg_dict = {}
+            cfg_dict: Dict[str, Any] = {}
         elif callable(cfg):
             sampler, f = cfg, default_f
             cfg_dict = {}
@@ -204,15 +207,20 @@ def plot_multiple_middle_half_sample_means(
             f = cfg.get("f", default_f)
             cfg_dict = cfg
         else:
-            raise TypeError(f"Config for '{label}' must be dict, (sampler, f) tuple, or callable sampler.")
+            raise TypeError(
+                f"Config for '{label}' must be dict, (sampler, f) tuple, or callable sampler."
+            )
 
         if sampler is None or f is None:
-            raise ValueError(f"Config '{label}' missing sampler or f (and no default provided).")
+            raise ValueError(
+                f"Config '{label}' missing sampler or f (and no default provided)."
+            )
 
         # Style (per-entry overrides > auto-colors)
         color = cfg_dict.get("color", colors.get(label))
         this_label = cfg_dict.get("label", label)
 
+        # Plot one curve
         ax, info = plot_middle_half_sample_mean(
             sampler=sampler,
             f=f,
@@ -223,21 +231,33 @@ def plot_multiple_middle_half_sample_means(
             label=this_label,
             color=color,
         )
+
+        # Append SD(final n) to legend & store in output dict
+        sd_final = info.get("sd_mean_final")
+        if sd_final is not None:
+            n_final = int(info["n"][-1])
+            label_with_sd = (
+                rf"{this_label} "
+                rf"($\mathrm{{SD}}[\hat\mu_{{{n_final}}}]\approx{sd_final:.2e}$)"
+            )
+            # Update the matching line's label
+            for ln in reversed(ax.get_lines()):
+                if ln.get_label() == this_label:
+                    ln.set_label(label_with_sd)
+                    break
+            info["sd_mean_final"] = float(sd_final)
+
         info_dict[label] = info
 
+    # Title
     if title:
         ax.set_title(title)
 
     # Legend placement
     if legend_loc == "outside":
-        # shrink axes width to make room on right
         box = ax.get_position()
         ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
-        ax.legend(
-            loc="center left",
-            bbox_to_anchor=(1.02, 0.5),
-            frameon=False,
-        )
+        ax.legend(loc="center left", bbox_to_anchor=(1.02, 0.5), frameon=False)
     else:
         ax.legend(loc=legend_loc)
 

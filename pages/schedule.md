@@ -38,7 +38,7 @@ The first page of the notes indicates when it was most recently updated.
 | Oct 20   |                     |               |
 | Oct 22   |                     |               |
 | Oct 27   |                     |               |
-| Oct 29   |  **Test 2 on TBD**                      |               |
+| Oct 29   |  **Test 2 on Part 3 MCMC + Discrepancy and Part 4 Importance Sampling, Control Variates**                      |               |
 | Nov 3    |                     |               |
 | Nov 5    |                     |               |
 | Nov 10   |                     |               |
