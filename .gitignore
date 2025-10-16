@@ -14,6 +14,8 @@ Thumbs.db
 
 # --- Jupyter ---
 **/.ipynb_checkpoints/
+# Ignore JupyterLab Desktop workspace layouts
+notebooks/.jupyter/desktop-workspaces/
 
 
 # --- Python ---
