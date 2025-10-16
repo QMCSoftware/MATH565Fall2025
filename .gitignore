@@ -47,3 +47,4 @@ venv/
 # --- Editor settings / cache ---
 desktop-settings.json
 default-*
+*.jupyterlab-workspace
