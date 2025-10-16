@@ -49,3 +49,4 @@ The first page of the notes indicates when it was most recently updated.
 | Nov 26   | **Thanksgivng Break (no class)**|               |
 | Dec 1    |                     |               |
 | Dec 3    |                     |               |
+| **Dec 11 <br>2–4PM, WH 115** | **Take-Home Portion of the Final Exam Due <br>In-Class Portion of the Final Exam** | |
