@@ -244,8 +244,21 @@ def plot_multiple_middle_half_sample_means(
             for ln in reversed(ax.get_lines()):
                 if ln.get_label() == this_label:
                     ln.set_label(label_with_sd)
+                    # If you want to ensure a color is stored, you can also grab it here:
+                    if color is None:
+                        color = ln.get_color()
                     break
-            info["sd_mean_final"] = float(sd_final)
+            # <<< make sure to update this_label for storing/display later
+            this_label = label_with_sd
+
+        # Store for reuse in zoom
+        info["sd_mean_final"] = float(sd_final) if sd_final is not None else None
+        info["display_label"] = this_label
+        # Store a concrete color (fallback to the plotted line color if color was None)
+        if color is None:
+            # last plotted line corresponds to this series
+            color = ax.get_lines()[-1].get_color()
+        info["color"] = color
 
         info_dict[label] = info
 
