@@ -1,6 +1,9 @@
 import numpy as np
 import scipy as sp
+from math import log, sqrt, exp
+from scipy.stats import norm
 
+# --- your bm_transform stays exactly as-is ---
 def bm_transform(T: float = None, d: int = None, t: np.ndarray = None) -> np.ndarray:
     """
     PCA transform A so that Z @ A.T has the law of (W_{t1},...,W_{td}).
@@ -24,35 +27,27 @@ def bm_transform(T: float = None, d: int = None, t: np.ndarray = None) -> np.nda
     A = vecs @ np.diag(np.sqrt(vals))
     return A
 
-def asian_arith_mean_call_payoff(
-    X: np.ndarray,   # (n_paths, d) uniforms in (0,1)
-    S0: float,
-    r: float,
-    sigma: float,
-    T: float = None,
-    K: float = 0.0,
-    *,
-    # Choose ONE of the drift specifications:
-    drift=None,            # None | scalar | length-d array (per-interval drift per unit time)
-    theta_slope=None,      # float for theta(t) = theta_slope * t
-    t: np.ndarray = None,  # optional non-uniform grid; overrides T,d if provided
-    A: np.ndarray = None,  # optional precomputed transform compatible with t
-) -> np.ndarray:
+# --- small helper: shared path + LR construction (no duplication) ---
+def _paths_LR_S_from_uniforms(
+    X: np.ndarray,
+    S0: float, r: float, sigma: float,
+    *, T: float = None, t: np.ndarray = None,
+    drift=None, theta_slope=None, A: np.ndarray = None
+):
     """
-    Discounted arithmetic-mean Asian call payoff with optional importance-sampling drift.
-
-    - If `t` is given, it must be strictly increasing and its last value is T.
-    - If `theta_slope` is provided, we use theta(t) = theta_slope * t (linear drift in time).
-      Mean shift is exact: m_j = ∫_0^{t_j} theta(s) ds = 0.5 * theta_slope * t_j^2.
-      Likelihood ratio uses piecewise-constant integrand at left endpoints: theta_k = theta_slope * t_{k-1}.
-    - Otherwise, `drift` behaves as before (scalar or length-d, per-interval drift per unit time),
-      with m_j = Σ_{k≤j} drift_k * Δt_k.
+    Given uniforms X (n,d), build:
+      - t, dt, T
+      - BM with optional mean shift from drift/theta_slope
+      - LR for that shift
+      - GBM stock paths S at t1..td
+    Everything matches the conventions already in your Asian code.
     """
     X = np.asarray(X, dtype=float)
     if X.ndim != 2:
         raise ValueError("X must have shape (n_paths, d)")
     n_paths, d = X.shape
 
+    # build t, dt, t_left
     if t is None:
         if T is None:
             raise ValueError("Provide T if `t` is not given.")
@@ -63,25 +58,23 @@ def asian_arith_mean_call_payoff(
         if t.shape != (d,):
             raise ValueError(f"t must have length d={d}, got {t.shape}")
         T = float(t[-1])
-    dt = np.empty(d)
-    dt[0] = t[0]
+    dt = np.empty(d); dt[0] = t[0]
     if d > 1:
         dt[1:] = np.diff(t)
-    t_left = np.empty(d)
-    t_left[0] = 0.0
+    t_left = np.empty(d); t_left[0] = 0.0
     if d > 1:
         t_left[1:] = t[:-1]
 
-    # normals -> BM(t)
-    Z = sp.stats.norm.ppf(X)
+    # normals -> BM(t) via PCA
+    Z = norm.ppf(X)
     if A is None:
         A = bm_transform(t=t)
     BM = Z @ A.T  # (n_paths, d)
 
-    # choose drift, compute mean shift and LR
+    # drift + LR (exactly your logic)
     if theta_slope is not None:
-        theta_k = theta_slope * t_left              # piecewise-constant at left endpoints
-        m = 0.5 * theta_slope * (t ** 2)            # exact cumulative mean shift at each t_j
+        theta_k = theta_slope * t_left
+        m = 0.5 * theta_slope * (t ** 2)
     elif drift is None:
         theta_k = np.zeros(d)
         m = np.zeros(d)
@@ -96,35 +89,93 @@ def asian_arith_mean_call_payoff(
 
     BM_shift = BM + m[None, :]
 
-    # Likelihood ratio: L = exp( -Σ θ_k ΔW_k - 0.5 Σ θ_k^2 Δt_k )
+    # LR with your ΔW convention
     dW = np.empty_like(BM)
-    dW[:, 0] = BM[:, 0]
+    dW[:, 0]  = BM[:, 0]
     if d > 1:
         dW[:, 1:] = np.diff(BM, axis=1)
     term1 = -(dW @ theta_k)
     term2 = -0.5 * float(np.sum((theta_k ** 2) * dt))
     LR = np.exp(term1 + term2)
 
-    # Stock paths and payoff
+    # GBM paths at t_j
     S = S0 * np.exp((r - 0.5 * sigma**2) * t[None, :] + sigma * BM_shift)
 
-    # Arithmetic mean over [0,T] with trapezoidal weights including S(0)
-    # ⇒ ∫_0^T S(t) dt ≈ 0.5*S0*dt1 + Σ_{k=2..d} 0.5*(S_{k-1}+S_k)*dt_k
-    # Implemented compactly via telescoping form below:
-    # First handle the first interval explicitly:
-    mean_S = 0.5 * S0 * dt[0]
-    if d == 1:
-        mean_S += 0.5 * S[:, 0] * dt[0]
+    return S, LR, t, dt, T
+
+def _bs_call_price(S0, K, r, sigma, T):
+    if sigma <= 0 or T <= 0:
+        return max(S0 - K*exp(-r*T), 0.0)
+    s = sigma * sqrt(T)
+    d1 = (log(S0/K) + (r + 0.5*sigma**2)*T) / s
+    d2 = d1 - s
+    return S0*norm.cdf(d1) - K*exp(-r*T)*norm.cdf(d2)
+
+def asian_arith_mean_call_payoff(
+    X: np.ndarray,   # (n_paths, d) uniforms in (0,1)
+    S0: float,
+    r: float,
+    sigma: float,
+    T: float = None,
+    K: float = 0.0,
+    *,
+    # (same drift knobs as before)
+    drift=None,            # None | scalar | length-d array
+    theta_slope=None,      # float for theta(t) = theta_slope * t
+    t: np.ndarray = None,  # optional non-uniform grid; overrides T,d if provided
+    A: np.ndarray = None,  # optional precomputed transform compatible with t
+    # --- new, optional ---
+    compute_euro: bool = False,      # also compute euro payoff*LR and C_bs (no CV)
+    use_control_variate: bool = False,  # return CV-adjusted per-path Z instead of plain Y
+    return_beta: bool = False,       # if using CV, optionally return (Z, beta)
+):
+    """
+    Discounted arithmetic-mean Asian call payoff with optional importance sampling.
+    NEW (optional):
+      - compute_euro=True   -> also compute discounted Euro payoff*LR and return (Y, X, C_bs)
+      - use_control_variate=True -> return CV-adjusted per-path values Z = Y - beta*(X-C_bs)
+        (beta is sample-optimal; if return_beta=True, returns (Z, beta))
+    Default behavior (both False) is IDENTICAL to your previous function: returns Y only.
+    """
+    # Shared paths + LR (no duplication)
+    S, LR, t, dt, T = _paths_LR_S_from_uniforms(
+        X, S0, r, sigma, T=T, t=t, drift=drift, theta_slope=theta_slope, A=A
+    )
+
+    # Continuous-time (trapezoid) average on non-uniform grid, branch-free
+    # S: (n,d) at times t1..td; include S0 via left column
+    n, d = S.shape
+    S_left = np.concatenate([np.full((n, 1), S0), S[:, :-1]], axis=1)  # (n,d)
+    areas  = 0.5 * (S_left + S) * dt                                   # (n,d)
+    mean_S = areas.sum(axis=1) / T
+
+    disc = np.exp(-r * T)
+    Y = disc * np.maximum(mean_S - K, 0.0) * LR  # (n,)  (same as before)
+
+    # Fast path: just Asian payoffs (legacy behavior)
+    if not compute_euro and not use_control_variate:
+        return Y
+
+    # European pieces (computed only if requested, no duplicated drift/LR)
+    ST = S[:, -1]
+    X_euro = disc * np.maximum(ST - K, 0.0) * LR
+    C_bs = _bs_call_price(S0, K, r, sigma, T)
+
+    if compute_euro and not use_control_variate:
+        # Return both for external stats/plots/etc.
+        return Y, X_euro, C_bs
+
+    # Control variate: Z = Y - beta*(X - C_bs), sample-optimal beta from this batch
+    V = X_euro - C_bs
+    varV = V.var(ddof=1)
+    beta = 0.0 if np.isclose(varV, 0.0) else float(np.cov(Y, V, ddof=1)[0, 1] / varV)
+    Z = Y - beta * V
+
+    if return_beta:
+        return Z, beta, C_bs
     else:
-        # 0.5*(S_{k-1}+S_k)*dt_k for k=2..d
-        mean_S = mean_S + (0.5 * (S[:, :-1] + S[:, 1:]) * dt[1:]).sum(axis=1)
-        # plus the 0.5*S[:,0]*dt[0] term to complete the first trapezoid
-        mean_S = mean_S + 0.5 * S[:, 0] * dt[0]
-    mean_S = mean_S / T
-
-    payoff = np.maximum(mean_S - K, 0.0) * np.exp(-r * T)
-    return payoff * LR
-
+        return Z
+    
 def price(payoffs: np.ndarray, *, iid: bool = False, ddof: int = 1):
     """Return (estimate, standard_error_or_None).
 
@@ -162,3 +213,4 @@ def price_rqmc(payoffs_by_rep: np.ndarray, *, ddof: int = 1):
     est = float(rep_means.mean())
     se = float(rep_means.std(ddof=ddof) / np.sqrt(R))
     return est, se
+
