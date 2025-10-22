@@ -32,22 +32,21 @@ def _paths_LR_S_from_uniforms(
     X: np.ndarray,
     S0: float, r: float, sigma: float,
     *, T: float = None, t: np.ndarray = None,
-    drift=None, theta_slope=None, A: np.ndarray = None
+    drift=None, A: np.ndarray = None
 ):
     """
     Given uniforms X (n,d), build:
       - t, dt, T
-      - BM with optional mean shift from drift/theta_slope
-      - LR for that shift
+      - Brownian motion with optional mean shift from constant/per-interval drift
+      - likelihood ratio (LR)
       - GBM stock paths S at t1..td
-    Everything matches the conventions already in your Asian code.
     """
     X = np.asarray(X, dtype=float)
     if X.ndim != 2:
         raise ValueError("X must have shape (n_paths, d)")
     n_paths, d = X.shape
 
-    # build t, dt, t_left
+    # Build time grid and deltas
     if t is None:
         if T is None:
             raise ValueError("Provide T if `t` is not given.")
@@ -58,49 +57,42 @@ def _paths_LR_S_from_uniforms(
         if t.shape != (d,):
             raise ValueError(f"t must have length d={d}, got {t.shape}")
         T = float(t[-1])
+
     dt = np.empty(d); dt[0] = t[0]
     if d > 1:
         dt[1:] = np.diff(t)
-    t_left = np.empty(d); t_left[0] = 0.0
-    if d > 1:
-        t_left[1:] = t[:-1]
 
-    # normals -> BM(t) via PCA
+    # Normals → BM(t) via PCA
     Z = norm.ppf(X)
     if A is None:
         A = bm_transform(t=t)
     BM = Z @ A.T  # (n_paths, d)
 
-    # drift + LR (exactly your logic)
-    if theta_slope is not None:
-        theta_k = theta_slope * t_left
-        m = 0.5 * theta_slope * (t ** 2)
-    elif drift is None:
+    # Importance-sampling drift (constant or per-interval)
+    if drift is None:
         theta_k = np.zeros(d)
-        m = np.zeros(d)
+    elif np.ndim(drift) == 0:
+        theta_k = np.full(d, float(drift))
     else:
-        if np.ndim(drift) == 0:
-            theta_k = np.full(d, float(drift))
-        else:
-            theta_k = np.asarray(drift, dtype=float)
-            if theta_k.shape != (d,):
-                raise ValueError(f"`drift` must be scalar or length-d; got {theta_k.shape}")
-        m = np.cumsum(theta_k * dt)
+        theta_k = np.asarray(drift, dtype=float)
+        if theta_k.shape != (d,):
+            raise ValueError(f"`drift` must be scalar or length-d; got {theta_k.shape}")
 
+    # Mean shift for BM at each monitoring time
+    m = np.cumsum(theta_k * dt)                 # (d,)
     BM_shift = BM + m[None, :]
 
-    # LR with your ΔW convention
+    # Likelihood ratio with your ΔW convention
     dW = np.empty_like(BM)
-    dW[:, 0]  = BM[:, 0]
+    dW[:, 0] = BM[:, 0]
     if d > 1:
         dW[:, 1:] = np.diff(BM, axis=1)
-    term1 = -(dW @ theta_k)
-    term2 = -0.5 * float(np.sum((theta_k ** 2) * dt))
+    term1 = -(dW @ theta_k)                     # -Σ θ_k ΔW_k
+    term2 = -0.5 * float(np.sum((theta_k**2) * dt))  # -½ Σ θ_k^2 Δt_k
     LR = np.exp(term1 + term2)
 
-    # GBM paths at t_j
+    # GBM paths
     S = S0 * np.exp((r - 0.5 * sigma**2) * t[None, :] + sigma * BM_shift)
-
     return S, LR, t, dt, T
 
 def _bs_call_price(S0, K, r, sigma, T):
@@ -119,53 +111,48 @@ def asian_arith_mean_call_payoff(
     T: float = None,
     K: float = 0.0,
     *,
-    # (same drift knobs as before)
-    drift=None,            # None | scalar | length-d array
-    theta_slope=None,      # float for theta(t) = theta_slope * t
+    drift=None,            # None | scalar | length-d array  (CONSTANT DRIFT ONLY)
     t: np.ndarray = None,  # optional non-uniform grid; overrides T,d if provided
     A: np.ndarray = None,  # optional precomputed transform compatible with t
-    # --- new, optional ---
-    compute_euro: bool = False,      # also compute euro payoff*LR and C_bs (no CV)
-    use_control_variate: bool = False,  # return CV-adjusted per-path Z instead of plain Y
-    return_beta: bool = False,       # if using CV, optionally return (Z, beta)
+    # Optional add-ons:
+    compute_euro: bool = False,          # also return (X_euro, C_bs)
+    use_control_variate: bool = False,   # return CV-adjusted per-path Z
+    return_beta: bool = False,           # if CV, also return beta
 ):
     """
-    Discounted arithmetic-mean Asian call payoff with optional importance sampling.
-    NEW (optional):
-      - compute_euro=True   -> also compute discounted Euro payoff*LR and return (Y, X, C_bs)
-      - use_control_variate=True -> return CV-adjusted per-path values Z = Y - beta*(X-C_bs)
-        (beta is sample-optimal; if return_beta=True, returns (Z, beta))
-    Default behavior (both False) is IDENTICAL to your previous function: returns Y only.
+    Discounted arithmetic-mean Asian call payoff with optional importance sampling (constant/per-interval drift).
+    Default behavior (both compute_euro=False and use_control_variate=False): returns Y only.
+
+    If compute_euro=True: returns (Y, X_euro, C_bs)
+    If use_control_variate=True: returns Z (or (Z, beta, C_bs) if return_beta=True)
     """
-    # Shared paths + LR (no duplication)
+    # Shared paths + LR (constant/per-interval drift only)
     S, LR, t, dt, T = _paths_LR_S_from_uniforms(
-        X, S0, r, sigma, T=T, t=t, drift=drift, theta_slope=theta_slope, A=A
+        X, S0, r, sigma, T=T, t=t, drift=drift, A=A
     )
 
-    # Continuous-time (trapezoid) average on non-uniform grid, branch-free
-    # S: (n,d) at times t1..td; include S0 via left column
+    # Trapezoid average on [0,T] for non-uniform grid (branch-free, includes S0)
     n, d = S.shape
     S_left = np.concatenate([np.full((n, 1), S0), S[:, :-1]], axis=1)  # (n,d)
     areas  = 0.5 * (S_left + S) * dt                                   # (n,d)
     mean_S = areas.sum(axis=1) / T
 
     disc = np.exp(-r * T)
-    Y = disc * np.maximum(mean_S - K, 0.0) * LR  # (n,)  (same as before)
+    Y = disc * np.maximum(mean_S - K, 0.0) * LR  # (n,)
 
-    # Fast path: just Asian payoffs (legacy behavior)
+    # Legacy fast path
     if not compute_euro and not use_control_variate:
         return Y
 
-    # European pieces (computed only if requested, no duplicated drift/LR)
+    # European pieces only if needed
     ST = S[:, -1]
     X_euro = disc * np.maximum(ST - K, 0.0) * LR
     C_bs = _bs_call_price(S0, K, r, sigma, T)
 
     if compute_euro and not use_control_variate:
-        # Return both for external stats/plots/etc.
         return Y, X_euro, C_bs
 
-    # Control variate: Z = Y - beta*(X - C_bs), sample-optimal beta from this batch
+    # Control variate: Z = Y - beta*(X - C_bs)
     V = X_euro - C_bs
     varV = V.var(ddof=1)
     beta = 0.0 if np.isclose(varV, 0.0) else float(np.cov(Y, V, ddof=1)[0, 1] / varV)
