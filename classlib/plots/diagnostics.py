@@ -7,7 +7,7 @@ def plot_middle_half_sample_mean(
     sampler: Callable[..., np.ndarray],
     f: Callable[[np.ndarray], np.ndarray],
     n_max: int = 2**15,
-    n_rep: int = 21,
+    n_rep: int = 51,
     n_start: int = 9,
     *,
     rng: Optional[Union[int, np.random.Generator]] = None,
