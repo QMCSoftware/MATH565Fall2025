@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "classlib-local"
+version = "0.0.0"
+description = "Local classlib for MATH 565 notebooks (editable install)"
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [{ name = "Fred Hickernell" }]
+
+[tool.setuptools]
+packages = { find = { where = ["."], include = ["classlib*"] } }
