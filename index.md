@@ -22,8 +22,8 @@ This course teaches students Monte Carlo simulation techniques, focusing on appl
        style="float:right; margin-left:10px; margin-bottom:6px;">
 </a>
 
-* _Office:_ RE 208  
-* _Office hours:_ [By appointment](https://outlook.office.com/bookwithme/user/037b70c376b1407ea8aa7e57c242da0e@illinoistech.edu?anonymous&ismsaljsauthenabled&ep=plink) on Mondays 3:00 – 5:00 PM in _RE 208_ and Thursdays 9 – 11 AM on _Microsoft Teams_, email me if you need to make an appointment for another time 
+* _Office:_ Galvin Tower 18C3-1 
+* _Office hours:_ [By appointment](https://outlook.office.com/bookwithme/user/037b70c376b1407ea8aa7e57c242da0e@illinoistech.edu?anonymous&ismsaljsauthenabled&ep=plink) on Mondays 3:00 – 5:00 PM in _Galvin Tower 18C3-1_ and Thursdays 9 – 11 AM on _Microsoft Teams_, email me if you need to make an appointment for another time 
 * _Phone:_ 312-567-8983  
 * _Email:_ [hickernell@illinoistech.edu](mailto:hickernell@illinoistech.edu)  
 * [_Website_](https://www.iit.edu/directory/people/fred-hickernell)  
