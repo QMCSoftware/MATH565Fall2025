@@ -4,7 +4,7 @@ title: Assignment 1
 permalink: /assgn1/
 ---
 
-# Assigment 1
+# Assignment 1
 
 Due: Friday, September 5, 2025
 

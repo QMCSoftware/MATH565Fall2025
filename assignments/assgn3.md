@@ -4,7 +4,7 @@ title: Assignment 3
 permalink: /assgn3/
 ---
 
-# Assigment 3
+# Assignment 3
 
 Due: Friday, October 17, 2025
 
