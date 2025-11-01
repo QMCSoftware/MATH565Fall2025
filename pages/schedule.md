@@ -46,8 +46,8 @@ The first page of the notes indicates when it was most recently updated.
 | Nov 14  | **Assignment 4 Due**  | |
 | Nov 17   |                     |               |
 | Nov 19   |                     |               |
-| Nov 23   |  Project Presentations                    |               |
 | Nov 24   |  Project Presentations <br>**No lecture**   |               |
+| Nov 25   |  Project Presentations                    |               |
 | Nov 26   | **Thanksgivng Break (no class)**|               |
 | Dec 1    |                     |               |
 | Dec 3    |                     |               |
