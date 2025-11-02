@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Assignment 4
-permalink: /assgn3/
+permalink: /assgn4/
 ---
 
 # Assignment 4
