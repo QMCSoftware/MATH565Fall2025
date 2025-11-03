@@ -39,10 +39,10 @@ brew install pdfgrep
 sudo apt-get update && sudo apt-get install pdfgrep
 ```
 
-2) From the course repo root (the folder that contains `Archive/`), run:
+2) From `MATH565Fall2025/assets/tests` (the folder that contains `archive`)), run:
 ```bash
 # Case-insensitive, recursive, show filename + page number + context
-pdfgrep -rniH -C2 'your term here' Archive/
+pdfgrep -rniH -C2 'your term here' archive/
 ```
 - `-r` = search subfolders  
 - `-n` = show **page number**  
@@ -52,9 +52,9 @@ pdfgrep -rniH -C2 'your term here' Archive/
 
 **Examples**
 ```bash
-pdfgrep -rniH -C2 'brownian' Archive/
-pdfgrep -rniH -C2 'sobol' Archive/
-pdfgrep -rniH -C2 'central limit|CLT' Archive/
+pdfgrep -rniH -C2 'brownian' archive/
+pdfgrep -rniH -C2 'sobol' archive/
+pdfgrep -rniH -C2 'central limit|CLT' archive/
 ```
 
 ### Windows (quick options)
@@ -66,26 +66,26 @@ wsl --install
 Then in Ubuntu (WSL):
 ```bash
 sudo apt-get update && sudo apt-get install pdfgrep
-cd /mnt/c/Users/<you>/path/to/MATH565/
-pdfgrep -rniH -C2 'your term here' Archive/
+cd /mnt/c/Users/<you>/path/to/MATH565Fall2025/assets/tests/
+pdfgrep -rniH -C2 'your term here' archive/
 ```
 
 **B) Cross-platform alternative (ripgrep-all):**
 ```bash
 # macOS
 brew install ripgrep-all poppler
-rga -n -i -C2 'your term here' Archive/
+rga -n -i -C2 'your term here' archive/
 ```
 ```powershell
 # Windows (Scoop)
 scoop install ripgrep-all
-rga -n -i -C2 'your term here' Archive/
+rga -n -i -C2 'your term here' archive/
 ```
 
 **Tips**
 - Put phrases in quotes, e.g. `'Monte Carlo'`.
 - Try several terms with regex: `'variance|SD|std\. dev'`.
-- Narrow to a subfolder/year, e.g. `Archive/2019/` or midterms only.
+- Narrow to a subfolder/year, e.g. `archive/2019/` or midterms only.
 </details>
 
 <!-- End of HOW TO SEARCH section -->
