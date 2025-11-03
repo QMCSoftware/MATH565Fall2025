@@ -4,7 +4,7 @@ title: Conda Environment Setup
 permalink: /conda-setup/
 ---
 
-These steps set up Python and the `qmcpy` environment so you can run the course notebooks.
+These steps set up Python, `qmcpy`, and the **MATH 565 class library** so you can run all course notebooks.
 
 ---
 
@@ -37,19 +37,38 @@ conda activate qmcpy
 
 ---
 
-### 3. Install QMCSoftware (editable)
+### 3. Install the class package (editable)
+
+The course repo now includes a `pyproject.toml`, so you can install it as a package directly:
+
+```bash
+pip install -e .
+```
+
+This makes the class library (`classlib`) importable from anywhere, for example:
+
+```python
+from classlib.sampling import metropolis
+```
+
+---
+
+### 4. Install QMCSoftware (editable submodule)
+
+The `qmcsoftware` directory is a submodule that provides the main `qmcpy` package.  
+Install it in editable mode as well:
 
 ```bash
 pip install -e "qmcsoftware[dev]"
 ```
 
-This installs `qmcpy` plus its development extras (JupyterLab, matplotlib, pandas, etc.).
+This installs `qmcpy` plus JupyterLab, matplotlib, pandas, and other development extras.
 
 ---
 
-### 4. Install course-specific extras
+### 5. Install course-specific dependencies
 
-We keep our extras in a single file, `requirements-course.txt`.
+Additional packages used in notebooks are listed in:
 
 ```bash
 pip install -r requirements-course.txt
@@ -57,17 +76,17 @@ pip install -r requirements-course.txt
 
 ---
 
-### 5. Register the Jupyter kernel
+### 6. Register the Jupyter kernel
 
 ```bash
 python -m ipykernel install --user --name qmcpy --display-name "Python (qmcpy)"
 ```
 
-Now, when you open Jupyter, choose **Python (qmcpy)** as the kernel for the notebooks.
+Then choose **Python (qmcpy)** as the kernel when you open a notebook.
 
 ---
 
-### 6. Updating later
+### 7. Updating later
 
 When the repo or QMCSoftware changes:
 
@@ -76,26 +95,26 @@ git pull
 git submodule update --init --recursive   # keep submodules in sync
 
 conda activate qmcpy
+pip install -e . --upgrade
 pip install -e "qmcsoftware[dev]" --upgrade
 pip install -r requirements-course.txt --upgrade
 ```
 
-*(Advanced: If you want the very latest `qmcsoftware` instead of the pinned commit, you may `cd qmcsoftware && git checkout develop && git pull`, but this is **not required** for the course.)*
+*(Advanced: to track the latest QMCSoftware `develop` branch, run  
+`cd qmcsoftware && git checkout develop && git pull`, but this is **not required** for the course.)*
 
 ---
 
-### 7. Verify installation
-
-Run this to check that `qmcpy` is installed and working:
+### 8. Verify installation
 
 ```bash
-python -c "import qmcpy; print('QMCSoftware version:', qmcpy.__version__)"
+python -c "import classlib, qmcpy; print('classlib + QMCSoftware OK:', qmcpy.__version__)"
 ```
 
-You should see output like:
+Expected output (version numbers may vary):
 
 ```
-QMCSoftware version: 2.0
+classlib + QMCSoftware OK: 2.0
 ```
 
 ---
@@ -103,22 +122,22 @@ QMCSoftware version: 2.0
 ### Troubleshooting
 
 - **Apple Silicon (M1/M2/M3):** Prefer [miniforge](https://github.com/conda-forge/miniforge) and `mamba`.
-- **Windows users:** If `pip` tries to compile something and fails, you may need [Microsoft C++ Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/).
-- **Starting fresh:** If your environment breaks:
-
+- **Windows users:** If `pip` fails while compiling, install [Microsoft C++ Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/).
+- **Starting fresh:**  
+  If your environment breaks:
   ```bash
   conda env remove -n qmcpy
   conda create -n qmcpy python=3.12 -y
   conda activate qmcpy
   git submodule update --init --recursive
+  pip install -e .
   pip install -e "qmcsoftware[dev]"
   pip install -r requirements-course.txt
   ```
 
-- **Sanity check (optional):** Confirm the submodule exists:
+- **Check submodules:**  
   ```bash
   git submodule status
-  # or
   test -f qmcsoftware/pyproject.toml && echo "qmcsoftware present"
   ```
 
