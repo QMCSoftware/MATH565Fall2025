@@ -4,7 +4,7 @@ title: Assignment 2
 permalink: /assgn2/
 ---
 
-# Assigment 2
+# Assigmment 2
 
 Due: Friday, September 19, 2025
 

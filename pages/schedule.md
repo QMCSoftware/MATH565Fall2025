@@ -31,21 +31,23 @@ The first page of the notes indicates when it was most recently updated.
 | Sep 29   | Worst case error<br>  |               |
 | Oct 1    | Average case error<br>Bayesian Inference <br>**Project Proposals Due**     |               |
 | Oct 6    |  Bayesian inference<br>Queues |               |
-| Oct 8    |  Metropolis<br>Queues<br>Importance Sampling   |  [Improving Efficiency]({{ site.baseurl }}/lectures/MATH565MonteCarloMethodsNotesPart4ImprovingEfficiency.pdf)    |
+| Oct 8    |  Metropolis<br>Queues<br>Variable Transformations <br>Importance Sampling   |  [Improving Efficiency]({{ site.baseurl }}/lectures/MATH565MonteCarloMethodsNotesPart4ImprovingEfficiency.pdf)    |
 | Oct 13   | **Fall Break (no class)**                    |               |
-| Oct 15   |                     |               |
+| Oct 15   |  Importance Sampling                   |               |
 | Oct 17   | **Assignment 3 Due**   |               |
-| Oct 20   |                     |               |
-| Oct 22   |                     |               |
-| Oct 27   |                     |               |
+| Oct 20   |   Importance Sampling <br>Control Variates                  |               |
+| Oct 22   |  Control Variates                   |               |
+| Oct 27   |  Review                   |               |
 | Oct 29   |  **Test 2 on Part 3 MCMC + Discrepancy and Part 4 Importance Sampling, Control Variates**                      |               |
-| Nov 3    |                     |               |
+| Nov 3    |  Conditional Monte Carlo                  |               |
 | Nov 5    |                     |               |
 | Nov 10   |                     |               |
 | Nov 12   |                     |               |
+| Nov 14  | **Assignment 4 Due**  | |
 | Nov 17   |                     |               |
 | Nov 19   |                     |               |
-| Nov 24   |                     |               |
+| Nov 24   |  Project Presentations <br>**No lecture**   |               |
+| Nov 25   |  Project Presentations                    |               |
 | Nov 26   | **Thanksgivng Break (no class)**|               |
 | Dec 1    |                     |               |
 | Dec 3    |                     |               |

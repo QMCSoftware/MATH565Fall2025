@@ -36,3 +36,4 @@ permalink: /assignments/
 | [Assignment 1]({{ site.baseurl }}/assgn1/)  | Sep 5
 |  [Assignment 2]({{ site.baseurl }}/assgn2/)  |  Sep 19 
 |  [Assignment 3]({{ site.baseurl }}/assgn3/)  |  Oct 17
+|  [Assignment 4]({{ site.baseurl }}/assgn4/)  |  Nov 14
