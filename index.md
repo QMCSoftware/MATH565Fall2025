@@ -108,10 +108,9 @@ By the end of this course, students will be able to:
 
 | **This Github Website**                                   | **Canvas Website**                                   |
 | ---------------------------------------------------- | ---------------------------------------------------- |
-| [Syllabus](./index.html)                          | Grades |
-| [Schedule](./schedule.html)                          | Online Discussions |
-| [Lecture Notes](./lectures.html)                     |  |
-| [Notebooks ](./notebooks.html)                        |  |
+| [Syllabus]({{ "/" | relative_url }}) | Grades |
+| [Schedule and Lecture Notes]({{ "/schedule/" | relative_url }}) | Online Discussions |
+| [Notebooks]({{ "/notebooks/" | relative_url }}) |  |
 | [Class Git Repository](https://github.com/QMCSoftware/MATH565Fall2025) <br> scroll to the bottom for instructions on how to copy from the template              |  |
 
 </details>
