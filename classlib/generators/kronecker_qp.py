@@ -1,3 +1,10 @@
+## This is the version that ChatGPT helped make that fits the qmcpy discrete distributions
+## To use this generator in qmcpy, you can do the following:
+#
+# import qmcpy as qp
+# from classlib.generators import QPKronecker
+# qp.Kronecker = QPKronecker
+
 from __future__ import annotations
 import numpy as np
 import warnings
