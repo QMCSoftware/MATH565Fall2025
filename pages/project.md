@@ -23,8 +23,8 @@ warranted, and describing future work, or
    1. Your `qmcpy` feature, along with a blog illustrating it.  Teams of two will have 30-minute presentations (+10 minutes for question & answer). T
    
 - The oral presentations will be scheduled on November 24–25, 2025. If they wish, oﬀ-site students
-will prepare written reports of 10–15 pages instead that are due 11/25/25.
--  Each student will observe and assess two other presentations.
+will prepare written reports of 10–15 pages instead that are due 11/25/25.  Go to [this link](https://outlook.office.com/book/MATH565ProjectPresentations@iit0.onmicrosoft.com/s/Q3aTeb4fdUWzMhhk7ZMriQ2?ismsaljsauthenabled) to choose one timeslot to present _before November 12_.
+-  Each student will observe and assess two other presentations.  The booking link for choosing presentation times will be up a couple of weeks before the presentations.
 
 ### Guidelines
 - **Article Reviews.** These must cover topics not already covered in lecture. In general, articles must
