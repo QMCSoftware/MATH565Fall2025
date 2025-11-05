@@ -39,8 +39,8 @@ The first page of the notes indicates when it was most recently updated.
 | Oct 22   |  Control Variates                   |               |
 | Oct 27   |  Review                   |               |
 | Oct 29   |  **Test 2 on Part 3 MCMC + Discrepancy and Part 4 Importance Sampling, Control Variates**                      |               |
-| Nov 3    |  Conditional Monte Carlo                  |               |
-| Nov 5    |                     |               |
+| Nov 3    |  Conditional Monte Carlo <br>Antithetic Variates  |               |
+| Nov 5    |  Antithetic Variates <br> Latin Hypercube Sampling                 |               |
 | Nov 10   |                     |               |
 | Nov 12   |                     |               |
 | Nov 14  | **Assignment 4 Due**  | |
