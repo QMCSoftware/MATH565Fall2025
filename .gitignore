@@ -48,3 +48,4 @@ venv/
 desktop-settings.json
 default-*
 *.jupyterlab-workspace
+.jupyter/
