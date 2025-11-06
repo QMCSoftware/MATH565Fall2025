@@ -2,3 +2,6 @@
 	path = qmcsoftware
 	url = https://github.com/QMCSoftware/QMCSoftware.git
 	branch = develop
+[submodule "classlib"]
+	path = classlib
+	url = https://github.com/fjhickernell/HickernellClassLib.git
