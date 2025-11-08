@@ -12,7 +12,7 @@ Below are the planned tests and exams for the semester, with links to PDFs as th
 Date       | Assessment | Coverage / Notes                                         | PDF
 ---------- | ---------- | -------------------------------------------------------- | ---
 Sep 24     | Test 1     | Parts 1 Introduction and Part 2 Generating Samples       | [Test 1 questions + solutions]({{ '/assets/tests/current/MATH565Test1F25Answers.pdf' | relative_url }})
-Oct 29     | Test 2     | Part 3 MCMC + Discrepancy and Part 4 Importance Sampling, Control Variates |
+Oct 29     | Test 2     | Part 3 MCMC + Discrepancy and Part 4 Importance Sampling, Control Variates | [Test 2 questions + solutions]({{ '/assets/tests/current/MATH565Test2F25Answers.pdf' | relative_url }}) <br>[Test 2 Make-Up questions + solutions]({{ '/assets/tests/current/MATH565Test2MakeUpF25Answers.pdf' | relative_url }})
 
 ---
 
