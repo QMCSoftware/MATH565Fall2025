@@ -22,11 +22,21 @@ either
 warranted, and describing future work, or
    1. Your `qmcpy` feature, along with a blog illustrating it.  Teams of two will have 30-minute presentations (+10 minutes for question & answer). T
    
-- The oral presentations will be scheduled on November 24–25, 2025. If they wish, oﬀ-site students
-will prepare written reports of 10–15 pages instead that are due 11/25/25.  Go to [this link](https://outlook.office.com/book/MATH565ProjectPresentations@iit0.onmicrosoft.com/s/Q3aTeb4fdUWzMhhk7ZMriQ2?ismsaljsauthenabled) to choose one timeslot to present _before November 12_.
--  Each student will observe and assess two other presentations.  The booking link for choosing presentation times will be up a couple of weeks before the presentations.
+- The oral presentations will be scheduled on November 24–25, 2025, _in person_ in the Galvin Tower West Side Conference Room. (Off-site students may participate through Zoom.) Go to [this link](https://outlook.office.com/book/MATH565ProjectPresentations@iit0.onmicrosoft.com/s/Q3aTeb4fdUWzMhhk7ZMriQ2?ismsaljsauthenabled) to choose one timeslot to present _before November 12_.
+-  Each student will observe and assess TWO other presentations.  Go to [this link](https://outlook.office.com/book/MATH565ProjectPresentations@iit0.onmicrosoft.com/s/Moojcf_FzUms677wRGwg1Q2?ismsaljsauthenabled) and choose two slots WHEN ANOTHER STUDENT IS PRESENTING.  Here is the [presentation schedule updated November 11](https://iit0-my.sharepoint.com/:x:/g/personal/hickernell_illinoistech_edu/EcKptpmYVBpDqHO7cef6o94BpAvjlkfkXpmff7isKa0NKA?e=l0MvOT) and here is the [list of topics](https://iit0-my.sharepoint.com/:x:/g/personal/hickernell_illinoistech_edu/Eb21Hd_PIKdJrE0JW93y2lcBwKoeptd8mMiJ6FuARJ83fQ?e=F9a3el).  If you do not fulfill this requirement, your project grade will be _penalized_.
 
-### Guidelines
+## Important to keep in mind
+Your presentation should be from the perspective that you are reporting to your colleagues why this article or QMCPy feature is or is not worth pursuing further.  
+- Your audience is smart, but ignorant.  Provide some background, but expect that we will need to take your word for certain details.
+- You should be critical, i.e., clear about the strengths and weakness.
+- You have access to tools, like AI, that your classmates did not have a few years ago, so I will expect more.
+- I am likely not an expert in what you are presenting, but I expect you to be and will ask you probing questions.
+- Your grade will depend on both
+   - How clearly you present, and
+   - How well you answer questions from the audience.
+
+
+## Guidelines
 - **Article Reviews.** These must cover topics not already covered in lecture. In general, articles must
 have been published no less than fifteen years ago. 
 - **`qmcpy` Feature.** Discuss possibilities with the instructor to ensure that what you plan is the right size.
