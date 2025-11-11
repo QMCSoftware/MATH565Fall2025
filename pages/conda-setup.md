@@ -11,7 +11,7 @@ These steps set up Python, `qmcpy`, and the **MATH 565 class library** so you ca
 ### 1. Clone this repository (with submodules)
 
 ```bash
-# Recommended: clone and fetch submodules in one go
+# Recommended: clone and fetch all submodules in one go
 git clone --recurse-submodules https://github.com/QMCSoftware/MATH565Fall2025.git
 cd MATH565Fall2025
 ```
@@ -22,7 +22,8 @@ If you already cloned without `--recurse-submodules`, run:
 git submodule update --init --recursive
 ```
 
-> **Note:** Downloading the repo as a ZIP will **not** include submodules. Please use `git clone`.
+> **Note:** Downloading the repo as a ZIP will **not** include submodules.  
+> Please use `git clone` so that both `HickernellClassLib` and `qmcsoftware` are included.
 
 ---
 
@@ -37,15 +38,15 @@ conda activate qmcpy
 
 ---
 
-### 3. Install the class package (editable)
+### 3. Install the course package (editable)
 
-The course repo now includes a `pyproject.toml`, so you can install it as a package directly:
+The course repo includes a `pyproject.toml`, so you can install it directly:
 
 ```bash
 pip install -e .
 ```
 
-This makes the class library (`classlib`) importable from anywhere, for example:
+This makes the **`classlib`** folder (linked from `HickernellClassLib`) importable from anywhere, for example:
 
 ```python
 from classlib.sampling import metropolis
@@ -53,10 +54,21 @@ from classlib.sampling import metropolis
 
 ---
 
-### 4. Install QMCSoftware (editable submodule)
+### 4. Install HickernellClassLib (editable submodule)
 
-The `qmcsoftware` directory is a submodule that provides the main `qmcpy` package.  
-Install it in editable mode as well:
+The **HickernellClassLib** submodule provides shared Python code used across multiple courses.
+
+```bash
+pip install -e "HickernellClassLib"
+```
+
+This ensures the `classlib` package is editable and linked to its own submodule source.
+
+---
+
+### 5. Install QMCSoftware (editable submodule)
+
+The **QMCSoftware** submodule provides the main `qmcpy` package:
 
 ```bash
 pip install -e "qmcsoftware[dev]"
@@ -66,7 +78,7 @@ This installs `qmcpy` plus JupyterLab, matplotlib, pandas, and other development
 
 ---
 
-### 5. Install course-specific dependencies
+### 6. Install course-specific dependencies
 
 Additional packages used in notebooks are listed in:
 
@@ -76,7 +88,7 @@ pip install -r requirements-course.txt
 
 ---
 
-### 6. Register the Jupyter kernel
+### 7. Register the Jupyter kernel
 
 ```bash
 python -m ipykernel install --user --name qmcpy --display-name "Python (qmcpy)"
@@ -86,9 +98,9 @@ Then choose **Python (qmcpy)** as the kernel when you open a notebook.
 
 ---
 
-### 7. Updating later
+### 8. Updating later
 
-When the repo or QMCSoftware changes:
+When the repo or submodules change:
 
 ```bash
 git pull
@@ -96,6 +108,7 @@ git submodule update --init --recursive   # keep submodules in sync
 
 conda activate qmcpy
 pip install -e . --upgrade
+pip install -e "HickernellClassLib" --upgrade
 pip install -e "qmcsoftware[dev]" --upgrade
 pip install -r requirements-course.txt --upgrade
 ```
@@ -105,16 +118,19 @@ pip install -r requirements-course.txt --upgrade
 
 ---
 
-### 8. Verify installation
+### 9. Verify installation
 
 ```bash
-python -c "import classlib, qmcpy; print('classlib + QMCSoftware OK:', qmcpy.__version__)"
+python - << 'PYCODE'
+import classlib, qmcpy
+print("✅ classlib + QMCSoftware OK:", qmcpy.__version__)
+PYCODE
 ```
 
 Expected output (version numbers may vary):
 
 ```
-classlib + QMCSoftware OK: 2.0
+✅ classlib + QMCSoftware OK: 2.0
 ```
 
 ---
@@ -131,6 +147,7 @@ classlib + QMCSoftware OK: 2.0
   conda activate qmcpy
   git submodule update --init --recursive
   pip install -e .
+  pip install -e "HickernellClassLib"
   pip install -e "qmcsoftware[dev]"
   pip install -r requirements-course.txt
   ```
@@ -138,6 +155,7 @@ classlib + QMCSoftware OK: 2.0
 - **Check submodules:**  
   ```bash
   git submodule status
+  test -f HickernellClassLib/pyproject.toml && echo "HickernellClassLib present"
   test -f qmcsoftware/pyproject.toml && echo "qmcsoftware present"
   ```
 
