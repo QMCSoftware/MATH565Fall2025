@@ -1,7 +1,29 @@
 # MATH 565 Fall 2025
-This is the repository for the MATH 565 Monte Carlo Methods class at Illinois Tech in the Fall of 2025.  There are lecture notes and links to Jupyter notebooks.
 
-The class website at [qmcsoftware.github.io/MATH565Fall2025/](https://qmcsoftware.github.io/MATH565Fall2025/) contains the syllabus and links to lecture notes, assignments, and other resources.
+This is the repository for the **MATH 565 Monte Carlo Methods** class at Illinois Tech in Fall 2025.  
+It contains lecture notes, Jupyter notebooks, and links to other resources.
+
+The class website at [qmcsoftware.github.io/MATH565Fall2025](https://qmcsoftware.github.io/MATH565Fall2025/)
+contains the syllabus, assignments, and links to course materials.
+
+---
+
+## 📚 New: Shared Class Library (`HickernellClassLib`)
+
+This repository now includes a **Git submodule** called
+[`HickernellClassLib`](https://github.com/QMCSoftware/HickernellClassLib),
+which contains reusable Python code used across several courses.
+
+To make sure your local copy includes the submodule, run:
+
+```bash
+git submodule update --init --recursive
+```
+
+If you cloned before this change, please run the above command once.
+Future `git pull` operations will keep the submodule updated automatically.
+
+---
 
 ## 🧭 Two Ways to Make Your Own Copy: Fork vs Use Template
 
@@ -15,7 +37,10 @@ Choose this if you want to:
 
 **Steps:**
 1. Click the **"Fork"** button (top right of this page).
-2. Clone your fork to your computer using GitHub Desktop, VS Code, or the command line.
+2. Clone your fork to your computer using GitHub Desktop, VS Code, or the command line:
+   ```bash
+   git clone --recurse-submodules https://github.com/YOUR-USERNAME/MATH565Fall2025.git
+   ```
 3. Add the instructor’s repo as a remote named `upstream` to pull updates later:
    ```bash
    git remote add upstream https://github.com/QMCSoftware/MATH565Fall2025.git
@@ -35,7 +60,10 @@ Choose this if you:
 **Steps:**
 1. Click the **"Use this template"** button (above the file list).
 2. Create a new repo under your GitHub account.
-3. Clone and begin working on your copy.
+3. Clone your new repo (including submodules) and begin working:
+   ```bash
+   git clone --recurse-submodules https://github.com/YOUR-USERNAME/MATH565Fall2025.git
+   ```
 
 > ⚠️ This option does **not automatically receive updates** from the instructor’s repo.
 
@@ -56,4 +84,27 @@ If you chose the template route and want to get updates later, you can:
    git merge upstream/main
    ```
 
+3. Update the submodule if needed:
+   ```bash
+   git submodule update --init --recursive
+   ```
+
 > 💡 This works the same as with a fork — you just have to set up the `upstream` link manually.
+
+---
+
+### ✅ Verify the submodule import (optional)
+
+If you’re using the `qmcpy` environment, you can check that the class library works:
+
+```bash
+conda activate qmcpy
+python - << 'PYCODE'
+import os, sys
+sys.path.append(os.path.join(os.getcwd(), "classlib"))
+from classlib.distributions import UniformSumDistribution
+print("✅ classlib imported successfully")
+PYCODE
+```
+
+If you see the confirmation message, your setup is correct.
