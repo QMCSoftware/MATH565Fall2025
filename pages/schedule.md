@@ -10,20 +10,26 @@ permalink: /schedule/
      style="position:absolute; right:0; font-size:40%; top:1.4em;">⚙️</a>
 </h1>
 
-The first page of the notes indicates when it was most recently updated.
+The first page of the notes indicates when it was most recently updated.  
+
+The Apple Keynote files may be read on any browser on any OS by 
+1. Going to [Keynote on iCloud](https://www.icloud.com/keynote), 
+1. Signing in with any Apple ID (you can create one for free), and
+1. Uploading the Keynote file.
+
 
 | Date     | Topic               | Notes         |
 |----------|---------------------|---------------|
-| Aug 18   | What is a Monte Carlo?        | [Introduction]({{ site.baseurl }}/lectures/MATH565MonteCarloMethodsNotesPart1Intro.pdf) |
+| Aug 18   | What is a Monte Carlo?        | [Introduction (PDF)]({{ site.baseurl }}/lectures/MATH565MonteCarloMethodsNotesPart1Intro.pdf) <br>[Introduction (Keynote)]({{ site.baseurl }}/lectures/MATH565MonteCarloMethodsNotesPart1Intro.key)|
 | Aug 20   | Probability;  Sampling <br>Low Discrepancy Sampling   |            |
-| Aug 25   | Conditional Probability  <br>Random Number Generation <br>Quantile Function to Generate Non-Uniform Samples |  [Generating Samples]({{ site.baseurl }}/lectures/MATH565MonteCarloMethodsNotesPart2GenerateSamples.pdf)              |
+| Aug 25   | Conditional Probability  <br>Random Number Generation <br>Quantile Function to Generate Non-Uniform Samples |  [Generating Samples (PDF)]({{ site.baseurl }}/lectures/MATH565MonteCarloMethodsNotesPart2GenerateSamples.pdf)  <br>[Generating Samples (Keynote)]({{ site.baseurl }}/lectures/MATH565MonteCarloMethodsNotesPart2GenerateSamples.key)             |
 | Aug 27   |  Quantile Function to Generate Non-Uniform Samples <br>Multivariate Normal; Gaussian Processes; Brownian Motion  |               |
 | Sep 1    | **Labor Day (no class)**                    |               |
 | Sep 3    |  Option Pricing <br>Low Discrepancy Sampling                   |               |
 | **Friday, Sep 5** |  **Assignment 1 Due** <br>Acceptance-Rejection Sampling <br>Also see material recorded on September 6                 |               |
-| Sep 8 <br>  **Fred out of town <br> lectures to be recorded <br>will be announced when available**    |    `qmcpy` tutorial   |         |
+| Sep 8 <br>  **Fred out of town <br> lectures to be recorded <br>will be announced when available**    |  `qmcpy` tutorial   |         |
 | Sep 10 <br>  **Fred out of town <br> lectures to be recorded <br>will be announced when available**   | `qmcpy` tutorial    |               |
-| Sep 15   |   Metropolis-Hastings Algorithm <br>Discrepancy                  |  [Markov Chain Monte Carlo (MCMC) + Disrepancy]({{ site.baseurl }}/lectures/MATH565MonteCarloMethodsNotesPart3MarkovChainMonteCarlo.pdf) |  
+| Sep 15   |   Metropolis-Hastings Algorithm <br>Discrepancy                  |  [Markov Chain Monte Carlo (MCMC) + Disrepancy (PDF)]({{ site.baseurl }}/lectures/MATH565MonteCarloMethodsNotesPart3MarkovChainMonteCarlo.pdf) <br>[Markov Chain Monte Carlo (MCMC) + Disrepancy (Keynote)]({{ site.baseurl }}/lectures/MATH565MonteCarloMethodsNotesPart3MarkovChainMonteCarlo.key) |  
 | Sep 17   | Discrepancy                    |               |
 | Sep 19  |  **Assignment 2 Due**
 | Sep 22   |  Review of Generating Non-Uniform Samples    |               |
@@ -31,7 +37,7 @@ The first page of the notes indicates when it was most recently updated.
 | Sep 29   | Worst case error<br>  |               |
 | Oct 1    | Average case error<br>Bayesian Inference <br>**Project Proposals Due**     |               |
 | Oct 6    |  Bayesian inference<br>Queues |               |
-| Oct 8    |  Metropolis<br>Queues<br>Variable Transformations <br>Importance Sampling   |  [Improving Efficiency]({{ site.baseurl }}/lectures/MATH565MonteCarloMethodsNotesPart4ImprovingEfficiency.pdf)    |
+| Oct 8    |  Metropolis<br>Queues<br>Variable Transformations <br>Importance Sampling   |  [Improving Efficiency (PDF)]({{ site.baseurl }}/lectures/MATH565MonteCarloMethodsNotesPart4ImprovingEfficiency.pdf)  <br>[Improving Efficiency (Keynote)]({{ site.baseurl }}/lectures/MATH565MonteCarloMethodsNotesPart4ImprovingEfficiency.key)   |
 | Oct 13   | **Fall Break (no class)**                    |               |
 | Oct 15   |  Importance Sampling                   |               |
 | Oct 17   | **Assignment 3 Due**   |               |
@@ -41,14 +47,14 @@ The first page of the notes indicates when it was most recently updated.
 | Oct 29   |  **Test 2 on Part 3 MCMC + Discrepancy and Part 4 Importance Sampling, Control Variates**                      |               |
 | Nov 3    |  Conditional Monte Carlo <br>Antithetic Variates  |               |
 | Nov 5    |  Antithetic Variates <br> Latin Hypercube Sampling                 |               |
-| Nov 10   |                     |               |
-| Nov 12   |                     |               |
-| Nov 14  | **Assignment 4 Due**  | |
+| Nov 10   |  Quasi-Monte Carlo    |               |
+| Nov 12   |  Quasi-Monte Carlo    |               |
+| Nov 14   | **Assignment 4 Due**  | |
 | Nov 17   |                     |               |
 | Nov 19   |                     |               |
 | Nov 24   |  Project Presentations <br>**No lecture**   |               |
 | Nov 25   |  Project Presentations                    |               |
 | Nov 26   | **Thanksgivng Break (no class)**|               |
 | Dec 1    |                     |               |
-| Dec 3    |                     |               |
+| Dec 3    |  **Take-Home Portion of the Final Exam Released on Canvas**                    |               |
 | **Dec 11 <br>2–4PM, WH 115** | **Take-Home Portion of the Final Exam Due <br>In-Class Portion of the Final Exam** | |
