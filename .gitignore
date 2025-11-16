@@ -49,3 +49,4 @@ desktop-settings.json
 default-*
 *.jupyterlab-workspace
 .jupyter/
+notebooks/QMCPy_Intro_figures/*.pdf
