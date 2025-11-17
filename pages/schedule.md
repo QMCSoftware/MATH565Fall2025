@@ -50,7 +50,7 @@ The Apple Keynote files may be read on any browser on any OS by
 | Nov 10   |  Quasi-Monte Carlo    |               |
 | Nov 12   |  Quasi-Monte Carlo    |               |
 | Nov 14   | **Assignment 4 Due**  | |
-| Nov 17   |                     |               |
+| Nov 17   |  Quasi-Monte Carlo <br>Parallel Computing  | [Selected Topics (PDF)]({{ site.baseurl }}/lectures/MATH565MonteCarloMethodsNotesPart5SelectedTopics.pdf)  <br>[ Selected Topics (Keynote)]({{ site.baseurl }}/lectures/MATH565MonteCarloMethodsNotesPart5SelectedTopics.key)               |
 | Nov 19   |                     |               |
 | Nov 24   |  Project Presentations <br>**No lecture**   |               |
 | Nov 25   |  Project Presentations                    |               |
