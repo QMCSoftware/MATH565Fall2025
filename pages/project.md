@@ -20,10 +20,21 @@ proposed topic is accepted.
 either
    1. The main point of the article, illustrating it with some examples of your own, making any criticisms that are
 warranted, and describing future work, or
-   1. Your `qmcpy` feature, along with a blog illustrating it.  Teams of two will have 30-minute presentations (+10 minutes for question & answer). T
-   
-- The oral presentations will be scheduled on November 24–25, 2025, _in person_ in the Galvin Tower West Side Conference Room. (Off-site students may participate through Zoom.) Go to [this link](https://outlook.office.com/book/MATH565ProjectPresentations@iit0.onmicrosoft.com/s/Q3aTeb4fdUWzMhhk7ZMriQ2?ismsaljsauthenabled) to choose one timeslot to present _before November 12_.
--  Each student will observe and assess TWO other presentations.  Go to [this link](https://outlook.office.com/book/MATH565ProjectPresentations@iit0.onmicrosoft.com/s/Moojcf_FzUms677wRGwg1Q2?ismsaljsauthenabled) and choose two slots WHEN ANOTHER STUDENT IS PRESENTING.  Here is the [presentation schedule](https://iit0-my.sharepoint.com/:x:/g/personal/hickernell_illinoistech_edu/Ee9NTFhXiYNIqqx3xRO7dPcBFFnxjpxNivlW8FeYgUTtjA?e=6NVTuu) and here is the [list of topics](https://iit0-my.sharepoint.com/:x:/g/personal/hickernell_illinoistech_edu/Eb21Hd_PIKdJrE0JW93y2lcBwKoeptd8mMiJ6FuARJ83fQ?e=F9a3el).  If you do not fulfill this requirement, your project grade will be _penalized_.
+   1. Your `qmcpy` feature, along with a blog illustrating it.  Teams of two will have 30-minute presentations (+10 minutes for question & answer). 
+
+## Presentations and Observations
+- The oral presentations will be scheduled on November 24–25, 2025, _in person_ in the *Galvin Tower 14th Floor West Side Conference Room*. (Off-site students may participate through Zoom with prior permission.) 
+  - Go to [this link](https://outlook.office.com/book/MATH565ProjectPresentations@iit0.onmicrosoft.com/s/Q3aTeb4fdUWzMhhk7ZMriQ2?ismsaljsauthenabled) to choose one timeslot to present _before November 12_.
+  - You must bring your own laptop with an HDMI connectivity to present.  An HDMI to USB-C adaptor will be available if needed.  The screen has an HDMI cable.
+  - If you provide handouts (strongly encouraged), bring at least _three_ copies, a few more if you wish.
+  - Let me recommend that you dress business casual.  
+-  Each student will observe and assess TWO other presentations.  Go to [this link](https://outlook.office.com/book/MATH565ProjectPresentations@iit0.onmicrosoft.com/s/Moojcf_FzUms677wRGwg1Q2?ismsaljsauthenabled) and choose two slots WHEN ANOTHER STUDENT IS PRESENTING.  
+- Here is the [presentation schedule](https://iit0-my.sharepoint.com/:x:/g/personal/hickernell_illinoistech_edu/Ee9NTFhXiYNIqqx3xRO7dPcBFFnxjpxNivlW8FeYgUTtjA?e=6NVTuu) and here is the [list of topics](https://iit0-my.sharepoint.com/:x:/g/personal/hickernell_illinoistech_edu/Eb21Hd_PIKdJrE0JW93y2lcBwKoeptd8mMiJ6FuARJ83fQ?e=F9a3el).  
+- Your presentation is likely to _suffer_ if
+    - You are not on time for your presentation or observation,
+    - You are not prepared,
+    - You do not observe at lest TWO presentations, and/or
+    - Your observer feedback is not significant.
 
 ## Important to keep in mind
 Your presentation should be from the perspective that you are reporting to your colleagues why this article or QMCPy feature is or is not worth pursuing further.  
