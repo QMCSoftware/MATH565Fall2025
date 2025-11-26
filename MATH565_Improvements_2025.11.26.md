@@ -1,6 +1,31 @@
 # MATH 565 — Planned Improvements for Fall 2026
 **Version: 2025.11.26**
 
+---
+
+### MATH 565 Improvements — Changelog
+
+This changelog documents the evolution of planned improvements for MATH 565, using date-based versioning (YYYY.MM.DD), similar to macOS.
+
+---
+
+#### Version 2025.11.26
+- Initial categorized improvements document created.
+- Added Monte Carlo Tree Search (MCTS) as a selected topic.
+- Added planned improvements for:
+  - MCMC tools (emcee, PyMC/NUTS)
+  - SimPy queueing simulations
+  - Notebook refactoring and modernization
+  - QMCPy kernel class expansion
+- Added workflow plans (full repo notebook testing, student install verification).
+- Added documentation/publishing considerations (Quarto, Jupyter Book).
+
+---
+
+## Summary of Possible Future Improvements
+Record updates here as improvements evolve.
+
+
 This document summarizes the planned improvements for next year’s offering of **MATH 565 Monte Carlo Methods**, grouped into categories for clarity.
 
 ---
