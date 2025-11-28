@@ -1,0 +1,32 @@
+/* Hide `.hidden` blocks */
+.reveal .hidden {
+  display: none;
+}
+
+/* Base text color: dark gray instead of black */
+.reveal,
+.reveal p,
+.reveal li {
+  color: #333333;
+}
+
+/* Slightly smaller overall font size (tweak if you like) */
+.reveal {
+  font-size: 26px;
+}
+
+/* Title bar: white text on dark gray for non-title slides */
+.reveal section:not(.title-slide) h1,
+.reveal section:not(.title-slide) h2 {
+  background-color: #333333;
+  color: #ffffff;
+  padding: 0.25em 0.75em;
+  margin: 0 -0.5em 0.8em -0.5em;
+  border-radius: 0;
+}
+
+/* Alert-style text (Beamer \alert / Keynote highlight) */
+.reveal .alert {
+  color: #007acc;        /* nice blue */
+  font-weight: 600;
+}

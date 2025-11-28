@@ -50,3 +50,9 @@ default-*
 *.jupyterlab-workspace
 .jupyter/
 notebooks/QMCPy_Intro_figures/*.pdf
+
+# Quarto / R Markdown build outputs
+*_files/
+*_cache/
+_site/
+*.html
