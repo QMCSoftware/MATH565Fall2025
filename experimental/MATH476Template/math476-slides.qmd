@@ -2,26 +2,28 @@
 title: "MATH 476 — Statistics"
 subtitle: "Introduction and Probability"
 author: "Fred J. Hickernell"
+
+date: last-modified
+date-format: "MMMM D, YYYY"
+
 format:
   revealjs:
     theme: simple
-    slide-number: true
     css: math476-theme.css
+    slide-number: c/t
+    show-slide-number: all
+    footer: "© Fred J. Hickernell, updated {{< meta date >}}"
+    width: 1400
+    height: 800
+    margin: 0.04
+    center: false   
+    slide-level: 1
     title-slide-attributes:
-      data-background-image: "math476-scatter.png"   # put your PNG here
+      data-background-image: "math476-scatter.png"
       data-background-size: contain
       data-background-position: "top left"
       data-background-color: "#000000"
 ---
-
-# MATH 476 — Statistics
-
-Welcome to **MATH 476**.
-
-This course introduces probability and statistics with an emphasis on
-modeling and data.
-
-## Macros (hidden)
 
 ::: {.hidden}
 $$
@@ -33,7 +35,13 @@ $$
 :::
 <!-- Add more \newcommand definitions in the block above. -->
 
----
+# MATH 476 — Statistics
+
+Welcome to **MATH 476**.
+
+This course introduces probability and statistics with an emphasis on
+modeling and data.
+
 
 # Basic Probability Notation
 
@@ -48,7 +56,6 @@ $$
 
 [Key idea: probabilities are always between $0$ and $1$.]{.alert}
 
----
 
 # Example Slide With Alerts
 

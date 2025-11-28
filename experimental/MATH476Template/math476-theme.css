@@ -1,8 +1,3 @@
-/* Hide `.hidden` blocks */
-.reveal .hidden {
-  display: none;
-}
-
 /* Base text color: dark gray instead of black */
 .reveal,
 .reveal p,
@@ -10,23 +5,50 @@
   color: #333333;
 }
 
-/* Slightly smaller overall font size (tweak if you like) */
+/* Overall font sizing (tweak to taste) */
 .reveal {
-  font-size: 26px;
+  font-size: 30px;
 }
 
-/* Title bar: white text on dark gray for non-title slides */
+/* Title bar: white text on dark blue for non-title slides */
 .reveal section:not(.title-slide) h1,
 .reveal section:not(.title-slide) h2 {
-  background-color: #333333;
+  background-color: #004b80;   /* darker blue */
   color: #ffffff;
   padding: 0.25em 0.75em;
   margin: 0 -0.5em 0.8em -0.5em;
   border-radius: 0;
 }
 
-/* Alert-style text (Beamer \alert / Keynote highlight) */
+.reveal .hidden {
+  display: none;
+}
+
+/* Alert-style text (Beamer-like \alert) */
 .reveal .alert {
-  color: #007acc;        /* nice blue */
+  color: #007acc;          /* nicer lighter blue highlight */
   font-weight: 600;
+}
+
+/* Footer: bottom-left, gray, small text, constrained width */
+.reveal .footer {
+  position: absolute !important;
+  left: 3em !important;
+  right: 7em !important;
+  bottom: 0.6em !important;
+  text-align: left !important;
+  color: #777777 !important;
+  font-size: 0.6em !important;
+  background: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.reveal .slide-number {
+  font-size: 0.7em;
+  opacity: 0.9;
+  right: 1.5em;
+  bottom: 0.6em;
 }
