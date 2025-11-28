@@ -1,5 +1,5 @@
 # MATH 565 — Planned Improvements for Fall 2026
-**Version: 2025.11.26**
+**Version: 2025.11.28**
 
 ---
 
@@ -8,6 +8,9 @@
 This changelog documents the evolution of planned improvements for MATH 565, using date-based versioning (YYYY.MM.DD), similar to macOS.
 
 ---
+
+#### Version 2025.11.28
+- Added Hamiltonian and Langevin MCMC
 
 #### Version 2025.11.26
 - Initial categorized improvements document created.
@@ -41,6 +44,7 @@ This document summarizes the planned improvements for next year’s offering of 
 - Introduce **emcee** (ensemble samplers) for intuitive MCMC.
 - Consider **PyMC (NUTS)** for automatic HMC demonstrations.
 - Possibly replace or supplement Metropolis + parallel tempering.
+- Langevin and Hamiltonian MCMC (added 11/28/25)
 
 ### 1.3 Queueing Simulations
 - Revisit switching to **SimPy**, potentially with a small shim layer for consistency.
