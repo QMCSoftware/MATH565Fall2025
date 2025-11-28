@@ -93,6 +93,3 @@ This document summarizes the planned improvements for next year’s offering of 
 - Move toward a unified visual style for figures, code, and exposition.
 
 ---
-
-**Document version: 2025.11.26**  
-*Prepared automatically.*
