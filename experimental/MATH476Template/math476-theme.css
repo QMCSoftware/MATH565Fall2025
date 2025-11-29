@@ -1,9 +1,15 @@
+:root {
+  --header-blue: #004b80;   /* dark, for title bars */
+  --accent-blue: #007acc;   /* bright, for accents */
+}
+
 /* Base text color: dark gray instead of black */
 .reveal,
 .reveal p,
 .reveal li {
   color: #333333;
 }
+
 
 /* Overall font sizing (tweak to taste) */
 .reveal {
@@ -13,7 +19,7 @@
 /* Title bar: white text on dark blue for non-title slides */
 .reveal section:not(.title-slide) h1,
 .reveal section:not(.title-slide) h2 {
-  background-color: #004b80;   /* darker blue */
+  background-color: var(--header-blue);  /* darker blue */
   color: #ffffff;
   padding: 0.25em 0.75em;
   margin: 0 -0.5em 0.8em -0.5em;
@@ -24,9 +30,15 @@
   display: none;
 }
 
+.reveal h3 {
+  color: var(--header-blue);
+  font-weight: 600;
+  margin-top: 0.8em;
+}
+
 /* Alert-style text (Beamer-like \alert) */
 .reveal .alert {
-  color: #007acc;          /* nicer lighter blue highlight */
+  color: var(--accent-blue);         /* nicer lighter blue highlight */
   font-weight: 600;
 }
 

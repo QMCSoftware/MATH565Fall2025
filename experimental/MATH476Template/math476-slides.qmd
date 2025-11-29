@@ -17,7 +17,7 @@ format:
     height: 800
     margin: 0.04
     center: false   
-    slide-level: 1
+    slide-level: 2
     title-slide-attributes:
       data-background-image: "math476-scatter.png"
       data-background-size: contain
@@ -55,6 +55,11 @@ modeling and data.
   $$
 
 [Key idea: probabilities are always between $0$ and $1$.]{.alert}
+
+## More probability
+You need to know expectation, mean, etc.
+
+### Random variables
 
 
 # Example Slide With Alerts
