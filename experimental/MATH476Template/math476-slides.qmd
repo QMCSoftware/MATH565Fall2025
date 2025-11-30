@@ -57,10 +57,13 @@ modeling and data.
 [Key idea: probabilities are always between $0$ and $1$.]{.alert}
 
 ## More probability
-You need to know expectation, mean, etc.
+You need to know expectation, mean, etc. with a h2 header
 
 ### Random variables
 
+an h3 header
+
+and even more on this slide without the header
 
 # Example Slide With Alerts
 
