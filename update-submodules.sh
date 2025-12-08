@@ -14,9 +14,9 @@ set -euo pipefail
 #      Or commit + push:
 #        ./update-submodules.sh --push
 #
-#   3. This updates:
-#        • HickernellClassLib
-#        • QMCSoftware (develop branch)
+#   3. This updates submodules (by path):
+#        • classlib      → HickernellClassLib repo
+#        • qmcsoftware   → QMCSoftware (develop branch)
 # --------------------------------------------------------------------
 
 AUTO_COMMIT=0
@@ -39,7 +39,8 @@ case "${1:-}" in
 esac
 
 log() {
-  local ts=$(date '+%Y-%m-%d %H:%M:%S')
+  local ts
+  ts=$(date '+%Y-%m-%d %H:%M:%S')
   echo "[$ts] $*"
 }
 
@@ -56,19 +57,20 @@ if [[ -n "$(git status --porcelain)" ]]; then
   exit 1
 fi
 
+# IMPORTANT: these are **paths** in the repo, not GitHub names
 SUBMODULES=(
-  "HickernellClassLib"
-  "QMCSoftware"
+  "classlib"
+  "qmcsoftware"
 )
 
 for sm in "${SUBMODULES[@]}"; do
-  if ! grep -q "$sm" .gitmodules 2>/dev/null; then
-    log "Skipping: no submodule named $sm in this repo."
+  if ! grep -q "path = ${sm}" .gitmodules 2>/dev/null; then
+    log "Skipping: no submodule with path '${sm}' in this repo."
     continue
   fi
 
-  log "Updating submodule: $sm ..."
-  git submodule update --init --remote "$sm"
+  log "Updating submodule at path: ${sm} ..."
+  git submodule update --init --remote "${sm}"
 done
 
 if [[ -z "$(git status --porcelain)" ]]; then
@@ -80,7 +82,7 @@ git status --short
 
 if [[ "$AUTO_COMMIT" -eq 1 ]]; then
   log "Committing updated submodule pointers..."
-  git commit -am "Update submodules (HCL + QMCSoftware)"
+  git commit -am "Update submodules (classlib + qmcsoftware)"
 
   if [[ "$AUTO_PUSH" -eq 1 ]]; then
     log "Pushing commit..."
