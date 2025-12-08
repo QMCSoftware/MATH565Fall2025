@@ -15,7 +15,7 @@ format: revealjs
 Welcome to **MATH 476**.
 
 This course introduces probability and statistics with an emphasis on
-modeling and data.
+modeling and data and not running over the margins.
 
 ## Basic Probability Notation {.major}
 
