@@ -2,12 +2,8 @@
 title: "MATH 476 — Statistics"
 subtitle: "Introduction and Probability"
 author: "Fred J. Hickernell"
-
 date: last-modified
 date-format: "MMMM D, YYYY"
-
-format: revealjs
-
 ---
 
 ## MATH 476 — Statistics {.major}
