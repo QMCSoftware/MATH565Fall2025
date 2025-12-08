@@ -33,6 +33,12 @@ modeling and data.
 
 ## More probability
 You need to know expectation, mean, etc. with a h2 header
+\begin{gather*}
+\var(Y) = \operatorname{var}(Y) \\
+\DeclareMathOperator{\var}{var}
+\var(Y) = \operatorname{var}(Y) \\
+\Ex[Y] = \Ex[f(X)], Y \in \reals \\
+\end{gather*}
 
 ### Random variables
 
