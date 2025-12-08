@@ -56,3 +56,5 @@ notebooks/QMCPy_Intro_figures/*.pdf
 *_cache/
 _site/
 *.html
+/.quarto/
+**/*.quarto_ipynb

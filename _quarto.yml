@@ -1,0 +1,5 @@
+project:
+  type: default
+
+metadata-files:
+  - HickernellClassLib/quarto/hickernell-slides.yml

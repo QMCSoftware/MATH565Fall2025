@@ -1,0 +1,55 @@
+---
+title: "MATH 476 — Statistics"
+subtitle: "Introduction and Probability"
+author: "Fred J. Hickernell"
+
+date: last-modified
+date-format: "MMMM D, YYYY"
+
+format: revealjs
+
+title-slide-attributes:
+  data-background-image: "math476-scatter.png"
+  data-background-size: 55%
+  data-background-position: "top left"
+  data-background-color: "#f5f7fb"
+---
+
+<!-- Add more \newcommand definitions in the block above. -->
+
+## MATH 476 — Statistics {.major}
+
+Welcome to **MATH 476**.
+
+This course introduces probability and statistics with an emphasis on
+modeling and data.
+
+
+## Basic Probability Notation {.major}
+
+- Sample space: $\Omega$
+- Event: $A \subseteq \Omega$
+- Probability of $A$: $\Prob(A)$
+- Complement: $A^{c}$
+- Conditional probability:
+  $$
+    \Prob(A \mid B) = \frac{\Prob(A \cap B)}{\Prob(B)}, \qquad \Prob(B) > 0
+  $$
+
+[Key idea: probabilities are always between $0$ and $1$.]{.alert}
+
+## More probability
+You need to know expectation, mean, etc. with a h2 header
+
+### Random variables
+
+an h3 header
+
+## {.headerless}
+and even more on this slide without the header
+
+## Example Slide With Alerts {.major}
+
+- Plain text is dark gray.
+- [Alerted term]{.alert} stands out in blue.
+- You can also color math: [ $\Pr(A \mid B)$ ]{.alert}
