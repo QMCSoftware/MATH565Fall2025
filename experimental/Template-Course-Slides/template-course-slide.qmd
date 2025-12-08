@@ -17,7 +17,6 @@ Welcome to **MATH 476**.
 This course introduces probability and statistics with an emphasis on
 modeling and data.
 
-
 ## Basic Probability Notation {.major}
 
 - Sample space: $\Omega$
@@ -28,6 +27,7 @@ modeling and data.
   $$
     \Prob(A \mid B) = \frac{\Prob(A \cap B)}{\Prob(B)}, \qquad \Prob(B) > 0
   $$
+- Expectation $\Ex[Y]=$
 
 [Key idea: probabilities are always between $0$ and $1$.]{.alert}
 
