@@ -10,8 +10,6 @@ format: revealjs
 
 ---
 
-<!-- Add more \newcommand definitions in the block above. -->
-
 ## MATH 476 — Statistics {.major}
 
 Welcome to **MATH 476**.
