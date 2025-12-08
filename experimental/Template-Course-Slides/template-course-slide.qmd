@@ -8,11 +8,6 @@ date-format: "MMMM D, YYYY"
 
 format: revealjs
 
-title-slide-attributes:
-  data-background-image: "math476-scatter.png"
-  data-background-size: 55%
-  data-background-position: "top left"
-  data-background-color: "#f5f7fb"
 ---
 
 <!-- Add more \newcommand definitions in the block above. -->
