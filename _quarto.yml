@@ -4,19 +4,3 @@ project:
 metadata-files:
   - classlib/classlib/quarto/hickernell-slides.yml
 
-format:
-  revealjs:
-    include-in-header:
-      - text: |
-          <script>
-          window.MathJax = {
-            tex: {
-              macros: {
-                Prob: "{\\mathbb{P}}",
-                Ex:   "{\\mathbb{E}}",
-                Var:  "{\\mathrm{Var}}",
-                Cov:  "{\\mathrm{Cov}}"
-              }
-            }
-          };
-          </script>
