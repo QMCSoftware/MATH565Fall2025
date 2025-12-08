@@ -2,4 +2,4 @@ project:
   type: default
 
 metadata-files:
-  - classlib/quarto/hickernell-slides.yml
+  - classlib/classlib/quarto/hickernell-slides.yml
