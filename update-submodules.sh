@@ -70,7 +70,18 @@ for sm in "${SUBMODULES[@]}"; do
   fi
 
   log "Updating submodule at path: ${sm} ..."
-  git submodule update --init --remote "${sm}"
+
+  if [[ "$sm" == "qmcsoftware" ]]; then
+    git submodule update --init "$sm"
+    (
+      cd "$sm"
+      git fetch origin develop
+      git checkout develop
+      git pull --ff-only origin develop
+    )
+  else
+    git submodule update --init --remote "$sm"
+  fi
 done
 
 if [[ -z "$(git status --porcelain)" ]]; then
