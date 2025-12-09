@@ -4,6 +4,7 @@ subtitle: "Introduction and Probability"
 author: "Fred J. Hickernell"
 date: last-modified
 date-format: "MMMM D, YYYY"
+   
 ---
 
 ## MATH 476 — Statistics {.major}
@@ -28,7 +29,9 @@ modeling and data and not running over the margins.
 [Key idea: probabilities are always between $0$ and $1$.]{.alert}
 
 ## More probability
+
 You need to know expectation, mean, etc. with a h2 header
+
 \begin{gather*}
 \var(Y) = \operatorname{var}(Y) \\
 \DeclareMathOperator{\var}{var}
@@ -41,6 +44,7 @@ You need to know expectation, mean, etc. with a h2 header
 an h3 header
 
 ## {.headerless}
+
 and even more on this slide without the header
 
 ## Example Slide With Alerts {.major}
@@ -48,3 +52,37 @@ and even more on this slide without the header
 - Plain text is dark gray.
 - [Alerted term]{.alert} stands out in blue.
 - You can also color math: [ $\Pr(A \mid B)$ ]{.alert}
+
+---
+
+## Python Test Slide {.major}
+
+This slide verifies that Python runs inside your Quarto RevealJS slides.
+
+```{python}
+import numpy as np
+import matplotlib.pyplot as plt
+
+x = np.linspace(0, 4*np.pi, 400)
+y = np.sin(x)
+
+plt.plot(x, y)
+plt.title("Sine Wave Test")
+plt.show()
+```
+
+---
+
+## Interactive Plot (Plotly) {.major}
+
+This slide tests interactive graphics.
+
+```{python}
+import numpy as np
+import plotly.express as px
+
+x = np.linspace(0, 10, 200)
+y = np.sin(x)
+
+px.line(x=x, y=y, title="Interactive Sine Wave")
+```
