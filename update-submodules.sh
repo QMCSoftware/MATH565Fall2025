@@ -59,11 +59,11 @@ elif [[ "$AUTO_COMMIT" -eq 1 ]]; then
 fi
 
 ensure_clean_worktree() {
-  local status
-  status="$(git status --porcelain)"
+  local ws
+  ws="$(git status --porcelain)"
 
   # Completely clean — good to go
-  if [[ -z "${status}" ]]; then
+  if [[ -z "${ws}" ]]; then
     return 0
   fi
 
@@ -76,23 +76,23 @@ ensure_clean_worktree() {
       only_submodules=0
       break
     fi
-  done <<< "${status}"
+  done <<< "${ws}"
 
   if (( only_submodules == 1 )); then
     log "Uncommitted changes present — submodule pointers (classlib/qmcsoftware) are modified."
     echo
     echo "git status --short:"
-    echo "${status}"
+    echo "${ws}"
     echo
-    echo "This usually means one of the following:"
-    echo "  • You ran 'git pull' and now have updated submodule pointers."
+    echo "This usually means:"
+    echo "  • You pulled new changes and updated submodule pointers."
     echo "  • A previous run of this script stopped before committing."
     echo
-    echo "To record these pointer updates, you can run:"
+    echo "To record these pointer updates, run:"
     echo "  git add classlib qmcsoftware"
     echo "  git commit -m \"Update submodule pointers\""
     echo
-    echo "To discard them and return to the recorded commits, you can run:"
+    echo "To discard them, run:"
     echo "  git restore --staged classlib qmcsoftware 2>/dev/null || true"
     echo "  git submodule update --init --recursive"
     echo
@@ -102,13 +102,14 @@ ensure_clean_worktree() {
     log "Uncommitted changes present — working tree is not clean."
     echo
     echo "git status --short:"
-    echo "${status}"
+    echo "${ws}"
     echo
     echo "Please commit, stash, or discard these changes before running:"
     echo "  ./${SCRIPT_NAME}${EXTRA_FLAGS}"
   fi
   exit 1
 }
+
 
 ensure_clean_worktree
 
