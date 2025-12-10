@@ -50,12 +50,67 @@ if [[ ! -d ".git" ]]; then
   exit 1
 fi
 
-# Safety: require clean working tree
-if [[ -n "$(git status --porcelain)" ]]; then
-  log "Uncommitted changes present — please commit or stash first."
-  git status --short
-  exit 1
+SCRIPT_NAME="$(basename "$0")"
+EXTRA_FLAGS=""
+if [[ "$AUTO_PUSH" -eq 1 ]]; then
+  EXTRA_FLAGS=" --push"
+elif [[ "$AUTO_COMMIT" -eq 1 ]]; then
+  EXTRA_FLAGS=" --commit"
 fi
+
+ensure_clean_worktree() {
+  local status
+  status="$(git status --porcelain)"
+
+  # Completely clean — good to go
+  if [[ -z "${status}" ]]; then
+    return 0
+  fi
+
+  # Check if *only* submodule pointers (classlib/qmcsoftware) are dirty
+  local only_submodules=1
+  local line path
+  while IFS= read -r line; do
+    path="${line##* }"
+    if [[ "${path}" != "classlib" && "${path}" != "qmcsoftware" ]]; then
+      only_submodules=0
+      break
+    fi
+  done <<< "${status}"
+
+  if (( only_submodules == 1 )); then
+    log "Uncommitted changes present — submodule pointers (classlib/qmcsoftware) are modified."
+    echo
+    echo "git status --short:"
+    echo "${status}"
+    echo
+    echo "This usually means one of the following:"
+    echo "  • You ran 'git pull' and now have updated submodule pointers."
+    echo "  • A previous run of this script stopped before committing."
+    echo
+    echo "To record these pointer updates, you can run:"
+    echo "  git add classlib qmcsoftware"
+    echo "  git commit -m \"Update submodule pointers\""
+    echo
+    echo "To discard them and return to the recorded commits, you can run:"
+    echo "  git restore --staged classlib qmcsoftware 2>/dev/null || true"
+    echo "  git submodule update --init --recursive"
+    echo
+    echo "Then re-run:"
+    echo "  ./${SCRIPT_NAME}${EXTRA_FLAGS}"
+  else
+    log "Uncommitted changes present — working tree is not clean."
+    echo
+    echo "git status --short:"
+    echo "${status}"
+    echo
+    echo "Please commit, stash, or discard these changes before running:"
+    echo "  ./${SCRIPT_NAME}${EXTRA_FLAGS}"
+  fi
+  exit 1
+}
+
+ensure_clean_worktree
 
 # IMPORTANT: these are **paths** in the repo, not GitHub names
 SUBMODULES=(
@@ -84,6 +139,7 @@ for sm in "${SUBMODULES[@]}"; do
   fi
 done
 
+# If nothing changed, we are done
 if [[ -z "$(git status --porcelain)" ]]; then
   log "All submodules already up to date."
   exit 0
@@ -93,7 +149,8 @@ git status --short
 
 if [[ "$AUTO_COMMIT" -eq 1 ]]; then
   log "Committing updated submodule pointers..."
-  git commit -am "Update submodules (classlib + qmcsoftware)"
+  git add classlib qmcsoftware
+  git commit -m "Update submodules (classlib + qmcsoftware)"
 
   if [[ "$AUTO_PUSH" -eq 1 ]]; then
     log "Pushing commit..."
