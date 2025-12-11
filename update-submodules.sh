@@ -40,7 +40,7 @@ esac
 
 log() {
   local ts
-  ts=$(date '+%Y-%m-%d %H:%M:%S')
+  ts=$(/bin/date '+%Y-%m-%d %H:%M:%S')
   echo "[$ts] $*"
 }
 
@@ -79,6 +79,12 @@ ensure_clean_worktree() {
   done <<< "${ws}"
 
   if (( only_submodules == 1 )); then
+    # NEW BEHAVIOR: if we're auto-committing, just proceed and include them
+    if [[ "$AUTO_COMMIT" -eq 1 ]]; then
+      log "Submodule pointers (classlib/qmcsoftware) already modified; will include them in this auto-commit."
+      return 0
+    fi
+
     log "Uncommitted changes present — submodule pointers (classlib/qmcsoftware) are modified."
     echo
     echo "git status --short:"
@@ -88,9 +94,11 @@ ensure_clean_worktree() {
     echo "  • You pulled new changes and updated submodule pointers."
     echo "  • A previous run of this script stopped before committing."
     echo
-    echo "To record these pointer updates, run:"
-    echo "  git add classlib qmcsoftware"
-    echo "  git commit -m \"Update submodule pointers\""
+    echo "To record these pointer updates, either:"
+    echo "  • run this script again with --commit or --push, or"
+    echo "  • manually run:"
+    echo "      git add classlib qmcsoftware"
+    echo "      git commit -m \"Update submodule pointers\""
     echo
     echo "To discard them, run:"
     echo "  git restore --staged classlib qmcsoftware 2>/dev/null || true"
@@ -109,7 +117,6 @@ ensure_clean_worktree() {
   fi
   exit 1
 }
-
 
 ensure_clean_worktree
 
