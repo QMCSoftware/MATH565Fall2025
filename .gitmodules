@@ -4,4 +4,5 @@
 	branch = develop
 [submodule "classlib"]
 	path = classlib
-	url = https://github.com/fjhickernell/HickernellClassLib.git
+	url = git@github.com:fjhickernell/HickernellAcademicLib.git
+	branch = main
