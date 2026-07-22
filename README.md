@@ -6,6 +6,10 @@ It contains lecture notes, Jupyter notebooks, and links to other resources.
 The class website at [qmcsoftware.github.io/MATH565Fall2025](https://qmcsoftware.github.io/MATH565Fall2025/)
 contains the syllabus, assignments, and links to course materials.
 
+Found a broken link, typo, unclear instruction, missing file, or notebook error? See
+[how to report a problem](https://qmcsoftware.github.io/MATH565Fall2025/report-a-problem/).
+Please do not put grades, student IDs, or other private information in a public GitHub issue.
+
 ---
 
 ## 📚 New: Shared Class Library (`HickernellClassLib`)

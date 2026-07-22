@@ -112,6 +112,7 @@ By the end of this course, students will be able to:
 | [Schedule and Lecture Notes]({{ "/schedule/" | relative_url }}) | Online Discussions |
 | [Notebooks]({{ "/notebooks/" | relative_url }}) |  |
 | [Class Git Repository](https://github.com/QMCSoftware/MATH565Fall2025) <br> scroll to the bottom for instructions on how to copy from the template              |  |
+| [Report a Problem]({{ "/report-a-problem/" | relative_url }}) | Private questions about grades or personal circumstances |
 
 </details>
 
