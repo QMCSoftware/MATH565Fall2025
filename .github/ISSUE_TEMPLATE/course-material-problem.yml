@@ -1,0 +1,73 @@
+name: Course repository or website problem
+description: Report a broken link, typo, unclear instruction, or problem with course files
+title: "[Course materials] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve the course materials. Please do not include grades,
+        student IDs, private messages, or other personal information in this public report.
+
+  - type: dropdown
+    id: location-type
+    attributes:
+      label: Where is the problem?
+      options:
+        - Course website
+        - Course repository
+        - Jupyter notebook
+        - Assignment or course document
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: location
+    attributes:
+      label: Page URL or file path
+      description: Paste the exact website address or repository file path, if possible.
+      placeholder: https://qmcsoftware.github.io/MATH565Fall2025/... or pages/example.md
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What is wrong?
+      description: Explain what you saw and why it appears incorrect or unclear.
+      placeholder: Describe the broken link, error message, typo, or confusing instruction.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+      description: Tell us what you expected to see or happen. A suggested correction is welcome.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: For a technical problem, list the steps that reliably produce it.
+      placeholder: |
+        1. Open ...
+        2. Click or run ...
+        3. See ...
+
+  - type: input
+    id: environment
+    attributes:
+      label: Browser or computing environment
+      description: Include this only when it may matter.
+      placeholder: Safari 18 on macOS, Chrome on Windows, or Python 3.12 in the qmcpy environment
+
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy check
+      options:
+        - label: I have not included grades, student IDs, private messages, credentials, or other personal information.
+          required: true
